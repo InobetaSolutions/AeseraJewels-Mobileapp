@@ -1,179 +1,204 @@
-// import 'dart:io';
 
-// import 'package:aesera_jewels/modules/payment_selection/payment_selection_controller.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-
-// class PaymentScreen extends StatelessWidget {
-//   final PaymentController controller = Get.put(PaymentController());
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Payment'),
-//         bottom: TabBar(
-//           controller: controller.tabController,
-//           tabs: [
-//             Tab(text: 'Own Number'),
-//             Tab(text: 'Others Number'),
-//           ],
-//         ),
-//       ),
-//       body: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           children: [
-//             Expanded(
-//               child: TabBarView(
-//                 controller: controller.tabController,
-//                 children: [
-//                   _buildPaymentForm(), // Own Number Form
-//                   _buildPaymentForm(), // Others Number Form
-//                 ],
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             ElevatedButton(
-//               onPressed: () => controller.submitPayment(),
-//               child: Text('Payment Completed'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildPaymentForm() {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Text('Payment Mobile Number', style: TextStyle(fontSize: 16)),
-//         TextField(
-//           onChanged: (value) => controller.mobileNumber.value = value,
-//           decoration: InputDecoration(hintText: 'Enter Payment Mobile Number'),
-//         ),
-//         SizedBox(height: 20),
-
-//         Text('Amount Paid', style: TextStyle(fontSize: 16)),
-//         TextField(
-//           onChanged: (value) => controller.amountPaid.value = value,
-//           decoration: InputDecoration(hintText: 'Enter Paid Amount'),
-//           keyboardType: TextInputType.number,
-//         ),
-//         SizedBox(height: 20),
-
-//         Text('Upload Screenshot (Optional)', style: TextStyle(fontSize: 16)),
-//         ElevatedButton(
-//           onPressed: controller.pickScreenshot,
-//           child: Text('Upload'),
-//         ),
-//         SizedBox(height: 20),
-
-//         Obx(() {
-//           if (controller.screenshot != null) {
-//             return Image.file(File(controller.screenshot!.path), height: 200, width: 200);
-//           }
-//           return SizedBox.shrink();
-//         }),
-//       ],
-//     );
-//   }
-// }
+import 'package:aesera_jewels/modules/investment_details/portfolio_controller.dart';
 import 'package:aesera_jewels/modules/payment_selection/payment_selection_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-//import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
-class PaymentScreen extends StatelessWidget {
-  final PaymentController controller = Get.put(PaymentController());
+class PaymentScreen extends GetWidget<PaymentController> {
+  final controller = Get.put(PaymentController());
+  final investmentController = Get.put(InvestmentController());
+
+  PaymentScreen({super.key, required String amount});
 
   @override
   Widget build(BuildContext context) {
-    // Use MediaQuery to get screen size
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      appBar: AppBar(title: Text('Payment')),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Payment Mobile Number Input Field
-            Text(
-              'Payment Mobile Number',
-              style: TextStyle(
-                fontSize: width * 0.05,
-              ), // Adjust font size based on screen width
-            ),
-            TextField(
-              onChanged: (value) => controller.mobileNumber.value = value,
-              decoration: InputDecoration(
-                hintText: 'Enter Payment Mobile Number',
-              ),
-              keyboardType: TextInputType.phone,
-            ),
-            SizedBox(
-              height: height * 0.02,
-            ), // Adjust spacing based on screen height
-            // Amount Paid Input Field
-            Text(
-              'Amount Paid',
-              style: TextStyle(
-                fontSize: width * 0.05,
-              ), // Adjust font size based on screen width
-            ),
-            TextField(
-              onChanged: (value) => controller.amountPaid.value = value,
-              decoration: InputDecoration(hintText: 'Enter Paid Amount'),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(
-              height: height * 0.02,
-            ), // Adjust spacing based on screen height
-            // Upload Screenshot Section
-            Text(
-              'Upload Screenshot (Optional)',
-              style: TextStyle(
-                fontSize: width * 0.05,
-              ), // Adjust font size based on screen width
-            ),
-            ElevatedButton(
-              onPressed: controller.pickScreenshot,
-              child: Text('Upload'),
-            ),
-            SizedBox(
-              height: height * 0.02,
-            ), // Adjust spacing based on screen height
-            // Display Image if Screenshot is Picked
-            Obx(() {
-              if (controller.screenshot.value != null) {
-                return Image.file(
-                  File(controller.screenshot.value!.path),
-                  height:
-                      width *
-                      0.4, // Make image height responsive to screen width
-                  width:
-                      width *
-                      0.4, // Make image width responsive to screen width
-                  fit: BoxFit.cover,
-                );
-              }
-              return SizedBox.shrink();
-            }),
-
-            SizedBox(
-              height: height * 0.05,
-            ), // Adjust spacing based on screen height
-            // Payment Completed Button
-            ElevatedButton(
-              onPressed: controller.submitPayment,
-              child: Text('Payment Completed'),
-            ),
-          ],
+      backgroundColor: const Color(0xFFFCF9FD),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFCF9FD),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Get.back(),
         ),
+        title: const Text(
+          "Payment",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: Obx(() {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Toggle Tabs
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0C1D36),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Row(
+                  children: [
+                    _tabButton("Own Number", 0),
+                    _tabButton("Others Number", 1),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+
+              // Mobile Number Field (if "Others Number")
+              if (controller.selectedTab.value == 1) ...[
+                _label("Payment Mobile Number"),
+                const SizedBox(height: 8),
+                _inputField(
+                  hint: "Enter Payment Mobile Number",
+                  controller: controller.mobileController,
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 20),
+              ],
+
+              // Amount Field
+              _label("Amount Paid"),
+              const SizedBox(height: 8),
+              _inputField(
+                hint: "Enter Paid Amount",
+                controller: controller.amountController,
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 20),
+
+              // Upload Button
+              _label("Upload Screenshot (Optional)"),
+              const SizedBox(height: 8),
+              GestureDetector(
+                onTap: controller.pickImageSource,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlue.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.cloud_upload, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text("Upload", style: TextStyle(color: Colors.blue)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // Optional display of selected file name
+              Obx(() {
+                if (controller.screenshot.value != null) {
+                  return Text(
+                    "Selected: ${controller.screenshot.value!.name}",
+                    style: const TextStyle(color: Colors.grey),
+                    overflow: TextOverflow.ellipsis,
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
+
+              const Spacer(),
+
+              // Submit Button
+              GestureDetector(
+                onTap: controller.submitPayment,
+                child: Container(
+                  width: double.infinity,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0C1D36),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Payment Completed",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  // Helper Widgets
+  Widget _tabButton(String title, int index) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => controller.switchTab(index),
+        child: Container(
+          decoration: BoxDecoration(
+            color: controller.selectedTab.value == index
+                ? Colors.amber
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: controller.selectedTab.value == index
+                    ? Colors.black
+                    : Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _label(String text) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(text, style: const TextStyle(fontWeight: FontWeight.w600)),
+    );
+  }
+
+  Widget _inputField({
+    required String hint,
+    required TextEditingController controller,
+    required TextInputType keyboardType,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hint,
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+        ),
+        keyboardType: keyboardType,
       ),
     );
   }

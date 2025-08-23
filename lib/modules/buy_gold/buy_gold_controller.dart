@@ -1,5 +1,4 @@
-
-import 'package:aesera_jewels/modules/scan_to_pay/scan_to_pay_view.dart';
+import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
 import 'package:get/get.dart';
 
 class BuyGoldController extends GetxController {
@@ -24,8 +23,14 @@ class BuyGoldController extends GetxController {
     selectedValue.value = value;
   }
 
-  // Proceed with payment logic → Navigate to ScanToPayScreen
+  // Proceed with payment logic → Navigate to PaymentScreen
   void makePayment() {
-    Get.to(() => ScanToPayScreen());
+    Get.to(
+      () => PaymentScreen(
+        // Replace 'amount' with the correct parameter name, e.g. 'paymentAmount'
+        amount: isRupees.value ? selectedValue.value : '${selectedValue.value} grams',
+      ),
+      transition: Transition.rightToLeft,
+    );
   }
 }

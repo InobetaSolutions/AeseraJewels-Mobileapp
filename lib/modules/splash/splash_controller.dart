@@ -7,7 +7,7 @@ class SplashController extends GetxController {
 
     // Navigate to SeamlessPayment screen after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
-      Get.offNamed('/seamlessPayments');
+      Get.offNamed('/seamless_payments');
     });
   }
 }

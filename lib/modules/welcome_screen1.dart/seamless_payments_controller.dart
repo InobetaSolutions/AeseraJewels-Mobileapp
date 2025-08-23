@@ -6,6 +6,6 @@ class SeamlessPaymentController extends GetxController {
   }
 
   void onForward() {
-    Get.toNamed('/madeGoldEasy'); // Navigate to MadeGoldEasy
+    Get.toNamed('/made_gold_easy'); // Navigate to MadeGoldEasy
   }
 }

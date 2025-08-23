@@ -64,7 +64,7 @@ class JewelsForOccasionScreen extends GetWidget<JewelsForOccasionController> {
                   Text(
                     'Turn your savings into beautiful jewellery with ease.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black45),
+                    style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ],
               ),

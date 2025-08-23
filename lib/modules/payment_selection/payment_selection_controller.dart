@@ -1,104 +1,94 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'dart:io';
-
-// class PaymentController extends GetxController {
-//   RxString mobileNumber = ''.obs;
-//   RxString amountPaid = ''.obs;
-//   XFile? screenshot;
-
-//   final ImagePicker picker = ImagePicker();
-
-//   // Function to pick a screenshot
-//   Future<void> pickScreenshot() async {
-//     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-//     if (pickedFile != null) {
-//       screenshot = pickedFile;
-//       update();
-//     }
-//   }
-
-//   // Function to clear the form
-//   void clearForm() {
-//     mobileNumber.value = '';
-//     amountPaid.value = '';
-//     screenshot = null;
-//     update();
-//   }
-
-//   // Function to submit payment
-//   void submitPayment() {
-//     // Placeholder for payment logic
-//     Get.snackbar('Payment Completed', 'Payment has been successfully completed');
-//   }
-// }
-
-// mixin ImageSource {
-// }
-import 'dart:io';
+import 'package:aesera_jewels/modules/investment_details/portfolio_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class PaymentController extends GetxController with GetSingleTickerProviderStateMixin {
-  // Reactive variables for form input
-  RxString mobileNumber = ''.obs;
-  RxString amountPaid = ''.obs;
+class PaymentController extends GetxController {
+  var selectedTab = 0.obs;
+  //var selectedTab = 2.obs;
 
-  // Screenshot picked from gallery
+  // Text field controllers
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+
+  // Image picker
+  final ImagePicker picker = ImagePicker();
   Rx<XFile?> screenshot = Rx<XFile?>(null);
 
-  // Tab management for "Own Number" and "Others Number"
-  late TabController tabController;
-
-  // Image picker instance
-  final ImagePicker picker = ImagePicker();
-
-  @override
-  void onInit() {
-    tabController = TabController(length: 2, vsync: this);
-    super.onInit();
-  }
-
-  // Function to pick screenshot
-  Future<void> pickScreenshot() async {
-    try {
-      final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        screenshot.value = pickedFile;
-      }
-    } catch (e) {
-      Get.snackbar("Error", "Failed to pick image: $e");
-    }
-  }
-
-  // Function to clear form inputs
-  void clearForm() {
-    mobileNumber.value = '';
-    amountPaid.value = '';
+  void switchTab(int index) {
+    selectedTab.value = index;
+    selectedTab.value = index;
+    amountController.clear();
+    mobileController.clear();
     screenshot.value = null;
   }
 
-  // Simulated payment submission
-  void submitPayment() {
-    if (tabController.index == 1 && mobileNumber.value.trim().isEmpty) {
-      Get.snackbar("Error", "Mobile number is required for 'Others Number'");
-      return;
-    }
-
-    if (amountPaid.value.trim().isEmpty) {
-      Get.snackbar("Error", "Please enter the amount paid.");
-      return;
-    }
-
-    // Simulate a successful payment
-    Get.snackbar("Success", "Payment has been successfully completed");
+  Future<void> pickImageSource() async {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () async {
+                Get.back();
+                final image = await picker.pickImage(
+                  source: ImageSource.camera,
+                );
+                if (image != null) {
+                  screenshot.value = image;
+                  Get.snackbar("Success", "Image selected from camera.");
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Gallery'),
+              onTap: () async {
+                Get.back();
+                final image = await picker.pickImage(
+                  source: ImageSource.gallery,
+                );
+                if (image != null) {
+                  screenshot.value = image;
+                  Get.snackbar("Success", "Image selected from gallery.");
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  @override
-  void onClose() {
-    tabController.dispose();
-    super.onClose();
+  void submitPayment() {
+    String amount = amountController.text.trim();
+    String mobile = mobileController.text.trim();
+
+    if (selectedTab.value == 1 && mobile.isEmpty) {
+      Get.snackbar("Missing Info", "Please enter payment mobile number.");
+      return;
+    }
+
+    if (amount.isEmpty) {
+      Get.snackbar("Missing Info", "Please enter amount paid.");
+      return;
+    }
+
+    // Print for debugging
+    print("Tab: ${selectedTab.value}");
+    // print("Tab: ${selectedTab.value}");
+    print("Mobile: $mobile");
+    print("Amount: $amount");
+    print("Screenshot: ${screenshot.value?.path}");
+
+    // Proceed to next screen
+    Get.to(() => InvestmentScreen());
   }
 }

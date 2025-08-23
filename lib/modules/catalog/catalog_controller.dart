@@ -134,7 +134,6 @@
 //   }
 // }
 import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
-import 'package:aesera_jewels/modules/scan_to_pay/scan_to_pay_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -153,6 +152,10 @@ class CatalogController extends GetxController {
   final cityController = TextEditingController();
   final postalCodeController = TextEditingController();
 
+  // Add these observable variables to fix the error
+  final isRupees = true.obs;
+  final selectedValue = ''.obs;
+
   void openAddressBottomSheet() {
     Get.bottomSheet(
       Scrollbar(
@@ -166,7 +169,7 @@ class CatalogController extends GetxController {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +238,13 @@ class CatalogController extends GetxController {
                         return;
                       }
 
-                      Get.to(() => PaymentScreen()); // Close the bottom sheet
+                      Get.to(
+                        () => PaymentScreen(
+                          amount: isRupees.value
+                              ? selectedValue.value
+                              : '${selectedValue.value} grams',
+                        ),
+                      ); // Close the bottom sheet
                       Get.snackbar(
                         "Success",
                         "Address submitted",

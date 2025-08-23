@@ -1,544 +1,203 @@
-import 'package:aesera_jewels/modules/dashboard/dashboard_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:aesera_jewels/modules/dashboard/dashboard_controller.dart';
+import 'package:aesera_jewels/modules/login/login_view.dart';
 
-class DashboardScreen extends GetWidget<DashboardController> {
+class DashboardScreen extends StatelessWidget {
+  final DashboardController controller = Get.put(DashboardController());
+
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final buttonWidth = width * 0.25;
+
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        elevation: 1,
+        title: const Text("Dashboard", style: TextStyle(color: Colors.black)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
+            child: ElevatedButton(
+              onPressed: () => Get.offAll(() => LoginView()),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber,
+                shape: const StadiumBorder(),
+                padding: EdgeInsets.symmetric(
+                  horizontal: buttonWidth * 0.5,
+                  vertical: 10,
+                ),
+              ),
+              child: const Text(
+                "Logout",
+                style: TextStyle(color: Colors.black, fontSize: 12),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Dashboard',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber,
-                      shape: StadiumBorder(),
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                    ),
-                    onPressed: () {
-                      // TODO: Handle logout
-                    },
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-
-              // User Name
-              Text(
-                'Rama krishnan',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+        child: Scrollbar(
+          thickness: 6,
+          radius: const Radius.circular(10),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Welcome Title
+                const Text(
+                  "Rama Krishnan",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
-              ),
-              SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              // Gold Rate + Pay
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Color(0xFF0A2A4D),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Current Rate Gold (24K)',
-                      style: TextStyle(color: Colors.amber),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Rs.9,450',
-                      style: TextStyle(
-                        color: Colors.amber,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed: controller.goToBuyGold,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber,
-                          shape: StadiumBorder(),
-                        ),
-                        child: Text(
-                          'Pay',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-
-              // Shop Now Section
-              GestureDetector(
-                onTap: controller.goToCatalog,
-                child: Container(
-                  height: 150,
+                // GOLD RATE CARD
+                Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFF0A2A4D),
-                    borderRadius: BorderRadius.circular(16),
+                    color: const Color(0xFF032541),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Stack(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Right-side gold coins image
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: Image.asset(
-                            'assets/images/Group 72.png', // Use your actual asset
-                            fit: BoxFit.contain,
-                            width: 120,
-                          ),
+                      const Text(
+                        "Current Rate Gold (24K)",
+                        style: TextStyle(color: Colors.amber),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        "Rs. 9,450",
+                        style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-
-                      // Left-side button
-                      Positioned(
-                        left: 16,
-                        bottom: 16,
+                      const SizedBox(height: 12),
+                      Align(
+                        alignment: Alignment.centerRight,
                         child: ElevatedButton(
-                          onPressed: controller.goToCatalog,
+                          onPressed: controller.goToBuyGold,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.amber,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            shape: const StadiumBorder(),
                             padding: EdgeInsets.symmetric(
-                              horizontal: 20,
+                              horizontal: width * 0.08,
                               vertical: 12,
                             ),
                           ),
-                          child: Text(
-                            'Shop Now',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          child: const Text(
+                            "Pay",
+                            style: TextStyle(color: Colors.black),
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
 
-              // Portfolio Button
-              ElevatedButton(
-                onPressed: controller.goToPortfolio,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF0A2A4D),
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    'Portfolio',
-                    style: TextStyle(
-                      color: Colors.amber,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                const SizedBox(height: 20),
+
+                // SHOP NOW SECTION
+                GestureDetector(
+                  onTap: controller.goToCatalog,
+                  child: Container(
+                    width: double.infinity,
+                    height: 230,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF032541),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            Image.asset(
+                              "assets/images/catalog1.png",
+                              width: 70,
+                              height: 70,
+                            ),
+                            const SizedBox(height: 10),
+                            Image.asset(
+                              "assets/images/catelog2.png",
+                              width: 70,
+                              height: 50,
+                            ),
+                            const SizedBox(height: 10),
+                            ElevatedButton(
+                              onPressed: controller.goToCatalog,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.amber,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: width * 0.06,
+                                  vertical: 10,
+                                ),
+                              ),
+                              child: const Text(
+                                "Shop Now",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Image.asset(
+                            "assets/images/catelog3.png",
+                            width: double.infinity,
+                            height: 210,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 30),
+
+                // PORTFOLIO BUTTON
+                Center(
+                  child: ElevatedButton(
+                    onPressed: controller.goToInvestment,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF032541),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.2,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      "Portfolio",
+                      style: TextStyle(
+                        color: Colors.amber,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-// // import 'package:aesera_jewels/modules/dashboard/dashboard_controller.dart';
-// // import 'package:flutter/material.dart';
-// // import 'package:get/get.dart';
-
-// // class DashboardScreen extends StatelessWidget {
-// //   final DashboardController controller = Get.find();
-
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       backgroundColor: Colors.white,
-// //       body: SafeArea(
-// //         child: Padding(
-// //           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-// //           child: Column(
-// //             crossAxisAlignment: CrossAxisAlignment.start,
-// //             children: [
-// //               Row(
-// //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// //                 children: [
-// //                   Text(
-// //                     "Dashboard",
-// //                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-// //                   ),
-// //                   ElevatedButton(
-// //                     onPressed: () {}, // Logout logic here
-// //                     style: ElevatedButton.styleFrom(
-// //                       backgroundColor: Colors.amber,
-// //                       shape: StadiumBorder(),
-// //                       padding: EdgeInsets.symmetric(
-// //                         horizontal: 20,
-// //                         vertical: 10,
-// //                       ),
-// //                     ),
-// //                     child: Text(
-// //                       "Logout",
-// //                       style: TextStyle(color: Colors.black),
-// //                     ),
-// //                   ),
-// //                 ],
-// //               ),
-// //               SizedBox(height: 20),
-// //               Text(
-// //                 "Rama krishnan",
-// //                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-// //               ),
-// //               SizedBox(height: 20),
-
-// //               // GOLD RATE CONTAINER
-// //               Container(
-// //                 decoration: BoxDecoration(
-// //                   color: Color(0xFF032541),
-// //                   borderRadius: BorderRadius.circular(10),
-// //                 ),
-// //                 padding: EdgeInsets.all(16),
-// //                 child: Column(
-// //                   crossAxisAlignment: CrossAxisAlignment.start,
-// //                   children: [
-// //                     Text(
-// //                       "Current Rate Gold (24K)",
-// //                       style: TextStyle(color: Colors.amber),
-// //                     ),
-// //                     SizedBox(height: 8),
-// //                     Text(
-// //                       "Rs.9,450",
-// //                       style: TextStyle(
-// //                         color: Colors.amber,
-// //                         fontSize: 24,
-// //                         fontWeight: FontWeight.bold,
-// //                       ),
-// //                     ),
-// //                     SizedBox(height: 10),
-// //                     Align(
-// //                       alignment: Alignment.centerRight,
-// //                       child: ElevatedButton(
-// //                         onPressed: controller.goToBuyGold,
-// //                         style: ElevatedButton.styleFrom(
-// //                           backgroundColor: Colors.amber,
-// //                           shape: StadiumBorder(),
-// //                           padding: EdgeInsets.symmetric(
-// //                             horizontal: 20,
-// //                             vertical: 10,
-// //                           ),
-// //                         ),
-// //                         child: Text(
-// //                           "Pay",
-// //                           style: TextStyle(color: Colors.black),
-// //                         ),
-// //                       ),
-// //                     ),
-// //                   ],
-// //                 ),
-// //               ),
-
-// //               SizedBox(height: 20),
-
-// //               // SHOP NOW CONTAINER
-// //               GestureDetector(
-// //                 onTap: controller.goToCatalog,
-// //                 child: Container(
-// //                   decoration: BoxDecoration(
-// //                     color: Color(0xFF032541),
-// //                     borderRadius: BorderRadius.circular(16),
-// //                   ),
-// //                   padding: EdgeInsets.all(16),
-// //                   child: Row(
-// //                     children: [
-// //                       Column(
-// //                         children: [
-// //                           Image.asset("assets/images/catalog1.png", width: 40),
-// //                           SizedBox(height: 10),
-// //                           Image.asset("assets/images/catelog2.png", width: 40),
-// //                           SizedBox(height: 10),
-// //                           ElevatedButton(
-// //                             onPressed: controller.goToCatalog,
-// //                             style: ElevatedButton.styleFrom(
-// //                               backgroundColor: Colors.amber,
-// //                               shape: RoundedRectangleBorder(
-// //                                 borderRadius: BorderRadius.circular(10),
-// //                               ),
-// //                             ),
-// //                             child: Text(
-// //                               "Shop Now",
-// //                               style: TextStyle(color: Colors.black),
-// //                             ),
-// //                           ),
-// //                         ],
-// //                       ),
-// //                       SizedBox(width: 20),
-// //                       Expanded(
-// //                         child: Image.asset("assets/images/catelog3.png"),
-// //                       ),
-// //                     ],
-// //                   ),
-// //                 ),
-// //               ),
-
-// //               SizedBox(height: 20),
-
-// //               // PORTFOLIO BUTTON
-// //               Center(
-// //                 child: ElevatedButton(
-// //                   onPressed: controller.goToPortfolio,
-// //                   style: ElevatedButton.styleFrom(
-// //                     backgroundColor: Color(0xFF032541),
-// //                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 16),
-// //                     shape: RoundedRectangleBorder(
-// //                       borderRadius: BorderRadius.circular(10),
-// //                     ),
-// //                   ),
-// //                   child: Text(
-// //                     "Portfolio",
-// //                     style: TextStyle(
-// //                       color: Colors.amber,
-// //                       fontSize: 16,
-// //                       fontWeight: FontWeight.bold,
-// //                     ),
-// //                   ),
-// //                 ),
-// //               ),
-// //             ],
-// //           ),
-// //         ),
-// //       ),
-// //     );
-// //   }
-// // }import 'package:aesera_jewels/modules/dashboard/dashboard_controller.dart';
-// import 'package:aesera_jewels/modules/dashboard/dashboard_controller.dart';
-// import 'package:aesera_jewels/modules/login/login_view.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-
-// class DashboardScreen extends StatelessWidget {
-//   final DashboardController controller = Get.find();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           // Make the screen scrollable
-//           child: Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 // Header Row
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Align(
-//                       alignment: Alignment.topCenter,
-//                       child: Padding(
-//                         padding: const EdgeInsets.fromLTRB(60, 4, 20, 4),
-//                         child: Text(
-//                           "Dashboard",
-//                           textAlign: TextAlign.center,
-//                           style: TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                             fontSize: 20,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     ElevatedButton(
-//                       onPressed: () {}, // Logout logic here
-//                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: Colors.amber,
-//                         shape: StadiumBorder(),
-//                         padding: EdgeInsets.symmetric(
-//                           horizontal: 5,
-//                           vertical: 5,
-//                         ),
-//                       ),
-//                       child: TextButton(
-//                         onPressed: () {
-//                           Get.offAll(() => LoginView());
-//                         },
-//                         child: const Text(
-//                           "Logout",
-//                           style: TextStyle(color: Colors.black),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//                 SizedBox(height: 20),
-//                 Text(
-//                   "Rama krishnan",
-//                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
-//                 ),
-//                 SizedBox(height: 20),
-
-//                 // GOLD RATE CONTAINER
-//                 Container(
-//                   decoration: BoxDecoration(
-//                     color: Color(0xFF032541),
-//                     borderRadius: BorderRadius.circular(10),
-//                   ),
-//                   padding: EdgeInsets.all(16),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         "Current Rate Gold (24K)",
-//                         style: TextStyle(color: Colors.amber),
-//                       ),
-//                       SizedBox(height: 8),
-//                       Text(
-//                         "Rs.9,450",
-//                         style: TextStyle(
-//                           color: Colors.amber,
-//                           fontSize: 24,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                       SizedBox(height: 10),
-//                       Align(
-//                         alignment: Alignment.centerRight,
-//                         child: ElevatedButton(
-//                           onPressed: controller.goToBuyGold,
-//                           style: ElevatedButton.styleFrom(
-//                             backgroundColor: Colors.amber,
-//                             shape: StadiumBorder(),
-//                             padding: EdgeInsets.symmetric(
-//                               horizontal: 20,
-//                               vertical: 10,
-//                             ),
-//                           ),
-//                           child: Text(
-//                             "Pay",
-//                             style: TextStyle(color: Colors.black),
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-
-//                 SizedBox(height: 20),
-
-//                 // SHOP NOW CONTAINER
-//                 GestureDetector(
-//                   onTap: controller.goToCatalog,
-//                   child: Container(
-//                     decoration: BoxDecoration(
-//                       color: Color(0xFF032541),
-//                       borderRadius: BorderRadius.circular(16),
-//                     ),
-//                     padding: EdgeInsets.all(16),
-//                     child: Row(
-//                       children: [
-//                         Column(
-//                           children: [
-//                             Image.asset(
-//                               "assets/images/catalog1.png",
-//                               width: 40,
-//                             ),
-//                             SizedBox(height: 10),
-//                             Image.asset(
-//                               "assets/images/catelog2.png",
-//                               width: 40,
-//                             ),
-//                             SizedBox(height: 10),
-//                             ElevatedButton(
-//                               onPressed: controller.goToCatalog,
-//                               style: ElevatedButton.styleFrom(
-//                                 backgroundColor: Colors.amber,
-//                                 shape: RoundedRectangleBorder(
-//                                   borderRadius: BorderRadius.circular(10),
-//                                 ),
-//                               ),
-//                               child: Text(
-//                                 "Shop Now",
-//                                 style: TextStyle(color: Colors.black),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                         SizedBox(width: 20),
-//                         Expanded(
-//                           child: Image.asset("assets/images/catelog3.png"),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-
-//                 SizedBox(height: 20),
-
-//                 // PORTFOLIO BUTTON
-//                 Center(
-//                   child: ElevatedButton(
-//                     onPressed: controller.goToPortfolio,
-//                     style: ElevatedButton.styleFrom(
-//                       backgroundColor: Color(0xFF032541),
-//                       padding: EdgeInsets.symmetric(
-//                         horizontal: 80,
-//                         vertical: 16,
-//                       ),
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(10),
-//                       ),
-//                     ),
-//                     child: Text(
-//                       "Portfolio",
-//                       style: TextStyle(
-//                         color: Colors.amber,
-//                         fontSize: 16,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

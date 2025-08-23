@@ -10,14 +10,14 @@ import 'package:get/get.dart';
 
 class DashboardController extends GetxController {
   void goToBuyGold() {
-    Get.toNamed('/buygold');
+    Get.toNamed('/buy_gold');
   }
 
   void goToCatalog() {
     Get.toNamed('/catalog');
   }
 
-  void goToPortfolio() {
-    Get.toNamed('/portfolio');
+  void goToInvestment() {
+    Get.toNamed('/investment');
   }
 }

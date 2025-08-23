@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'buy_gold_controller.dart';
@@ -11,7 +10,7 @@ class BuyGoldScreen extends GetView<BuyGoldController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Buy Gold"),
-        leading: const BackButton(),
+        leading: BackButton(onPressed: () => Get.back()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -140,34 +139,36 @@ class BuyGoldScreen extends GetView<BuyGoldController> {
               () => Wrap(
                 spacing: 12,
                 runSpacing: 12,
-                children: (controller.isRupees.value
-                        ? controller.rupeesOptions
-                        : controller.gramsOptions)
-                    .map((option) {
-                  bool isSelected =
-                      controller.selectedValue.value == option;
-                  return GestureDetector(
-                    onTap: () => controller.selectValue(option),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? Colors.amber
-                            : const Color(0xFFF1EEF6),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        controller.isRupees.value
-                            ? "₹$option"
-                            : "$option gm",
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                children:
+                    (controller.isRupees.value
+                            ? controller.rupeesOptions
+                            : controller.gramsOptions)
+                        .map((option) {
+                          bool isSelected =
+                              controller.selectedValue.value == option;
+                          return GestureDetector(
+                            onTap: () => controller.selectValue(option),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Colors.amber
+                                    : const Color(0xFFF1EEF6),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                controller.isRupees.value
+                                    ? "₹$option"
+                                    : "$option gm",
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          );
+                        })
+                        .toList(),
               ),
             ),
             const Spacer(),

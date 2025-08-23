@@ -1,10 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:aesera_jewels/modules/splash/splash_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
-class SplashView extends GetWidget<SplashController> {
+class SplashView extends GetWidget<SplashController> {            
   SplashView({Key? key}) : super(key: key);
 
   @override
