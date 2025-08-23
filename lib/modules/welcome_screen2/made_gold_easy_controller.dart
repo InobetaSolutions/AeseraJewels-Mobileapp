@@ -6,6 +6,6 @@ class MadeGoldEasyController extends GetxController {
   }
 
   void goToJewelsForOccasion() {
-    Get.offAllNamed('/JewelsForOccasion'); // Navigate after last onboarding
+    Get.offAllNamed('/jewels_for_occasion'); // Navigate after last onboarding
   }
 }

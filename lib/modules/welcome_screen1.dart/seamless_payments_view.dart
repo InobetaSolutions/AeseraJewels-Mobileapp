@@ -65,7 +65,7 @@ class SeamlessPaymentView extends GetView<SeamlessPaymentController> {
                   Text(
                     "Secure your financial future with gold effortless\n saving mode easy and seamless.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12.5, color: Colors.black45),
+                    style: TextStyle(fontSize: 12.5, color: Colors.black),
                   ),
                 ],
               ),

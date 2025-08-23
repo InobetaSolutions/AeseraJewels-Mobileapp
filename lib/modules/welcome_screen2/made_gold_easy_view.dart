@@ -64,7 +64,7 @@ class MadeGoldEasyScreen extends GetWidget<MadeGoldEasyController> {
                   Text(
                     "Start building wealth with ease - saving in\n gold mode simple, accessible and hassle-free.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13, color: Colors.black45),
+                    style: TextStyle(fontSize: 13, color: Colors.black),
                   ),
                 ],
               ),
