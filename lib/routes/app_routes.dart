@@ -10,7 +10,7 @@ import 'package:aesera_jewels/modules/welcome_screen1.dart/seamless_payments_vie
 import 'package:aesera_jewels/modules/welcome_screen2/made_gold_easy_binding.dart';
 import 'package:aesera_jewels/modules/welcome_screen2/made_gold_easy_view.dart';
 import 'package:aesera_jewels/modules/welcome_screen3/jewels_for_occasion_binding.dart';
-import 'package:aesera_jewels/modules/welcome_screen3/welcome_view.dart';
+import 'package:aesera_jewels/modules/welcome_screen3/jewels_of_occasion_view.dart';
 
 // Auth
 import 'package:aesera_jewels/modules/registration/register_binding.dart';
@@ -39,6 +39,7 @@ import 'package:aesera_jewels/modules/investment_details/portfolio_view.dart';
 // Payments
 import 'package:aesera_jewels/modules/payment_selection/payment_selection_controller.dart';
 import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
+import 'package:aesera_jewels/modules/payment_selection/payment_selection_binding.dart';
 
 // Scan to Pay
 import 'package:aesera_jewels/modules/scan_to_pay/scan_to_pay_controller.dart';
@@ -113,31 +114,10 @@ class AppRoutes {
       binding: BuyGoldBinding(),
     ),
 
-    // Portfolio
-    GetPage(
-      name: investment,
-      page: () => InvestmentScreen(), // Removed tabIndex or replace with correct parameter if needed
-      binding: InvestmentBinding(),
-    ),
-
-    // Payments
-    GetPage(
-      name: payment,
-      page: () => PaymentScreen(
-        amount: '0', 
-      ), // Replace '0' with the appropriate value or variable
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => PaymentController());
-      }),
-    ),
-
-    // Scan to Pay
-    // GetPage(
-    //   name: scanToPay,
-    //   page: () => ScanToPayScreen(),
-    //   binding: BindingsBuilder(() {
-    //     Get.lazyPut(() => ScanToPayController());
-    //   }),
-    // ),
+    
+  
+    GetPage(name: payment, page: () => PaymentScreen(sourceScreen: Get.arguments["source"] ?? "")),
+    GetPage(name: investment, page: () => InvestmentScreen(initialTabIndex: 0,)),
+    
   ];
 }
