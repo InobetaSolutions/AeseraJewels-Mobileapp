@@ -1,3 +1,5 @@
+import 'package:aesera_jewels/modules/onboard/onboard_binding.dart';
+import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
 import 'package:get/get.dart';
 
 // Splash
@@ -60,27 +62,27 @@ class AppRoutes {
   static const buyGold = '/buy_gold';
   static const madeGoldEasy = '/made_gold_easy';
   static const seamlessPayments = '/seamless_payments';
-  //static const home = '/home';
+ static const onboard = '/onboard';
 
   static final routes = [
     GetPage(name: splash, page: () => SplashView(), binding: SplashBinding()),
 
     // Welcome Screens
-    GetPage(
-      name: jewelsForOccasion,
-      page: () => JewelsForOccasionScreen(),
-      binding: JewelsForOccasionBinding(),
-    ),
-    GetPage(
-      name: seamlessPayments,
-      page: () => SeamlessPaymentView(),
-      binding: SeamlessPaymentBinding(),
-    ),
-    GetPage(
-      name: madeGoldEasy,
-      page: () => MadeGoldEasyScreen(),
-      binding: MadeGoldEasyBinding(),
-    ),
+    // GetPage(
+    //   name: jewelsForOccasion,
+    //   page: () => JewelsForOccasionScreen(),
+    //   binding: JewelsForOccasionBinding(),
+    // ),
+    // GetPage(
+    //   name: seamlessPayments,
+    //   page: () => SeamlessPaymentView(),
+    //   binding: SeamlessPaymentBinding(),
+    // ),
+    // GetPage(
+    //   name: madeGoldEasy,
+    //   page: () => MadeGoldEasyScreen(),
+    //   binding: MadeGoldEasyBinding(),
+    // ),
 
     // Auth
     GetPage(
@@ -115,7 +117,11 @@ class AppRoutes {
     ),
 
     
-  
+  GetPage(
+      name: onboard,
+      page: () => OnboardingScreen(),
+       binding: OnboardingBinding(),
+    ),
     GetPage(name: payment, page: () => PaymentScreen(sourceScreen: Get.arguments["source"] ?? "")),
     GetPage(name: investment, page: () => InvestmentScreen(initialTabIndex: 0,)),
     

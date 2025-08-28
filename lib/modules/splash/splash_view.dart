@@ -26,8 +26,9 @@ class SplashView extends GetWidget<SplashController> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Image.asset(
-                'assets/images/sample registraion 2-artguru 1.png', // Replace with your logo image
-                width: 200,
+                'assets/images/splash logo.png', // Replace with your logo image
+                width: 100,
+                height: 100,
               ),
             ),
           ),
