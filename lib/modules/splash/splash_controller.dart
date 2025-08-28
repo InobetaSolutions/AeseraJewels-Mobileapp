@@ -5,9 +5,10 @@ class SplashController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // Navigate to SeamlessPayment screen after 3 seconds
+    
     Future.delayed(const Duration(seconds: 3), () {
-      Get.offNamed('/seamless_payments');
+     // Get.offNamed('/otp');
+    Get.offNamed('/onboard');   
     });
   }
 }

@@ -8,7 +8,7 @@ class SeamlessPaymentView extends GetView<SeamlessPaymentController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:const Color(0xFFF5F5F5),
       body: SafeArea(
         child: Column(
           children: [
@@ -17,29 +17,37 @@ class SeamlessPaymentView extends GetView<SeamlessPaymentController> {
               children: [
                 Image.asset(
                   "assets/images/Depth 3, Frame 0.png",
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.60,
+                  
+                  width: 390,
+                  height: MediaQuery.of(context).size.height * 0.59,
                   fit: BoxFit.cover,
                 ),
                 Positioned(
                   top: 16,
                   right: 16,
-                  child: ElevatedButton(
-                    onPressed: controller.onSkip,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: StadiumBorder(),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+                  child: Container(
+                    width: 54,
+                    height: 33,
+                    child: ElevatedButton(
+                      onPressed: controller.onSkip,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        //shape: StadiumBorder(),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        elevation: 0,
                       ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      'Skip',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                      child: Text(
+                        'Skip',
+                        style: TextStyle(fontFamily: 'Manrope',fontSize: 16,
+                          color: const Color(0xFF000000),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
@@ -56,16 +64,18 @@ class SeamlessPaymentView extends GetView<SeamlessPaymentController> {
                     "Easy and Seamless Payments",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 21.5,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 22.7,
+                      fontFamily: 'Lexend',
+                      fontWeight: FontWeight.w700,
                       color: Color(0xFF0A2A4D),
                     ),
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "Secure your financial future with gold effortless\n saving mode easy and seamless.",
+                    "Secure your financial future with gold\n effortless saving mode easy and seamless.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12.5, color: Colors.black),
+                    style: TextStyle(fontSize: 15, color: Colors.black,fontFamily: 'Lexend',
+                      fontWeight: FontWeight.w400,fontStyle: FontStyle.normal),
                   ),
                 ],
               ),
@@ -80,12 +90,12 @@ class SeamlessPaymentView extends GetView<SeamlessPaymentController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [_dot(isActive: true), _dot(), _dot()],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 22),
                   GestureDetector(
                     onTap: controller.onForward,
                     child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 60,
+                      height: 60,
                       decoration: const BoxDecoration(
                         color: Color(0xFF0A2A4D),
                         shape: BoxShape.circle,
@@ -110,8 +120,8 @@ class SeamlessPaymentView extends GetView<SeamlessPaymentController> {
 Widget _dot({bool isActive = false}) {
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 4),
-    width: isActive ? 18 : 10,
-    height: 10,
+    width: isActive ? 20 : 10,
+    height: 8,
     decoration: BoxDecoration(
       color: isActive ? Colors.black : Colors.black26,
       borderRadius: BorderRadius.circular(10),

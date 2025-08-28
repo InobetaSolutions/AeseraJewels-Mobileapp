@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 
 class MadeGoldEasyController extends GetxController {
-  void skipRegister() {
-    Get.offAllNamed('/register'); // Navigate directly to Register
+  void skip() {
+    Get.offAllNamed('/login'); // Navigate directly to Register
   }
 
   void goToJewelsForOccasion() {
