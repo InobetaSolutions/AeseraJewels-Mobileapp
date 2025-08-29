@@ -565,7 +565,7 @@ class CatalogController extends GetxController {
     }
 
     Get.back();
-    Get.to(() => PaymentScreen(sourceScreen: "catalog"), arguments: {
+    Get.to(() => PaymentScreen(), arguments: {
       "amount": selectedValue.value.toStringAsFixed(2),
       "source": "catalog",
     });
