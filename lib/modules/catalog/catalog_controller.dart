@@ -1,23 +1,20 @@
 
 // // import 'dart:convert';
 // // import 'package:aesera_jewels/models/catalog_model.dart';
-// // import 'package:aesera_jewels/modules/payment_selection/payment_selection_controller.dart';
-// // //import 'package:aesera_jewels/modules/payment/payment_screen.dart';
 // // import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
 // // import 'package:flutter/material.dart';
 // // import 'package:get/get.dart';
+// // import 'package:google_fonts/google_fonts.dart';
 // // import 'package:http/http.dart' as http;
 
 // // class CatalogController extends GetxController {
 // //   var isLoading = true.obs;
 // //   var productList = <ProductModel>[].obs;
 
-// //   // Bottom sheet controllers
 // //   final addressController = TextEditingController();
 // //   final cityController = TextEditingController();
 // //   final postalCodeController = TextEditingController();
 
-// //   // Selected product price
 // //   final selectedValue = 0.0.obs;
 
 // //   @override
@@ -26,105 +23,101 @@
 // //     super.onInit();
 // //   }
 
-// //   /// Fetch products from API
+// //   /// ✅ Fetch products from API
 // //   Future<void> fetchProducts() async {
 // //     try {
 // //       isLoading(true);
 
-// //       var request = http.Request(
-// //         'GET',
-// //         Uri.parse('http://13.204.96.244:3000/api/get-products'),
+// //       var response = await http.get(
+// //         Uri.parse("http://13.204.96.244:3000/api/get-products"),
 // //       );
 
-// //       http.StreamedResponse response = await request.send();
-
 // //       if (response.statusCode == 200) {
-// //         final body = await response.stream.bytesToString();
-// //         final List decoded = jsonDecode(body);
-
+// //         final List decoded = jsonDecode(response.body);
 // //         productList.value =
 // //             decoded.map((json) => ProductModel.fromJson(json)).toList();
 // //       } else {
-// //         Get.snackbar("Error", "Failed to fetch products: ${response.reasonPhrase}",
-// //             backgroundColor: Colors.redAccent, colorText: Colors.white);
+// //         Get.snackbar("Error", "Failed to fetch products",
+// //             backgroundColor: Colors.red, colorText: Colors.white);
 // //       }
 // //     } catch (e) {
-// //       Get.snackbar("Exception", e.toString(),
-// //           backgroundColor: Colors.redAccent, colorText: Colors.white);
+// //       Get.snackbar("Error", e.toString(),
+// //           backgroundColor: Colors.red, colorText: Colors.white);
 // //     } finally {
 // //       isLoading(false);
 // //     }
 // //   }
 
-// //   /// Open bottom sheet for address entry
+// //   /// ✅ Bottom Sheet for Address Input
 // //   void openAddressBottomSheet() {
 // //     Get.bottomSheet(
-// //       Scrollbar(
-// //         thumbVisibility: true,
-// //         thickness: 3,
-// //         child: SingleChildScrollView(
-// //           padding: EdgeInsets.only(
-// //             bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
+// //       SingleChildScrollView(
+// //         padding: EdgeInsets.only(
+// //           bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
+// //         ),
+// //         child: Container(
+// //           padding: const EdgeInsets.all(20),
+// //           decoration: const BoxDecoration(
+// //             color: Colors.white,
+// //             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
 // //           ),
-// //           child: Container(
-// //             padding: const EdgeInsets.all(20),
-// //             decoration: const BoxDecoration(
-// //               color: Colors.white,
-// //               borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-// //             ),
-// //             child: Column(
-// //               crossAxisAlignment: CrossAxisAlignment.start,
-// //               mainAxisSize: MainAxisSize.min,
-// //               children: [
-// //                 Row(
-// //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// //                   children: [
-// //                     const Text(
-// //                       "Delivery Address",
-// //                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+// //           child: Column(
+// //             crossAxisAlignment: CrossAxisAlignment.start,
+// //             mainAxisSize: MainAxisSize.min,
+// //             children: [
+// //               Row(
+// //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// //                 children: [
+// //                   Text(
+// //                     "Delivery Address",
+// //                     style: GoogleFonts.plusJakartaSans(
+// //                       fontSize: 18,
+// //                       fontWeight: FontWeight.w700,
+// //                       color: const Color(0xFF0D0F1C),
 // //                     ),
-// //                     IconButton(
-// //                       onPressed: () => Get.back(),
-// //                       icon: const Icon(Icons.close),
+// //                   ),
+// //                   IconButton(
+// //                     onPressed: () => Get.back(),
+// //                     icon: const Icon(Icons.close, color: Colors.black87),
+// //                   ),
+// //                 ],
+// //               ),
+// //               const SizedBox(height: 16),
+
+// //               buildInputField("Address", addressController,
+// //                   "Enter your address", TextInputType.text),
+// //               const SizedBox(height: 12),
+
+// //               buildInputField("City", cityController, "Enter your city",
+// //                   TextInputType.text),
+// //               const SizedBox(height: 12),
+
+// //               buildInputField("Postal Code", postalCodeController,
+// //                   "Enter postal code", TextInputType.number),
+
+// //               const SizedBox(height: 20),
+// //               SizedBox(
+// //                 width: double.infinity,
+// //                 child: ElevatedButton(
+// //                   onPressed: submitAddress,
+// //                   style: ElevatedButton.styleFrom(
+// //                     backgroundColor: const Color(0xFF09243D),
+// //                     shape: RoundedRectangleBorder(
+// //                       borderRadius: BorderRadius.circular(12),
 // //                     ),
-// //                   ],
-// //                 ),
-// //                 const SizedBox(height: 16),
-
-// //                 _buildInput("Address", addressController, "Enter your address",
-// //                     TextInputType.text),
-// //                 const SizedBox(height: 12),
-
-// //                 _buildInput("City", cityController, "Enter your city",
-// //                     TextInputType.text),
-// //                 const SizedBox(height: 12),
-
-// //                 _buildInput("Postal Code", postalCodeController,
-// //                     "Enter your postal code", TextInputType.number),
-// //                 const SizedBox(height: 20),
-
-// //                 SizedBox(
-// //                   width: double.infinity,
-// //                   child: ElevatedButton(
-// //                     style: ElevatedButton.styleFrom(
-// //                       backgroundColor: const Color(0xFF0A2A4D),
-// //                       padding: const EdgeInsets.symmetric(vertical: 14),
-// //                       shape: RoundedRectangleBorder(
-// //                         borderRadius: BorderRadius.circular(8),
-// //                       ),
-// //                     ),
-// //                     onPressed: submitAddress,
-// //                     child: const Text(
-// //                       "Proceed to Payment",
-// //                       style: TextStyle(
-// //                           fontSize: 16,
-// //                           fontWeight: FontWeight.bold,
-// //                           color: Colors.white),
+// //                     padding: const EdgeInsets.symmetric(vertical: 14),
+// //                   ),
+// //                   child: Text(
+// //                     "Confirm Order",
+// //                     style: GoogleFonts.plusJakartaSans(
+// //                       fontSize: 15,
+// //                       fontWeight: FontWeight.w700,
+// //                       color: Colors.white,
 // //                     ),
 // //                   ),
 // //                 ),
-// //               ],
-// //             ),
+// //               )
+// //             ],
 // //           ),
 // //         ),
 // //       ),
@@ -132,76 +125,78 @@
 // //     );
 // //   }
 
-// //   /// Validate & Navigate
-// //   void submitAddress() {
-// //     final address = addressController.text.trim();
-// //     final city = cityController.text.trim();
-// //     final postal = postalCodeController.text.trim();
-
-// //     if (address.isEmpty || city.isEmpty || postal.isEmpty) {
-// //       Get.snackbar("Error", "All fields are required",
-// //           backgroundColor: Colors.redAccent, colorText: Colors.white);
-// //       return;
-// //     }
-// //     if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(city)) {
-// //       Get.snackbar("Error", "City must contain only alphabets",
-// //           backgroundColor: Colors.redAccent, colorText: Colors.white);
-// //       return;
-// //     }
-// //     if (!RegExp(r'^[0-9]+$').hasMatch(postal)) {
-// //       Get.snackbar("Error", "Postal code must contain only digits",
-// //           backgroundColor: Colors.redAccent, colorText: Colors.white);
-// //       return;
-// //     }
-
-// //     Get.back(); // close bottom sheet
-
-// //     // Navigate to PaymentScreen
-// //     // Get.to(
-// //     //   () =>  PaymentScreen(sourceScreen: '',),
-// //     //   arguments: {
-// //     //     "amount": selectedValue.value.toStringAsFixed(2),
-// //     //     "source": "catalog",
-// //     //   },
-// //     // );
-// //     // From catalog screen:
-// // Get.to(() => PaymentScreen(sourceScreen: "catalog"));
-
-
-
-// //   }
-
-// //   /// Input builder
-// //   Widget _buildInput(String label, TextEditingController controller,
+// //   /// ✅ Input Field Builder
+// //   Widget buildInputField(String label, TextEditingController controller,
 // //       String hint, TextInputType type) {
 // //     return Column(
 // //       crossAxisAlignment: CrossAxisAlignment.start,
 // //       children: [
-// //         Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+// //         Text(
+// //           label,
+// //           style: GoogleFonts.plusJakartaSans(
+// //             fontSize: 14,
+// //             fontWeight: FontWeight.w600,
+// //             color: Colors.black,
+// //           ),
+// //         ),
 // //         const SizedBox(height: 6),
 // //         TextField(
 // //           controller: controller,
 // //           keyboardType: type,
+// //           maxLength: label == "Postal Code" ? 7 : 40,
 // //           decoration: InputDecoration(
 // //             hintText: hint,
-// //             hintStyle: const TextStyle(color: Colors.teal),
-// //             filled: true,
-// //             fillColor: const Color(0xFFF1FCFF),
+// //             counterText: "",
+// //             contentPadding:
+// //                 const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
 // //             border: OutlineInputBorder(
-// //               borderRadius: BorderRadius.circular(12),
-// //               borderSide: BorderSide.none,
+// //               borderRadius: BorderRadius.circular(10),
 // //             ),
 // //           ),
 // //         ),
 // //       ],
 // //     );
 // //   }
-// // }
+
+// //   /// ✅ Address Validation + Navigate to Payment
+// //   void submitAddress() {
+// //     final address = addressController.text.trim();
+// //     final city = cityController.text.trim();
+// //     final postal = postalCodeController.text.trim();
+
+// //     if (address.isEmpty || city.isEmpty || postal.isEmpty) {
+// //       _showError("All fields are required");
+// //       return;
+// //     }
+
+// //     if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(city)) {
+// //       _showError("City must contain only alphabets");
+// //       return;
+// //     }
+
+// //     if (!RegExp(r'^\d{7}$').hasMatch(postal)) {
+// //       _showError("Postal code must be exactly 7 digits");
+// //       return;
+// //     }
+
+// //     Get.back(); // close sheet
+// //     Get.to(() => PaymentScreen(sourceScreen: "catalog"), arguments: {
+// //       "amount": selectedValue.value.toStringAsFixed(2),
+// //     });
+// //   }
+
+// //   void _showError(String message) {
+// //     Get.snackbar("Validation", message,
+// //         backgroundColor: Colors.red, colorText: Colors.white);
+// //   }
+
+// //   } 
 // import 'dart:convert';
 // import 'package:aesera_jewels/models/catalog_model.dart';
 // import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
+// import 'package:google_fonts/google_fonts.dart';
 // import 'package:http/http.dart' as http;
 
 // class CatalogController extends GetxController {
@@ -220,22 +215,17 @@
 //     super.onInit();
 //   }
 
-//   /// Fetch products from API
+//   /// ✅ Fetch products from API
 //   Future<void> fetchProducts() async {
 //     try {
 //       isLoading(true);
 
-//       var request = http.Request(
-//         'GET',
-//         Uri.parse('http://13.204.96.244:3000/api/get-products'),
+//       var response = await http.get(
+//         Uri.parse("http://13.204.96.244:3000/api/get-products"),
 //       );
 
-//       http.StreamedResponse response = await request.send();
-
 //       if (response.statusCode == 200) {
-//         final body = await response.stream.bytesToString();
-//         final List decoded = jsonDecode(body);
-
+//         final List decoded = jsonDecode(response.body);
 //         productList.value =
 //             decoded.map((json) => ProductModel.fromJson(json)).toList();
 //       } else {
@@ -250,12 +240,7 @@
 //     }
 //   }
 
-//   /// Simulated Original Price (e.g., 20% more)
-//   double calculateOriginalPrice(double price) {
-//     return (price * 1.2);
-//   }
-
-//   /// Bottom sheet for address input
+//   /// ✅ Bottom Sheet for Address Input
 //   void openAddressBottomSheet() {
 //     Get.bottomSheet(
 //       SingleChildScrollView(
@@ -263,72 +248,70 @@
 //           bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
 //         ),
 //         child: Container(
+          
 //           padding: const EdgeInsets.all(20),
 //           decoration: const BoxDecoration(
 //             color: Colors.white,
-//             borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+//             borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
 //           ),
 //           child: Column(
 //             crossAxisAlignment: CrossAxisAlignment.start,
 //             mainAxisSize: MainAxisSize.min,
 //             children: [
-//               Center(
-//                 child: Container(
-//                   width: 40,
-//                   height: 4,
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey.shade300,
-//                     borderRadius: BorderRadius.circular(4),
-//                   ),
-//                 ),
-//               ),
-//               const SizedBox(height: 16),
 //               Row(
 //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //                 children: [
-//                   const Text("Delivery Address",
-//                       style:
-//                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+//                   Text(
+//                     "Delivery Address",
+//                     style: GoogleFonts.plusJakartaSans(
+//                       fontSize: 22,
+//                       fontWeight: FontWeight.w700,
+//                       color: const Color(0xFF0D0F1C),
+//                     ),
+//                   ),
 //                   IconButton(
 //                     onPressed: () => Get.back(),
-//                     icon: const Icon(Icons.close),
+//                     icon: const Icon(Icons.close, color: Color( 0xFF0D0F1C) ),
 //                   ),
 //                 ],
 //               ),
 //               const SizedBox(height: 16),
 
-//               _buildInput("Address", addressController, "Enter your address",
+//               buildInputField("Address", addressController,
+//                   "Enter your address", TextInputType.text),
+//               const SizedBox(height: 16),
+
+//               buildInputField("City", cityController, "Enter your city",
 //                   TextInputType.text),
-//               const SizedBox(height: 12),
+//               const SizedBox(height: 16),
 
-//               _buildInput(
-//                   "City", cityController, "Enter your city", TextInputType.text),
-//               const SizedBox(height: 12),
-
-//               _buildInput("Postal Code", postalCodeController,
+//               buildInputField("Postal Code", postalCodeController,
 //                   "Enter your postal code", TextInputType.number),
-//               const SizedBox(height: 20),
 
+//               const SizedBox(height: 20),
 //               SizedBox(
-//                 width: double.infinity,
+//                 width: 358,
+//                 height: 48,
 //                 child: ElevatedButton(
+//                   onPressed: submitAddress,
 //                   style: ElevatedButton.styleFrom(
-//                     backgroundColor: const Color(0xFF0A2A4D),
-//                     padding: const EdgeInsets.symmetric(vertical: 14),
+//                     backgroundColor: const Color(0xFF09243D),
 //                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(30),
+//                       borderRadius: BorderRadius.circular(24),
+//                     ),
+//                     elevation: 4,
+//                     shadowColor: Colors.black.withOpacity(0.25),
+//                   ),
+//                   child: Text(
+//                     "Submit",
+//                     style: GoogleFonts.plusJakartaSans(
+//                       fontSize: 16,
+//                       fontWeight: FontWeight.w700,
+//                       color: const Color(0xFFF7FAFC),
 //                     ),
 //                   ),
-//                   onPressed: submitAddress,
-//                   child: const Text(
-//                     "Submit",
-//                     style: TextStyle(
-//                         fontSize: 16,
-//                         fontWeight: FontWeight.bold,
-//                         color: Colors.white),
-//                   ),
 //                 ),
-//               ),
+//               )
 //             ],
 //           ),
 //         ),
@@ -337,29 +320,56 @@
 //     );
 //   }
 
-//   /// Address form input builder
-//   Widget _buildInput(String label, TextEditingController controller,
+//   /// ✅ Input Field Builder
+//   Widget buildInputField(String label, TextEditingController controller,
 //       String hint, TextInputType type) {
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         Text(label,
-//             style:
-//                 const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+//         Text(
+//           label,
+//           style: GoogleFonts.plusJakartaSans(
+//             fontSize: 16,
+//             fontWeight: FontWeight.w500,
+//             color: Color(0xFF0D0F1C),
+//           ),
+//         ),
 //         const SizedBox(height: 6),
-//         TextField(
-//           controller: controller,
-//           keyboardType: type,
-//           maxLength: label == "Postal Code" ? 7 : 30,
-//           decoration: InputDecoration(
-//             counterText: "",
-//             hintText: hint,
-//             hintStyle: const TextStyle(color: Colors.teal),
-//             filled: true,
-//             fillColor: const Color(0xFFF1FCFF),
-//             border: OutlineInputBorder(
-//               borderRadius: BorderRadius.circular(12),
-//               borderSide: BorderSide.none,
+//         Container(
+//           width: 358,
+//           height: 56,
+//           decoration: BoxDecoration(
+//             color: const Color(0xFFF6FDFF),
+//             borderRadius: BorderRadius.circular(16),
+//             boxShadow: const [
+//               BoxShadow(
+//                 color: Color(0x40000000), // #00000040
+//                 offset: Offset(-0, 4),
+//                 blurRadius: 4,
+//                 spreadRadius: 0,
+//               ),
+//             ],
+//           ),
+//           child: TextField(
+//             controller: controller,
+//             keyboardType: type,
+//             maxLength: label == "Postal Code" ? 7 : 40,
+//             style: GoogleFonts.plusJakartaSans(
+//               fontSize: 16,
+//               fontWeight: FontWeight.w400,
+//               color: const Color(0xFF2596BE),
+//             ),
+//             decoration: InputDecoration(
+//               hintText: hint,
+//               hintStyle: GoogleFonts.plusJakartaSans(
+//                 fontSize: 16,
+//                 fontWeight: FontWeight.w400,
+//                 color: const Color(0xFF2596BE),
+//               ),
+//               counterText: "",
+//               border: InputBorder.none,
+//               contentPadding:
+//                   const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
 //             ),
 //           ),
 //         ),
@@ -367,7 +377,7 @@
 //     );
 //   }
 
-//   /// Validate and navigate to payment
+//   /// ✅ Address Validation + Navigate to Payment
 //   void submitAddress() {
 //     final address = addressController.text.trim();
 //     final city = cityController.text.trim();
@@ -378,18 +388,8 @@
 //       return;
 //     }
 
-//     if (address.length > 30) {
-//       _showError("Address must not exceed 30 characters");
-//       return;
-//     }
-
 //     if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(city)) {
 //       _showError("City must contain only alphabets");
-//       return;
-//     }
-
-//     if (city.length > 30) {
-//       _showError("City must not exceed 30 characters");
 //       return;
 //     }
 
@@ -398,24 +398,29 @@
 //       return;
 //     }
 
-//     Get.back(); // Close bottom sheet
+//     Get.back(); 
+//     Get.to(() => PaymentScreen(), arguments: {
+//   "source": "catalog",
+//   "amount": selectedValue.value.toStringAsFixed(2),
+// });
 
-//     Get.to(() => PaymentScreen(sourceScreen: "catalog"), arguments: {
-//       "amount": selectedValue.value.toStringAsFixed(2),
-//     });
+//     // close sheet
+//     // Get.to(() => PaymentScreen(sourceScreen: "catalog"), arguments: {
+//     //   "amount": selectedValue.value.toStringAsFixed(2),
+//     // });
 //   }
 
-//   /// Display error message
 //   void _showError(String message) {
 //     Get.snackbar("Validation", message,
-//         backgroundColor: Colors.redAccent, colorText: Colors.white);
+//         backgroundColor: Colors.red, colorText: Colors.white);
 //   }
 // }
 import 'dart:convert';
 import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'; // Ensure get package is properly imported
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class CatalogController extends GetxController {
@@ -431,24 +436,17 @@ class CatalogController extends GetxController {
   @override
   void onInit() {
     fetchProducts();
-    super.onInit();
   }
 
-  /// Fetch products from API
+  /// Fetch products
   Future<void> fetchProducts() async {
     try {
       isLoading(true);
-      var request = http.Request(
-        'GET',
-        Uri.parse('http://13.204.96.244:3000/api/get-products'),
-      );
-
-      http.StreamedResponse response = await request.send();
+      var response =
+          await http.get(Uri.parse("http://13.204.96.244:3000/api/get-products"));
 
       if (response.statusCode == 200) {
-        final body = await response.stream.bytesToString();
-        final List decoded = jsonDecode(body);
-
+        final List decoded = jsonDecode(response.body);
         productList.value =
             decoded.map((json) => ProductModel.fromJson(json)).toList();
       } else {
@@ -463,93 +461,59 @@ class CatalogController extends GetxController {
     }
   }
 
-  /// Calculate original price (20% markup)
-  double calculateOriginalPrice(double price) {
-    return price * 1.2;
-  }
-
-  /// Open bottom sheet
+  /// Address BottomSheet
   void openAddressBottomSheet() {
     Get.bottomSheet(
       SingleChildScrollView(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
-        ),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(Get.context!).viewInsets.bottom),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, -2),
-              ),
-            ],
+            borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Delivery Address",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text("Delivery Address",
+                      style: GoogleFonts.plusJakartaSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black)),
                   IconButton(
-                    onPressed: () => Get.back(),
-                    icon: const Icon(Icons.close),
-                  ),
+                      onPressed: () => Get.back(),
+                      icon: const Icon(Icons.close, color: Colors.black))
                 ],
               ),
-              const SizedBox(height: 16),
-
-              buildInputField("Address", addressController,
-                  "Enter your address", TextInputType.text),
               const SizedBox(height: 12),
 
-              buildInputField("City", cityController, "Enter your city",
-                  TextInputType.text),
+              buildInputField("Address", addressController, "Enter your address"),
               const SizedBox(height: 12),
-
+              buildInputField("City", cityController, "Enter your city"),
+              const SizedBox(height: 12),
               buildInputField("Postal Code", postalCodeController,
-                  "Enter your postal code", TextInputType.number),
-              const SizedBox(height: 24),
+                  "Enter your postal code",
+                  type: TextInputType.number),
 
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: submitAddress,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0A2A4D),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: const Color(0xFF09243D),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    elevation: 4,
+                        borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  child: const Text("Submit",
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -558,49 +522,30 @@ class CatalogController extends GetxController {
     );
   }
 
-  /// Input Field Builder Styled as Card
   Widget buildInputField(String label, TextEditingController controller,
-      String hint, TextInputType type) {
+      String hint, {TextInputType type = TextInputType.text}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            style: GoogleFonts.plusJakartaSans(
+                fontSize: 14, fontWeight: FontWeight.w600)),
         const SizedBox(height: 6),
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF1FCFF),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 4,
-                offset: Offset(0, 2),
-              ),
-            ],
+        TextField(
+          controller: controller,
+          keyboardType: type,
+          decoration: InputDecoration(
+            hintText: hint,
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           ),
-          child: TextField(
-            controller: controller,
-            keyboardType: type,
-            maxLength: label == "Postal Code" ? 7 : 30,
-            decoration: InputDecoration(
-              counterText: "",
-              hintText: hint,
-              hintStyle: const TextStyle(color: Colors.teal),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-            ),
-          ),
-        ),
+        )
       ],
     );
   }
 
-  /// Submit address and navigate
   void submitAddress() {
     final address = addressController.text.trim();
     final city = cityController.text.trim();
@@ -610,36 +555,24 @@ class CatalogController extends GetxController {
       _showError("All fields are required");
       return;
     }
-
-    if (address.length > 30) {
-      _showError("Address must not exceed 30 characters");
-      return;
-    }
-
     if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(city)) {
       _showError("City must contain only alphabets");
       return;
     }
-
-    if (city.length > 30) {
-      _showError("City must not exceed 30 characters");
-      return;
-    }
-
     if (!RegExp(r'^\d{7}$').hasMatch(postal)) {
-      _showError("Postal code must be exactly 7 digits");
+      _showError("Postal must be 7 digits");
       return;
     }
 
-    Get.back(); // close sheet
-
+    Get.back();
     Get.to(() => PaymentScreen(sourceScreen: "catalog"), arguments: {
       "amount": selectedValue.value.toStringAsFixed(2),
+      "source": "catalog",
     });
   }
 
-  void _showError(String message) {
-    Get.snackbar("Validation", message,
-        backgroundColor: Colors.redAccent, colorText: Colors.white);
+  void _showError(String msg) {
+    Get.snackbar("Validation", msg,
+        backgroundColor: Colors.red, colorText: Colors.white);
   }
 }

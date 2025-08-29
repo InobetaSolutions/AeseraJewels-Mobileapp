@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterController extends GetxController {
+class RegisterController  extends GetxController {
   final nameController = TextEditingController();
   final mobileController = TextEditingController();
   final isLoading = false.obs;
@@ -118,6 +118,6 @@ class RegisterController extends GetxController {
   void onClose() {
     nameController.dispose();
     mobileController.dispose();
-    super.onClose();
+    //super.onClose();
   }
 }

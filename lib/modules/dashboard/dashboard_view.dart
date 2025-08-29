@@ -233,7 +233,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dashboard_controller.dart';
 import 'package:aesera_jewels/modules/login/login_view.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends GetWidget<DashboardController> {
   final DashboardController controller = Get.put(DashboardController());
 
   @override

@@ -209,7 +209,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'payment_selection_controller.dart'; // your controller file
 
-class PaymentScreen extends StatelessWidget {
+class PaymentScreen extends GetWidget<PaymentController> {
   final String sourceScreen; // pass from previous screen
   PaymentScreen({super.key, required this.sourceScreen});
 

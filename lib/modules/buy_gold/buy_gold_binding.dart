@@ -1,5 +1,5 @@
+import 'package:aesera_jewels/modules/buy_gold/buy_gold_controller.dart';
 import 'package:get/get.dart';
-import 'buy_gold_controller.dart';
 
 class BuyGoldBinding extends Bindings {
   @override

@@ -123,7 +123,7 @@ class AppRoutes {
        binding: OnboardingBinding(),
     ),
     GetPage(name: payment, page: () => PaymentScreen(sourceScreen: Get.arguments["source"] ?? "")),
-    GetPage(name: investment, page: () => InvestmentScreen(initialTabIndex: 0,)),
+    // GetPage(name: investment, page: () => InvestmentDetailScreen(initialTabIndex: 0), binding: InvestmentBinding()),
     
   ];
 }
