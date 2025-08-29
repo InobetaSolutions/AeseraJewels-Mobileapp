@@ -44,4 +44,10 @@ class ScanToPayController extends GetxController {
       paymentCompleted.value = true;
     });
   }
+  
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
 }

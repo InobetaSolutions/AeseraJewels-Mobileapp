@@ -2,11 +2,12 @@ import 'package:aesera_jewels/modules/welcome_screen2/made_gold_easy_controller.
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MadeGoldEasyScreen extends GetWidget<MadeGoldEasyController> {
+class MadeGoldEasyScreen extends  GetWidget<MadeGoldEasyController> {
   const MadeGoldEasyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(MadeGoldEasyController());
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

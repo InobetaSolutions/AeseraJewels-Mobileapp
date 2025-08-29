@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 class SplashView extends GetWidget<SplashController> {            
   SplashView({Key? key}) : super(key: key);
+  final SplashController controller = Get.put(SplashController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +28,11 @@ class SplashView extends GetWidget<SplashController> {
               ),
               child: Image.asset(
                 'assets/images/splash logo.png', // Replace with your logo image
-                width: 100,
-                height: 100,
+                width: 145,
+                height: 145,
+                fit: BoxFit.contain,
               ),
+              
             ),
           ),
         ],

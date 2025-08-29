@@ -32,6 +32,6 @@ class SeamlessPaymentController extends GetxController {
   @override
   void onClose() {
     pageController.dispose();
-    super.onClose();
+    //super.onClose();
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class JewelsForOccasionScreen extends GetWidget<JewelsForOccasionController> {
+  final JewelsForOccasionController controller = Get.put(JewelsForOccasionController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +114,8 @@ class JewelsForOccasionScreen extends GetWidget<JewelsForOccasionController> {
       ),
     );
   }
+// Remove the unused mixin controller
+  var goTologin;
 }
 
 Widget _dot({bool isActive = false}) {

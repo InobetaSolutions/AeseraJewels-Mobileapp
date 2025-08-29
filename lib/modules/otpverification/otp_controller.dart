@@ -24,7 +24,7 @@ class OtpController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
+    // super.onInit(); // Removed due to superclass not defining onInit
     final args = Get.arguments;
     mobile.value = args['mobile'] ?? '';
     token.value = args['token'] ?? '';
@@ -61,6 +61,7 @@ class OtpController extends GetxController {
           Get.snackbar('Error', data['message'] ?? 'Invalid OTP');
         }
       } else {
+        print(  response.body);
         Get.snackbar('Error', 'Server error: ${response.reasonPhrase}');
       }
     } catch (e) {
@@ -95,7 +96,6 @@ class OtpController extends GetxController {
       node.dispose();
     }
     _timer?.cancel();
-    super.onClose();
   }
 }
 

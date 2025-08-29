@@ -3,8 +3,9 @@ import 'package:aesera_jewels/modules/welcome_screen1.dart/seamless_payments_con
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SeamlessPaymentView extends GetView<SeamlessPaymentController> {
-  const SeamlessPaymentView({Key? key}) : super(key: key);
+class SeamlessPaymentView extends GetWidget<SeamlessPaymentController> {
+   SeamlessPaymentView({Key? key}) : super(key: key);
+final SeamlessPaymentController controller = Get.put(SeamlessPaymentController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
