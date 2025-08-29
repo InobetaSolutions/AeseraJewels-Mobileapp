@@ -71,7 +71,7 @@ final SeamlessPaymentController controller = Get.put(SeamlessPaymentController()
                       color: Color(0xFF0A2A4D),
                     ),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 10),
                   Text(
                     "Secure your financial future with gold\n effortless saving mode easy and seamless.",
                     textAlign: TextAlign.center,

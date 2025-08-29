@@ -1,40 +1,22 @@
-// // import 'package:aesera_jewels/routes/app_routes.dart';
-// // import 'package:get/get.dart';
 
-// // class DashboardController extends GetxController {
-// //   void goToBuyGold() => Get.toNamed(AppRoutes.BuyGold);
-// //   void goToCatalog() => Get.toNamed(AppRoutes.catalog);
-// //   void goToPortfolio() => Get.toNamed(AppRoutes.portfolio);
-// // }
-// import 'package:get/get.dart';
 
-// class DashboardController extends GetxController {
-//   void goToBuyGold() {
-//     Get.toNamed('/buy_gold');
-//   }
-
-//   void goToCatalog() {
-//     Get.toNamed('/catalog');
-//   }
-
-//   void goToInvestment() {
-//     Get.toNamed('/investment');
-//   }
-// }
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:aesera_jewels/routes/app_routes.dart';
 
 class DashboardController extends GetxController {
+  /// Observables
   var goldRate = 0.0.obs;
   var isLoadingRate = true.obs;
 
   @override
   void onInit() {
+    super.onInit();
     fetchCurrentGoldRate();
   }
 
+  /// Fetch gold rate from API
   void fetchCurrentGoldRate() async {
     try {
       isLoadingRate(true);
@@ -43,7 +25,11 @@ class DashboardController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        goldRate.value = data['price_gram_24k'];
+        if (data != null && data['price_gram_24k'] != null) {
+          goldRate.value = double.tryParse(data['price_gram_24k'].toString()) ?? 0.0;
+        } else {
+          Get.snackbar('Error', 'Invalid data from API');
+        }
       } else {
         Get.snackbar('Error', 'Failed to fetch gold rate');
       }
@@ -54,15 +40,8 @@ class DashboardController extends GetxController {
     }
   }
 
-  void goToBuyGold() {
-    Get.toNamed('/buy_gold');
-  }
-
-  void goToCatalog() {
-    Get.toNamed('/catalog');
-  }
-
-  void goToInvestment() {
-    Get.toNamed('/investment');
-  }
+  /// Navigation functions
+  void goToBuyGold() => Get.toNamed(AppRoutes.buyGold);
+  void goToCatalog() => Get.toNamed(AppRoutes.catalog);
+  void goToInvestment() => Get.toNamed(AppRoutes.investment);
 }
