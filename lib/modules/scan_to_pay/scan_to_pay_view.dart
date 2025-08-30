@@ -45,6 +45,7 @@ class ScanToPayScreen extends GetWidget<ScanToPayController> {
             ),
             const SizedBox(height: 30), // Added space for button
             Obx(
+              
               () => ElevatedButton(
                 onPressed: controller.onProceed,
                 style: ElevatedButton.styleFrom(

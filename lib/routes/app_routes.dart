@@ -65,7 +65,7 @@ class AppRoutes {
  static const onboard = '/onboard';
 
   static final routes = [
-    GetPage(name: splash, page: () => SplashView(), binding: SplashBinding()),
+    GetPage(name: splash, page: () =>SplashScreen(), binding: SplashBinding()),
 
     // Welcome Screens
     // GetPage(
@@ -91,7 +91,7 @@ class AppRoutes {
       binding: RegisterBinding(),
     ),
     GetPage(name: login, page: () => LoginView(), binding: LoginBinding()),
-    GetPage(name: otp, page: () => OtpView(), binding: OtpBinding()),
+    GetPage(name: otp, page: () => OtpScreen(), binding: OtpBinding()),
 
     // Dashboard
     GetPage(
@@ -122,7 +122,7 @@ class AppRoutes {
       page: () => OnboardingScreen(),
        binding: OnboardingBinding(),
     ),
-    GetPage(name: payment, page: () => PaymentScreen(), binding: PaymentBinding()),
+    GetPage(name: payment, page: () => PaymentScreen( ), binding: PaymentBinding()),
     GetPage(
       name: investment,
       page: () => InvestmentDetailScreen(initialTabIndex: 0,),

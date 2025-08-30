@@ -1,12 +1,22 @@
 
+import 'package:aesera_jewels/modules/auth_controller.dart';
+import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
+import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dashboard_controller.dart';
 import 'package:aesera_jewels/modules/login/login_view.dart';
 
 class DashboardScreen extends StatelessWidget {
   final DashboardController controller = Get.put(DashboardController());
+  final authController = Get.put(AuthController());
+
+  DashboardScreen({super.key}) {
+    authController.loadUser(); // Load saved user
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,48 +37,65 @@ class DashboardScreen extends StatelessWidget {
             color: const Color(0xFF1A0F12),
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(left: 12, right: 16, top: 10.5, bottom: 10.5),
-            child: ElevatedButton(
-              onPressed: () => Get.offAll(() => LoginView()),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFFB700),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 3),
-              ),
-              child: Text(
-                "Logout",
-                style: GoogleFonts.lexend(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF000000),
-                ),
-              ),
-            ),
-          ),
-        ],
+actions: [
+  TextButton(
+    onPressed: () async {
+      Get.offAll(() =>  OnboardingScreen());
+    },
+    child: const Text("Logout", style: TextStyle(color: Colors.white)),
+  ),
+  Padding(
+    padding: const EdgeInsets.only(
+        left: 12, right: 16, top: 10.5, bottom: 10.5),
+    child: ElevatedButton(
+      onPressed: () {
+        StorageService.erase();
+        SystemNavigator.pop(); // exit app
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFFFB700),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 21, vertical: 3),
+      ),
+      child: Text(
+        "Logout",
+        style: GoogleFonts.lexend(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF000000),
+        ),
+      ),
+    ),
+  ),
+],
       ),
       body: SafeArea(
         child: Scrollbar(
           thickness: 6,
           radius: const Radius.circular(10),
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 20, bottom: bottomPadding + 40),
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 20,
+              bottom: bottomPadding + 40,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// Welcome Text
-                Text(
-                  "Rama Krishnan",
-                  style: GoogleFonts.lexend(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22,
-                    color: const Color(0xFF1A0F12),
-                  ),
-                ),
+                Obx(() => Text(
+                       "Welcome, ${controller.userName.value}",
+                       
+                      style: GoogleFonts.lexend(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 22,
+                        color: const Color(0xFF1A0F12),
+                      ),
+                    )),
 
                 const SizedBox(height: 16),
 
@@ -95,6 +122,8 @@ class DashboardScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
+
+                        /// Dynamic Gold Rate
                         Obx(() {
                           if (controller.isLoadingRate.value) {
                             return Text(
@@ -105,9 +134,32 @@ class DashboardScreen extends StatelessWidget {
                                 color: const Color(0xFFFFB700),
                               ),
                             );
+                          } else if (controller.goldRate.value != null) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Rs. ${controller.goldRate.value!.priceGram24k.toStringAsFixed(2)}",
+                                  style: GoogleFonts.lexend(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 24,
+                                    color: const Color(0xFFFFB700),
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  "Updated: ${controller.goldRate.value!.istDate}",
+                                  style: GoogleFonts.lexend(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            );
                           } else {
                             return Text(
-                              "Rs. ${controller.goldRate.value.toStringAsFixed(0)}",
+                              "No Data",
                               style: GoogleFonts.lexend(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 24,
@@ -116,6 +168,7 @@ class DashboardScreen extends StatelessWidget {
                             );
                           }
                         }),
+
                         const Spacer(),
                         Align(
                           alignment: Alignment.centerRight,
@@ -163,7 +216,7 @@ class DashboardScreen extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          /// Left Section: Images and Button
+                          /// Left Section: Images + Button
                           Column(
                             children: [
                               Image.asset(
@@ -186,12 +239,14 @@ class DashboardScreen extends StatelessWidget {
                                 onPressed: controller.goToCatalog,
                                 style: TextButton.styleFrom(
                                   backgroundColor: const Color(0xFFFFB700),
-                                  padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 6),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 23, vertical: 6),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                 ),
                                 child: Text(
+                                  textAlign: TextAlign.center,
                                   "Shop\n Now",
                                   style: GoogleFonts.lexend(
                                     fontSize: 22,
@@ -206,11 +261,12 @@ class DashboardScreen extends StatelessWidget {
 
                           /// Right Image
                           Padding(
-                            padding: const EdgeInsets.only(top: 40, bottom: 40),
+                            padding:
+                                const EdgeInsets.only(top: 40, bottom: 0),
                             child: Image.asset(
                               "assets/images/catalog_gold_img.png",
                               width: 150,
-                              height: 231,
+                              height: 240,
                               fit: BoxFit.cover,
                             ),
                           ),
