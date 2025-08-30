@@ -1,4 +1,3 @@
-
 // import 'package:aesera_jewels/models/catalog_model.dart';
 // import 'package:aesera_jewels/modules/catalog/catalog_controller.dart';
 // import 'package:flutter/material.dart';
@@ -167,6 +166,7 @@
 //     );
 //   }
 // }
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/modules/catalog/catalog_controller.dart';
 import 'package:flutter/material.dart';
@@ -174,7 +174,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CatalogScreen extends GetWidget<CatalogController> {
-   CatalogScreen({super.key});
+  CatalogScreen({super.key});
   final CatalogController controller = Get.put(CatalogController());
 
   @override
@@ -252,11 +252,7 @@ class CatalogItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
         boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            spreadRadius: 1,
-          ),
+          BoxShadow(color: Colors.black12, blurRadius: 4, spreadRadius: 1),
         ],
       ),
       child: Column(
@@ -267,7 +263,7 @@ class CatalogItemCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                'http://13.204.96.244:3000/uploads/${item.image}',
+                "${ImageUrl.imageUrl}${item.image}", // full image path
                 width: 149,
                 height: 149,
                 fit: BoxFit.contain,
@@ -294,7 +290,7 @@ class CatalogItemCard extends StatelessWidget {
             style: GoogleFonts.lexend(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color:Color(0xFF09243D), 
+              color: Color(0xFF09243D),
               //const Color(0xFFFF9800),
             ),
           ),
@@ -321,8 +317,7 @@ class CatalogItemCard extends StatelessWidget {
                 height: 20,
 
                 alignment: Alignment.center,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: const Color(0xFF09243D),
                   borderRadius: BorderRadius.circular(13),
@@ -343,8 +338,10 @@ class CatalogItemCard extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFFB700),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),

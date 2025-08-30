@@ -112,17 +112,17 @@ class LoginView extends GetWidget<LoginController> {
               const SizedBox(height: 16),
 
               /// Register Redirect
-              TextButton(
-                onPressed: controller.register,
-                child: Text(
-                  "Don't have an account? Register",
-                  style: GoogleFonts.lexend(
-                    color: const Color(0xFF2596BE),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
+              // TextButton(
+              //   onPressed: controller.register,
+              //   child: Text(
+              //     "Don't have an account? Register",
+              //     style: GoogleFonts.lexend(
+              //       color: const Color(0xFF2596BE),
+              //       fontWeight: FontWeight.w400,
+              //       fontSize: 14,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
