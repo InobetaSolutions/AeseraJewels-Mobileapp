@@ -77,11 +77,11 @@ class OnboardingController extends GetxController {
         curve: Curves.easeInOut,
       );
     } else {
-      Get.offAllNamed('/register');
+      Get.offAllNamed('/login');
     }
   }
 
   void skipOnboarding() {
-    Get.offAllNamed('/register');
+    Get.offAllNamed('/login');
   }
 }

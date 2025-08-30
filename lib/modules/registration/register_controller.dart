@@ -124,8 +124,9 @@
 // //     mobileController.dispose();
 // //     //super.onClose();
 // //   }
-// // }
+// // }import 'dart:convert';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -166,6 +167,9 @@ class RegisterController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+
+      
+
         final otp = data['otp'];
         final resendotp = data['resendotp'];
         final token = data['token'];
@@ -173,8 +177,7 @@ class RegisterController extends GetxController {
         if (otp != null && token != null) {
           print("OTP: $otp");
           _showSnackBar("OTP Sent", "Check your SMS (OTP: $otp)");
-           _showSnackBar("OTP Sent", "Check your SMS (OTP: $resendotp)");
-          
+          _showSnackBar("OTP Sent", "Check your SMS (OTP: $resendotp)");
 
           Get.toNamed('/otp', arguments: {
             "otp": otp,
@@ -188,7 +191,13 @@ class RegisterController extends GetxController {
           _showSnackBar("Error", "Invalid response from server.");
         }
       } else {
-        _showSnackBar("Error", "Failed: ${response.reasonPhrase}");
+        // _showSnackBar("Error", "Failed: ${response.reasonPhrase}");
+         _showSnackBar(
+            "User Already Registered",
+            "This mobile number is already registered. Please login with this number."
+          );
+
+
       }
     } catch (e) {
       isLoading.value = false;
@@ -212,3 +221,4 @@ class RegisterController extends GetxController {
     super.onClose();
   }
 }
+
