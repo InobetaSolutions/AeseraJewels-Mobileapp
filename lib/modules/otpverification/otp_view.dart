@@ -463,30 +463,51 @@ class OtpScreen extends GetWidget<OtpController> {
                             ),
                           ],
                         ),
-                        child: TextField(
-                          controller: controller.otpControllers[index],
-                          focusNode: controller.focusNodes[index],
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          maxLength: 1,
-                          style: GoogleFonts.lexend(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                         child: TextField(
+                            controller: controller.otpControllers[index],
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            maxLength: 1,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              counterText: '',
+                            ),
+                            style: TextStyle(fontSize: 24),
+                            // ✅ Auto focus move only, no auto-submit
+                            onChanged: (value) {
+                              if (value.isNotEmpty && index < 3) {
+                                FocusScope.of(context).nextFocus();
+                              }
+                              if (value.isEmpty && index > 0) {
+                                FocusScope.of(context).previousFocus();
+                              }
+                            },
                           ),
-                          decoration: const InputDecoration(
-                            counterText: "",
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(vertical: 8),
-                          ),
-                          onChanged: (value) {
-                            if (value.isNotEmpty && index < 3) {
-                              controller.focusNodes[index + 1].requestFocus();
-                            }
-                            if (value.isEmpty && index > 0) {
-                              controller.focusNodes[index - 1].requestFocus();
-                            }
-                          },
-                        ),
+                        
+                        // TextField(
+                        //   controller: controller.otpControllers[index],
+                        //   focusNode: controller.focusNodes[index],
+                        //   keyboardType: TextInputType.number,
+                        //   textAlign: TextAlign.center,
+                        //   maxLength: 1,
+                        //   style: GoogleFonts.lexend(
+                        //     fontSize: 20,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        //   decoration: const InputDecoration(
+                        //     counterText: "",
+                        //     border: InputBorder.none,
+                        //     contentPadding: EdgeInsets.symmetric(vertical: 8),
+                        //   ),
+                        //   onChanged: (value) {
+                        //     if (value.isNotEmpty && index < 3) {
+                        //       controller.focusNodes[index + 1].requestFocus();
+                        //     }
+                        //     if (value.isEmpty && index > 0) {
+                        //       controller.focusNodes[index - 1].requestFocus();
+                        //     }
+                        //   },
+                        // ),
                       ),
                     );
                   }),

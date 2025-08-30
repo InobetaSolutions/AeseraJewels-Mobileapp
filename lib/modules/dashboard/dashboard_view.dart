@@ -40,7 +40,7 @@ class DashboardScreen extends StatelessWidget {
 actions: [
   TextButton(
     onPressed: () async {
-      Get.offAll(() =>  OnboardingScreen());
+      Get.offAll(() => LoginView());
     },
     child: const Text("Logout", style: TextStyle(color: Colors.white)),
   ),

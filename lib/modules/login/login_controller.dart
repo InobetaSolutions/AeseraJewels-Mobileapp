@@ -181,7 +181,7 @@ class LoginController extends GetxController {
       Get.snackbar("Error", "Something went wrong: $e");
     }
   }
-
+ void register() => Get.toNamed('/register');
   @override
   void onClose() {
     mobileController.dispose();
