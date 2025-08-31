@@ -774,13 +774,18 @@ class OtpController extends GetxController {
         final userToken = data['data']['token']?.toString() ?? '';
 
         print("Storing name: $userName, userId: $userId");
-
-        await StorageService.saveLogin(
-          userToken,
-          mobile.value,
-          userName,
-          userId,
-        );
+              await StorageService().saveUser(
+  userName,
+  userToken,
+  mobile.value,
+  userId,
+);
+        // await StorageService.saveLogin(
+        //   userToken,
+        //   mobile.value,
+        //   userName,
+        //   userId,
+        // );
 
         /// ✅ Navigate to Dashboard with name + token
         Get.offAllNamed('/dashboard', arguments: {
