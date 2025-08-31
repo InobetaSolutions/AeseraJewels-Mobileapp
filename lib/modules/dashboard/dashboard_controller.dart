@@ -209,7 +209,8 @@ class DashboardController extends GetxController {
 
   /// Logout user
   void logout() {
-    StorageService.erase(); // clear all storage
+    final storageService = StorageService();
+    storageService.erase(); // clear all storage
     userName.value = "";
     Get.offAllNamed("/"); // back to login/onboarding
   }

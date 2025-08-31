@@ -48,8 +48,8 @@ actions: [
     padding: const EdgeInsets.only(
         left: 12, right: 16, top: 10.5, bottom: 10.5),
     child: ElevatedButton(
-      onPressed: () {
-        StorageService.erase();
+      onPressed: () async {
+        await StorageService().erase();
         SystemNavigator.pop(); // exit app
       },
       style: ElevatedButton.styleFrom(
