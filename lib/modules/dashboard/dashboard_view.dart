@@ -88,7 +88,7 @@ actions: [
               children: [
                 /// Welcome Text
                 Obx(() => Text(
-                       "Welcome, ${controller.userName.value}",
+                       " ${controller.userName.value}",
                        
                       style: GoogleFonts.lexend(
                         fontWeight: FontWeight.w700,
