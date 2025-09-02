@@ -116,12 +116,16 @@ class LoginView extends GetWidget<LoginController> {
                   Text("Didn't have an account?",
                       style: GoogleFonts.lexend(
                           color: const Color(0xFF2596BE), fontSize: 12)),
-                  TextButton(
-                    onPressed: controller.register,
+                  GestureDetector(
+                    onTap: () {
+                     controller.register();
+                    },
+                  
+                    
                     child: Text("register",
                         style: GoogleFonts.lexend(
                             color: const Color(0xFF2596BE), fontSize: 12)),
-                  )
+                  ),
                 ],
               ),
              
