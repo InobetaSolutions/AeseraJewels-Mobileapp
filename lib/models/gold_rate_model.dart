@@ -19,4 +19,15 @@ class GoldRateModel {
       istDate: json['istDate'] ?? '',
     );
   }
+
+double get rate => priceGram24k;
+ 
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'timestamp': timestamp,
+      'price_gram_24k': priceGram24k,
+      'istDate': istDate,
+    };
+  }
 }

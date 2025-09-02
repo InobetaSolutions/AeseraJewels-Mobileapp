@@ -30,10 +30,8 @@ class InvestmentDetailScreen extends StatelessWidget {
           'Investment Details',
           style: TextStyle(color: Colors.black),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
+        leading: BackButton(color: Colors.black, onPressed: () => Get.back()),
+      
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -80,10 +78,11 @@ class InvestmentDetailScreen extends StatelessWidget {
           ),
         ),
         const Spacer(),
-         TextButton(
-    onPressed: () async {
-      Get.offAll(() => LoginView());
-    },
+   TextButton(
+  onPressed: () async {
+    Get.off(LoginView());
+  },
+
     child: const Text("Logout", style: TextStyle(color: Colors.white)),
   ),
   Padding(

@@ -1,5 +1,7 @@
 import 'package:aesera_jewels/modules/onboard/onboard_binding.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
+import 'package:aesera_jewels/modules/payment/payment_binding.dart';
+import 'package:aesera_jewels/modules/payment/payment_screen.dart';
 import 'package:get/get.dart';
 
 // Splash
@@ -58,8 +60,9 @@ class AppRoutes {
   //  static const scanToPay = '/scan_to_pay';
   static const catalog = '/catalog';
   static const investment = '/investment';
+  //static const payment_selection = '/payment_selection';
+  //static const buyGold = '/buy_gold';
   static const payment = '/payment';
-  static const buyGold = '/buy_gold';
   static const madeGoldEasy = '/made_gold_easy';
   static const seamlessPayments = '/seamless_payments';
  static const onboard = '/onboard';
@@ -110,19 +113,21 @@ class AppRoutes {
     ),
 
     // Buy Gold
-    GetPage(
-      name: buyGold,
-      page: () => BuyGoldScreen(),
-      binding: BuyGoldBinding(),
-    ),
-
+    // GetPage(
+    //   name: buyGold,
+    //   page: () => BuyGoldScreen(),
+    //   binding: BuyGoldBinding(),
+    // ),
+ GetPage(name:payment,
+ page:()=>Payment_Screen(),
+ binding: Payment_Binding() ),
     
   GetPage(
       name: onboard,
       page: () => OnboardingScreen(),
        binding: OnboardingBinding(),
     ),
-    GetPage(name: payment, page: () => PaymentScreen( ), binding: PaymentBinding()),
+    //GetPage(name: payment_selection, page: () => PaymentSelectionScreen( ), binding: PaymentSelectionBinding()),
     GetPage(
       name: investment,
       page: () => InvestmentDetailScreen(initialTabIndex: 0,),
@@ -131,4 +136,6 @@ class AppRoutes {
     
     GetPage(name: onboard, page: () => OnboardingScreen(), binding: OnboardingBinding()),
   ];
+
+  
 }
