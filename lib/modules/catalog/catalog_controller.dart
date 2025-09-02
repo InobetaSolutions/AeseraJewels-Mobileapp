@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:aesera_jewels/models/catalog_model.dart';
+import 'package:aesera_jewels/modules/payment/payment_screen.dart';
 import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -208,7 +209,7 @@ class CatalogController extends GetxController {
 
     Get.back();
     Get.to(
-      () => PaymentScreen(),
+      () => Payment_Screen(),
       arguments: {
         "amount": selectedValue.value.toStringAsFixed(2),
         "source": "catalog",

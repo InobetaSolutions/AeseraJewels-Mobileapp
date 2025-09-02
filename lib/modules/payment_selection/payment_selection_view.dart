@@ -3,8 +3,8 @@ import 'package:aesera_jewels/modules/payment_selection/payment_selection_contro
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PaymentScreen extends StatelessWidget {
-  final PaymentController controller = Get.put(PaymentController());
+class PaymentSelectionScreen extends GetWidget<PaymentSelectionController> {
+  final PaymentSelectionController controller = Get.put(PaymentSelectionController());
 
   @override
   Widget build(BuildContext context) {

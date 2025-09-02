@@ -8,7 +8,7 @@ import 'package:aesera_jewels/modules/investment_details/portfolio_view.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import '../buy_gold/buy_gold_controller.dart';
 
-class PaymentController extends GetxController {
+class PaymentSelectionController extends GetxController {
   var selectedTab = 0.obs; // 0 = Own Number, 1 = Others Number
   var isLoading = false.obs;
   Rx<XFile?> screenshot = Rx<XFile?>(null);
