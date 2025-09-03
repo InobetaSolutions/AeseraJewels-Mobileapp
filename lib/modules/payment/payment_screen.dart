@@ -85,9 +85,13 @@ class Payment_Screen extends GetView<Payment_Controller> {
 
               /// Amount Input
               Text(controller.isRupees.value ? "Amount Paid" : "Weight (gm)"),
+
               const SizedBox(height: 6),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 2,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.blue.shade50,
                   borderRadius: BorderRadius.circular(12),
@@ -106,21 +110,25 @@ class Payment_Screen extends GetView<Payment_Controller> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 8,
+                        top: 10,
+                      ),
                       child: Text(
                         controller.isRupees.value ? "₹" : "gm",
                         style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     suffix: Padding(
-                      padding: const EdgeInsets.only(right: 12),
+                      padding: const EdgeInsets.only(right: 12, top: 10),
                       child: Text(
                         controller.getConversion(),
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 30,
                           fontWeight: FontWeight.w600,
                           color: Colors.teal,
                         ),
@@ -132,44 +140,55 @@ class Payment_Screen extends GetView<Payment_Controller> {
               const SizedBox(height: 20),
 
               /// Quick Select
-              const Text("Quick Select",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text(
+                "Quick Select",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 12,
-                children: (controller.isRupees.value
-                        ? controller.rupeesOptions
-                        : controller.gramsOptions)
-                    .map((option) {
-                  final isSelected =
-                      controller.enteredAmount.value.toString() == option;
-                  return GestureDetector(
-                    onTap: () {
-                      controller.selectValue(option);
-                      textController.text = option;
-                      textController.selection =
-                          TextSelection.collapsed(offset: option.length);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.amber : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        controller.isRupees.value
-                            ? "₹$option"
-                            : "$option gm",
-                        style: TextStyle(
-                          fontWeight: isSelected
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                children:
+                    (controller.isRupees.value
+                            ? controller.rupeesOptions
+                            : controller.gramsOptions)
+                        .map((option) {
+                          final isSelected =
+                              controller.enteredAmount.value.toString() ==
+                              option;
+                          return GestureDetector(
+                            onTap: () {
+                              controller.selectValue(option);
+                              textController.text = option;
+                              textController.selection =
+                                  TextSelection.collapsed(
+                                    offset: option.length,
+                                  );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Colors.amber
+                                    : Colors.grey[200],
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                controller.isRupees.value
+                                    ? "₹$option"
+                                    : "$option gm",
+                                style: TextStyle(
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          );
+                        })
+                        .toList(),
               ),
               const Spacer(),
 
@@ -195,7 +214,11 @@ class Payment_Screen extends GetView<Payment_Controller> {
 
   /// Toggle bar
   Widget _buildToggleBar(
-      bool isFirstSelected, String first, String second, Function(bool) onTap) {
+    bool isFirstSelected,
+    String first,
+    String second,
+    Function(bool) onTap,
+  ) {
     return Container(
       height: 50,
       decoration: BoxDecoration(

@@ -38,27 +38,37 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
 actions: [
-  TextButton(
-    onPressed: () async {
-      Get.offNamed('/login');
-    },
-    child: const Text("Logout", style: TextStyle(color: Colors.white)),
-  ),
+  /// Logout (Text Button)
+  // TextButton(
+  //   onPressed: () async {
+  //     await StorageService().erase();
+  //     Get.offAllNamed('/login'); // ✅ Navigate to login
+  //   },
+  //   child: const Text(
+  //     "Logout",
+  //     style: TextStyle(color: Colors.white),
+  //   ),
+  // ),
+
+  /// Logout (Elevated Button)
   Padding(
     padding: const EdgeInsets.only(
-        left: 12, right: 16, top: 10.5, bottom: 10.5),
+      left: 12,
+      right: 16,
+      top: 10.5,
+      bottom: 10.5,
+    ),
     child: ElevatedButton(
       onPressed: () async {
         await StorageService().erase();
-        SystemNavigator.pop(); // exit app
+        Get.offAllNamed('/login'); // ✅ Navigate to login
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFFFB700),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
         ),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 21, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 3),
       ),
       child: Text(
         "Logout",

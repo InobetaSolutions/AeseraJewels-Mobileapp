@@ -49,12 +49,12 @@ class InvestmentDetailScreen extends StatelessWidget {
               _buildTabBar(),
               const SizedBox(height: 16),
               _buildSectionTitle(),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               if (controller.selectedTab.value == InvestmentController.TAB_PAID)
-                _buildHeaderRow(["Ins No.", "Date", "Amount"])
+                _buildHeaderRow(["Ins No.", "Date","Amount","Grams"])
               else if (controller.selectedTab.value ==
                   InvestmentController.TAB_RECEIVED)
-                _buildHeaderRow(["Ins No.", "Date", "Grams"]),
+                _buildHeaderRow(["Ins No.", "Date","Grams"]),
               const SizedBox(height: 8),
               _buildTabContent(),
             ],
@@ -81,8 +81,8 @@ class InvestmentDetailScreen extends StatelessWidget {
         ElevatedButton(
           onPressed: () async {
             await StorageService().erase();
-            Get.offAll(() => LoginView());
-            SystemNavigator.pop(); // exit app
+            Get.offNamed('/login');
+             // exit app
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFFB700),
@@ -119,10 +119,15 @@ class InvestmentDetailScreen extends StatelessWidget {
             "Total Investment Amount",
             style: TextStyle(color: Colors.amber, fontSize: 16),
           ),
+           const Text(
+            "Total Allortment Grams ",
+            style: TextStyle(color: Colors.amber, fontSize: 16),
+          ),
           const SizedBox(height: 6),
           Obx(
             () => Text(
               controller.formattedTotal,
+              
               style: const TextStyle(
                 color: Colors.amber,
                 fontSize: 26,
