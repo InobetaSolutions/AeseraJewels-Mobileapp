@@ -1,129 +1,3 @@
-
-// import 'dart:convert';
-// import 'package:aesera_jewels/Api/base_url.dart';
-// import 'package:aesera_jewels/services/storage_service.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:http/http.dart' as http;
-
-// class OtpController extends GetxController {
-//   /// 4 controllers for OTP boxes
-//   final otpControllers = List.generate(4, (_) => TextEditingController());
-//   final focusNodes = List.generate(4, (_) => FocusNode());
-
-//   final isLoading = false.obs;
-//   final otp = ''.obs;     // OTP from backend (debug/display)
-//   final name = ''.obs;    // user name
-//   final mobile = ''.obs;  // user mobile
-//   final token = ''.obs;   // API token
-//   var isNewUser = false;
-
-//   @override
-//   void onInit() {
-//     super.onInit();
-
-//     /// receive data from Register screen
-//     final args = Get.arguments;
-//     if (args != null) {
-//       mobile.value = args['mobile']?.toString() ?? '';
-//       token.value  = args['token']?.toString() ?? '';
-//       otp.value    = args['otp']?.toString() ?? '';
-//       isNewUser    = args['isNewUser'] ?? false;
-//     }
-
-//     /// Auto focus move
-//     for (int i = 0; i < otpControllers.length; i++) {
-//       otpControllers[i].addListener(() {
-//         if (otpControllers[i].text.length == 1 && i < otpControllers.length - 1) {
-//           focusNodes[i + 1].requestFocus();
-//         } else if (otpControllers[i].text.isEmpty && i > 0) {
-//           focusNodes[i - 1].requestFocus();
-//         }
-//       });
-//     }
-//   }
-
-//   /// collect entered OTP
-//   String get enteredOtp => otpControllers.map((c) => c.text).join();
-
-//   /// ✅ Verify OTP API
-//   Future<void> verifyOtp() async {
-//     if (enteredOtp.length != 4) {
-//       Get.snackbar('Invalid OTP', 'Please enter the 4-digit OTP.');
-//       return;
-//     }
-
-//     isLoading.value = true;
-//     try {
-//       final url = Uri.parse("${BaseUrl.baseUrl}verify-otp");
-//       final response = await http.post(
-//         url,
-//         headers: {
-//           "Content-Type": "application/json",
-//           "Authorization": "Bearer ${token.value}",
-//         },
-//         body: jsonEncode({
-//           "mobile": mobile.value,
-//           "otp": enteredOtp,
-//         }),
-//       );
-
-//       isLoading.value = false;
-
-//       if (response.statusCode == 200) {
-//         final data = jsonDecode(response.body);
-//         print("data: $data");
-
-//         print("name.value, token.value, isNewUser: $name.value, ${token.value}, $isNewUser");
-//         Get.snackbar('Success', 'OTP verified successfully');
-
-//         /// ✅ Save user data in local storage
-//         final userId = data['data']['_id']?.toString() ?? '';
-//         final userName = data['data']['name']?.toString() ?? '';
-//         final userToken = data['data']['token']?.toString() ?? '';
-
-//         print("Storing name: $userName, userId: $userId");
-//               await StorageService().saveUser(
-//   userName,
-//   userToken,
-//   mobile.value,
-//   userId,
-// );
-//         // await StorageService.saveLogin(
-//         //   userToken,
-//         //   mobile.value,
-//         //   userName,
-//         //   userId,
-//         // );
-
-//         /// ✅ Navigate to Dashboard with name + token
-//         Get.offAllNamed('/dashboard', arguments: {
-//           "token": token.value,
-//           "isNewUser": isNewUser,
-//         });
-//       } else {
-//         Get.snackbar("Error", "Server error: ${response.reasonPhrase}");
-//       }
-//     } catch (e) {
-//       isLoading.value = false;
-//       Get.snackbar("Error", "Something went wrong: $e");
-//     }
-//   }
-
-//   /// ✅ Resend OTP API
-  
-//   @override
-//   void onClose() {
-//     for (var c in otpControllers) {
-//       c.dispose();
-//     }
-//     for (var node in focusNodes) {
-//       node.dispose();
-//     }
-//     super.onClose();
-//   }
-// }
-
 import 'dart:convert';
 import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -137,11 +11,11 @@ class OtpController extends GetxController {
   final focusNodes = List.generate(4, (_) => FocusNode());
 
   final isLoading = false.obs;
-  final otp = ''.obs;        // OTP from API (debug)
-  final mobile = ''.obs;     // user mobile
-  final token = ''.obs;      // token from API
-  final name = ''.obs;       // user name
-  var isNewUser = false;     // flag for new user
+  final otp = ''.obs; // OTP from API (debug)
+  final mobile = ''.obs; // user mobile
+  final token = ''.obs; // token from API
+  final name = ''.obs; // user name
+  var isNewUser = false; // flag for new user
   bool lastVerifySuccess = false;
 
   @override
@@ -160,7 +34,8 @@ class OtpController extends GetxController {
     /// Auto-move focus forward & backward
     for (int i = 0; i < otpControllers.length; i++) {
       otpControllers[i].addListener(() {
-        if (otpControllers[i].text.length == 1 && i < otpControllers.length - 1) {
+        if (otpControllers[i].text.length == 1 &&
+            i < otpControllers.length - 1) {
           focusNodes[i + 1].requestFocus();
         } else if (otpControllers[i].text.isEmpty && i > 0) {
           focusNodes[i - 1].requestFocus();
@@ -188,10 +63,7 @@ class OtpController extends GetxController {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${token.value}",
         },
-        body: jsonEncode({
-          "mobile": mobile.value,
-          "otp": enteredOtp,
-        }),
+        body: jsonEncode({"mobile": mobile.value, "otp": enteredOtp}),
       );
 
       isLoading.value = false;
@@ -205,7 +77,12 @@ class OtpController extends GetxController {
         final userName = data['data']['name']?.toString() ?? '';
         final userToken = data['data']['token']?.toString() ?? '';
 
-        await StorageService().saveUser(userName, userToken, mobile.value, userId);
+        await StorageService().saveUser(
+          userName,
+          userToken,
+          mobile.value,
+          userId,
+        );
         print("Stored token: $userToken, ID: $userToken");
 
         Get.snackbar('Success', 'OTP verified successfully');
