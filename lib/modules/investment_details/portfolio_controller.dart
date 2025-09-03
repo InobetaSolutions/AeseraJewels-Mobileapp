@@ -59,6 +59,7 @@ class InvestmentController extends GetxController {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${userToken.value}',
       };
+
       print("usertoken: ${userToken.value}");
 
       final response = await http.post(
