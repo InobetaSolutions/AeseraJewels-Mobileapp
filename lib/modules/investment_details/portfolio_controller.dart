@@ -58,7 +58,8 @@ class InvestmentController extends GetxController {
         'Authorization':
             'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiI3NDgzNzIwMzM0IiwibmFtZSI6ImthbXBhbGxpIiwiaWF0IjoxNzU2ODI1NDQ2LCJleHAiOjE3NTY4MjkwNDZ9.yBrUDtcEXmdKXky9XPRLI-X7_63augMgyagUGpGi-oI',
       };
- 
+
+
       final response = await http.post(
         Uri.parse('http://13.204.96.244:3000/api/getpaymenthistory'),
         headers: headers,
