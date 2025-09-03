@@ -63,35 +63,71 @@ class Payment_Screen extends GetView<Payment_Controller> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Payment Mobile Number"),
+                    const Text(
+                      "Payment Mobile Number",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     const SizedBox(height: 6),
-                    TextField(
-                      controller: mobileController,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onChanged: (v) => controller.enteredMobile.value = v,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.blue.shade50,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 1,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(0, 3),
+                            blurRadius: 4,
+                            color: Colors.black.withOpacity(0.1),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: mobileController,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        onChanged: (v) => controller.enteredMobile.value = v,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none, // remove default border
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 14,
+                          ),
+                          hintText: "Enter your mobile number",
+                          hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        style: const TextStyle(
+                          fontSize: 18, // 👈 font size for entered number
+                          color: Colors.black,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
                   ],
                 ),
+              const SizedBox(height: 25),
 
               /// Amount Input
-              Text(controller.isRupees.value ? "Amount Paid" : "Weight (gm)"),
-
+              Text(
+                controller.isRupees.value ? "Amount Paid" : "Weight (gm)",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
               const SizedBox(height: 6),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 2,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
                 decoration: BoxDecoration(
                   color: Colors.blue.shade50,
                   borderRadius: BorderRadius.circular(12),
@@ -107,19 +143,21 @@ class Payment_Screen extends GetView<Payment_Controller> {
                   controller: textController,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.teal,
+                  ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        right: 8,
-                        top: 10,
-                      ),
+                    prefix: Padding(
+                      padding: const EdgeInsets.only(left: 28.0, right: 5),
                       child: Text(
                         controller.isRupees.value ? "₹" : "gm",
                         style: const TextStyle(
-                          fontSize: 30,
+                          fontSize: 25,
                           fontWeight: FontWeight.w600,
+                          color: Colors.teal,
                         ),
                       ),
                     ),
@@ -128,7 +166,7 @@ class Payment_Screen extends GetView<Payment_Controller> {
                       child: Text(
                         controller.getConversion(),
                         style: const TextStyle(
-                          fontSize: 30,
+                          fontSize: 25,
                           fontWeight: FontWeight.w600,
                           color: Colors.teal,
                         ),
@@ -142,7 +180,7 @@ class Payment_Screen extends GetView<Payment_Controller> {
               /// Quick Select
               const Text(
                 "Quick Select",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
               Wrap(
@@ -248,6 +286,7 @@ class Payment_Screen extends GetView<Payment_Controller> {
           child: Text(
             text,
             style: TextStyle(
+              fontSize: 20, // ✅ Added font size
               color: selected ? Colors.black : Colors.white,
               fontWeight: FontWeight.bold,
             ),

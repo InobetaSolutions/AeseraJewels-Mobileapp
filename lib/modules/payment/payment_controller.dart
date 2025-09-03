@@ -98,7 +98,7 @@ class Payment_Controller extends GetxController {
         "mobile": mobile,
         "others": isOwnNumber.value ? "" : enteredMobile.value,
         "amount": amount,
-        "gram_allocated": gramAllocated,
+        "gram_allocated": gramAllocated.toStringAsFixed(4),
         "gram": gram,
         "amount_allocated": amountAllocated,
       });
