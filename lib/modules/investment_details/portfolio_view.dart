@@ -1,4 +1,3 @@
-
 import 'package:aesera_jewels/modules/investment_details/portfolio_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,19 +6,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:flutter/services.dart';
 import 'package:aesera_jewels/modules/login/login_view.dart';
-
+ 
 class InvestmentDetailScreen extends StatelessWidget {
   final InvestmentController controller = Get.put(InvestmentController());
-
+ 
   final int initialTabIndex;
   InvestmentDetailScreen({super.key, required this.initialTabIndex});
-
+ 
   @override
   Widget build(BuildContext context) {
-    Get.put(InvestmentController());
     controller.changeTab(initialTabIndex);
     final width = MediaQuery.of(context).size.width;
-
+ 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F4FA),
       appBar: AppBar(
@@ -30,8 +28,10 @@ class InvestmentDetailScreen extends StatelessWidget {
           'Investment Details',
           style: TextStyle(color: Colors.black),
         ),
-        leading: BackButton(color: Colors.black, onPressed: () => Get.back()),
-      
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -63,7 +63,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       }),
     );
   }
-
+ 
   Widget _buildHeader() {
     return Row(
       children: [
@@ -78,44 +78,32 @@ class InvestmentDetailScreen extends StatelessWidget {
           ),
         ),
         const Spacer(),
-   TextButton(
-  onPressed: () async {
-    Get.off(LoginView());
-  },
-
-    child: const Text("Logout", style: TextStyle(color: Colors.white)),
-  ),
-  Padding(
-    padding: const EdgeInsets.only(
-        left: 12, right: 16, top: 10.5, bottom: 10.5),
-    child: ElevatedButton(
-      onPressed: () async {
-        await StorageService().erase();
-        SystemNavigator.pop(); // exit app
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFFB700),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+        ElevatedButton(
+          onPressed: () async {
+            await StorageService().erase();
+            Get.offAll(() => LoginView());
+            SystemNavigator.pop(); // exit app
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFFFB700),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 3),
+          ),
+          child: Text(
+            "Logout",
+            style: GoogleFonts.lexend(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF000000),
+            ),
+          ),
         ),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 21, vertical: 3),
-      ),
-      child: Text(
-        "Logout",
-        style: GoogleFonts.lexend(
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          color: const Color(0xFF000000),
-        ),
-      ),
-    ),
-  ),
       ],
     );
   }
-  
-
+ 
   Widget _buildTotalCard(double width) {
     return Container(
       width: width,
@@ -146,7 +134,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       ),
     );
   }
-
+ 
   Widget _buildTabBar() {
     return Container(
       height: 48,
@@ -163,7 +151,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       ),
     );
   }
-
+ 
   Widget _tabButton(String title, int index) {
     return Expanded(
       child: Obx(() {
@@ -188,7 +176,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       }),
     );
   }
-
+ 
   Widget _buildSectionTitle() {
     switch (controller.selectedTab.value) {
       case InvestmentController.TAB_PAID:
@@ -208,7 +196,7 @@ class InvestmentDetailScreen extends StatelessWidget {
         );
     }
   }
-
+ 
   Widget _buildHeaderRow(List<String> titles) {
     return Row(
       children: titles
@@ -226,7 +214,7 @@ class InvestmentDetailScreen extends StatelessWidget {
           .toList(),
     );
   }
-
+ 
   Widget _buildTabContent() {
     switch (controller.selectedTab.value) {
       case InvestmentController.TAB_PAID:
@@ -237,7 +225,7 @@ class InvestmentDetailScreen extends StatelessWidget {
         return _buildPurchasedList();
     }
   }
-
+ 
   Widget _buildPaidList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
     return _styledContainer(
@@ -259,24 +247,24 @@ class InvestmentDetailScreen extends StatelessWidget {
       ),
     );
   }
-
+ 
   Widget _buildReceivedList() {
     return _styledContainer(
       ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.paidTransactions.length,
+        itemCount: controller.receivedTransactions.length,
         itemBuilder: (context, index) {
-          final rx = controller.paidTransactions[index];
+          final rx = controller.receivedTransactions[index];
           final date = rx.timestamp != null
               ? DateFormat('dd-MMM-yyyy').format(rx.timestamp!)
               : "N/A";
-          return _transactionRow("${index + 1}", date, "${rx.gold} g");
+          return _transactionRow("${index + 1}", date, "${rx.gram} g");
         },
       ),
     );
   }
-
+ 
   Widget _buildPurchasedList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
     return ListView.builder(
@@ -341,7 +329,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       },
     );
   }
-
+ 
   Widget _styledContainer(Widget child) {
     return Container(
       decoration: BoxDecoration(
@@ -352,7 +340,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       child: child,
     );
   }
-
+ 
   Widget _transactionRow(String ins, String date, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -376,3 +364,5 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 }
+ 
+ 

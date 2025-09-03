@@ -206,6 +206,7 @@ class OtpController extends GetxController {
         final userToken = data['data']['token']?.toString() ?? '';
 
         await StorageService().saveUser(userName, userToken, mobile.value, userId);
+        print("Stored token: $userToken, ID: $userToken");
 
         Get.snackbar('Success', 'OTP verified successfully');
 
