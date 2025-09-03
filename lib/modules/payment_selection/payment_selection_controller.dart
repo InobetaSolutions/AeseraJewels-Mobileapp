@@ -86,7 +86,7 @@ class PaymentSelectionController extends GetxController {
         /// ✅ Navigation after success
         if (sourceScreen == "catalog") {
           Get.offAll(() => InvestmentDetailScreen(initialTabIndex: 2));
-        } else if (sourceScreen == "buy_gold") {
+        } else if (sourceScreen == "") {
           final buyGoldCtrl = Get.find<BuyGoldController>();
           int tabIndex = buyGoldCtrl.isRupees.value ? 0 : 1;
           Get.offAll(() => InvestmentDetailScreen(initialTabIndex: tabIndex));
