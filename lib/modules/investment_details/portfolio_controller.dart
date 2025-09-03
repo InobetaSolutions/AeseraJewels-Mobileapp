@@ -56,7 +56,7 @@ class InvestmentController extends GetxController {
       final headers = {
         'Content-Type': 'application/json',
         'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiI3NDgzNzIwMzM0IiwibmFtZSI6ImthbXBhbGxpIiwiaWF0IjoxNzU2ODI1NDQ2LCJleHAiOjE3NTY4MjkwNDZ9.yBrUDtcEXmdKXky9XPRLI-X7_63augMgyagUGpGi-oI',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiI2MzA1NDUzODQxIiwibmFtZSI6IlZhbmRhIiwiaWF0IjoxNzU2ODc2ODE4LCJleHAiOjE3NTY4ODA0MTh9.wm_mBAMfGQQMWJIbV29gnWYfyW619vy6rEh8uMQDK1A',
       };
  
       final response = await http.post(
