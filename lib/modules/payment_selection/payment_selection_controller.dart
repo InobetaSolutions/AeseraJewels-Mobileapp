@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:aesera_jewels/modules/investment_details/portfolio_view.dart';
+import 'package:aesera_jewels/modules/investment_details/investment_view.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import '../buy_gold/buy_gold_controller.dart';
 

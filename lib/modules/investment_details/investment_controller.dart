@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:aesera_jewels/models/investment_model.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -10,7 +11,6 @@ class InvestmentController extends GetxController {
   static const TAB_RECEIVED = 1;
   static const TAB_PURCHASED = 2;
 
-  /// Observables
   final selectedTab = TAB_PAID.obs;
   final paidTransactions = <Transaction>[].obs;
   final receivedTransactions = <Transaction>[].obs;
@@ -21,8 +21,8 @@ class InvestmentController extends GetxController {
   final userMobile = ''.obs;
   final userToken = ''.obs;
 
-  /// API total investment
   final apiTotalInvestment = 0.0.obs;
+  final apiTotalGrams = 0.0.obs;
 
   @override
   void onInit() {
@@ -41,9 +41,7 @@ class InvestmentController extends GetxController {
     userToken.value = await StorageService().getToken() ?? '';
   }
 
-  void changeTab(int index) {
-    selectedTab.value = index;
-  }
+  void changeTab(int index) => selectedTab.value = index;
 
   Future<void> fetchTransactions() async {
     if (userMobile.value.isEmpty) return;
@@ -53,14 +51,13 @@ class InvestmentController extends GetxController {
     receivedTransactions.clear();
     purchasedHistory.clear();
     apiTotalInvestment.value = 0.0;
+    apiTotalGrams.value = 0.0;
 
     try {
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${userToken.value}',
       };
-
-      print("usertoken: ${userToken.value}");
 
       final response = await http.post(
         Uri.parse('http://13.204.96.244:3000/api/getpaymenthistory'),
@@ -73,14 +70,12 @@ class InvestmentController extends GetxController {
         final investmentResponse = InvestmentResponse.fromJson(data);
 
         apiTotalInvestment.value = investmentResponse.totalAmount;
+        apiTotalGrams.value = investmentResponse.totalGrams;
 
-        // Separate lists based on status
         paidTransactions.value = investmentResponse.payments
-            .where(
-              (t) =>
-                  t.status.toLowerCase() == 'pending' ||
-                  t.status.toLowerCase() == 'approved',
-            )
+            .where((t) =>
+                t.status.toLowerCase() == 'pending' ||
+                t.status.toLowerCase() == 'approved')
             .toList();
 
         receivedTransactions.value = investmentResponse.payments
@@ -100,15 +95,21 @@ class InvestmentController extends GetxController {
     }
   }
 
-  /// Fallback calculation
   double get calculatedTotal =>
       paidTransactions.fold(0.0, (sum, tx) => sum + tx.amount);
+  double get calculatedGrams =>
+      paidTransactions.fold(0.0, (sum, tx) => sum + tx.gram);
 
-  /// Use API total if available, else fallback
   String get formattedTotal {
     final amount = apiTotalInvestment.value > 0
         ? apiTotalInvestment.value
         : calculatedTotal;
     return NumberFormat.currency(locale: 'en_IN', symbol: '₹').format(amount);
+  }
+
+  String get formattedTotalGrams {
+    final grams =
+        apiTotalGrams.value > 0 ? apiTotalGrams.value : calculatedGrams;
+    return "${grams.toStringAsFixed(3)} g";
   }
 }

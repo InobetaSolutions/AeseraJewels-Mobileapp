@@ -70,7 +70,9 @@ class LoginController extends GetxController {
           Get.snackbar("Error", "Invalid response from server.");
         }
       } else {
-        Get.snackbar("Error", "Failed: ${response.reasonPhrase}");
+        Get.snackbar("Error", "User not exist please regster: ${response.reasonPhrase}",backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white);
+  
       }
     } catch (e) {
       isLoading.value = false;

@@ -1,16 +1,15 @@
-import 'package:aesera_jewels/modules/investment_details/portfolio_controller.dart';
+
+import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
-import 'package:flutter/services.dart';
-import 'package:aesera_jewels/modules/login/login_view.dart';
 
 class InvestmentDetailScreen extends StatelessWidget {
   final InvestmentController controller = Get.put(InvestmentController());
-
   final int initialTabIndex;
+
   InvestmentDetailScreen({super.key, required this.initialTabIndex});
 
   @override
@@ -41,6 +40,7 @@ class InvestmentDetailScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildHeader(),
               const SizedBox(height: 16),
@@ -51,10 +51,18 @@ class InvestmentDetailScreen extends StatelessWidget {
               _buildSectionTitle(),
               const SizedBox(height: 12),
               if (controller.selectedTab.value == InvestmentController.TAB_PAID)
-                _buildHeaderRow(["Ins No.", "Date","Amount","Grams"])
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: _buildHeaderRow([
+                    "Ins No.",
+                    "Date",
+                    "Amount",
+                    "Grams",
+                  ]),
+                )
               else if (controller.selectedTab.value ==
                   InvestmentController.TAB_RECEIVED)
-                _buildHeaderRow(["Ins No.", "Date","Grams"]),
+                _buildHeaderRow(["Ins No.", "Date", "Grams"]),
               const SizedBox(height: 8),
               _buildTabContent(),
             ],
@@ -82,7 +90,6 @@ class InvestmentDetailScreen extends StatelessWidget {
           onPressed: () async {
             await StorageService().erase();
             Get.offNamed('/login');
-             // exit app
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFFB700),
@@ -119,18 +126,29 @@ class InvestmentDetailScreen extends StatelessWidget {
             "Total Investment Amount",
             style: TextStyle(color: Colors.amber, fontSize: 16),
           ),
-           const Text(
-            "Total Allortment Grams ",
+          const SizedBox(height: 6),
+          Obx(
+            () => Text(
+              controller.formattedTotal,
+              style: const TextStyle(
+                color: Colors.amber,
+                fontSize: 23,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "Total Allotment Grams",
             style: TextStyle(color: Colors.amber, fontSize: 16),
           ),
           const SizedBox(height: 6),
           Obx(
             () => Text(
-              controller.formattedTotal,
-              
+              controller.formattedTotalGrams,
               style: const TextStyle(
                 color: Colors.amber,
-                fontSize: 26,
+                fontSize: 23,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -163,17 +181,20 @@ class InvestmentDetailScreen extends StatelessWidget {
         final selected = controller.selectedTab.value == index;
         return GestureDetector(
           onTap: () => controller.changeTab(index),
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: selected ? Colors.amber : Colors.transparent,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: selected ? Colors.black : Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(3.5),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: selected ? Colors.amber : Colors.transparent,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: selected ? Colors.black : Colors.white,
+                ),
               ),
             ),
           ),
@@ -204,6 +225,8 @@ class InvestmentDetailScreen extends StatelessWidget {
 
   Widget _buildHeaderRow(List<String> titles) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: titles
           .map(
             (t) => Expanded(
@@ -211,8 +234,8 @@ class InvestmentDetailScreen extends StatelessWidget {
                 t,
                 style: const TextStyle(fontWeight: FontWeight.bold),
                 textAlign: (t == "Amount" || t == "Grams")
-                    ? TextAlign.right
-                    : TextAlign.left,
+                    ? TextAlign.start
+                    : TextAlign.start,
               ),
             ),
           )
@@ -232,7 +255,7 @@ class InvestmentDetailScreen extends StatelessWidget {
   }
 
   Widget _buildPaidList() {
-    final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
+    final format = NumberFormat.currency(locale: 'en_IN', symbol: '');
     return _styledContainer(
       ListView.builder(
         shrinkWrap: true,
@@ -243,10 +266,54 @@ class InvestmentDetailScreen extends StatelessWidget {
           final date = tx.timestamp != null
               ? DateFormat('dd-MMM-yyyy').format(tx.timestamp!)
               : "N/A";
-          return _transactionRow(
-            "${index + 1}",
-            date,
-            format.format(tx.amount),
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10.0), // space between rows
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white, // White background for row
+                borderRadius: BorderRadius.circular(
+                  15,
+                ), // Optional rounded corners
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "${index + 1}",
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      date,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      format.format(tx.amount),
+                      style: const TextStyle(color: Colors.black),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      "${tx.gramAllocated.toStringAsFixed(3)}",
+                      style: const TextStyle(color: Colors.black),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
@@ -264,7 +331,11 @@ class InvestmentDetailScreen extends StatelessWidget {
           final date = rx.timestamp != null
               ? DateFormat('dd-MMM-yyyy').format(rx.timestamp!)
               : "N/A";
-          return _transactionRow("${index + 1}", date, "${rx.gram} g");
+          return _transactionRow(
+            "${index + 1}",
+            date,
+            "${rx.gram.toStringAsFixed(3)} g",
+          );
         },
       ),
     );
