@@ -1,3 +1,4 @@
+import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_binding.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
 import 'package:aesera_jewels/modules/payment/payment_binding.dart';
@@ -31,6 +32,8 @@ import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
 // Catalog
 import 'package:aesera_jewels/modules/catalog/catalog_controller.dart';
 import 'package:aesera_jewels/modules/catalog/catalog_view.dart';
+// import 'package:aesera_jewels/modules/catalog/product_model.dart';
+// TODO: Create 'product_model.dart' in 'lib/modules/catalog/' or update this import to the correct model file.
 
 // Buy Gold
 import 'package:aesera_jewels/modules/buy_gold/buy_gold_binding.dart';
@@ -104,13 +107,21 @@ class AppRoutes {
     ),
 
     // Catalog
-    GetPage(
-      name: catalog,
-      page: () => CatalogScreen(),
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => CatalogController());
-      }),
-    ),
+    // GetPage(
+    //   name: catalog,
+    //   page: () => CatalogScreen(item: ProductModel(id: '', name: '', imageUrl: '', price: 0, description: '',), ),
+    //   binding: BindingsBuilder(() {
+    //     Get.lazyPut(() => CatalogController());
+    //   }),
+    // ),
+GetPage(
+  name: catalog,
+  page: () => CatalogScreen(),
+  binding: BindingsBuilder(() {
+    Get.lazyPut(() => CatalogController());
+  }),
+),
+
 
     // Buy Gold
     // GetPage(
