@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,23 +23,28 @@ class LoginView extends GetWidget<LoginController> {
                 height: 100,
                 width: 100,
               ),
-              const SizedBox(height: 75),
+              const SizedBox(height: 60),
 
               /// Login card
-              Container(width: 359,height: 47,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFAFAFA),
-                  borderRadius: BorderRadius.circular(8),
-                
+              Container(
+                width: 359,
+                height: 65,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
                 ),
+                // decoration: BoxDecoration(
+                //   color: const Color(0xFFFAFAFA),
+                //   borderRadius: BorderRadius.circular(8),
+
+                // ),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
                   child: Text(
                     'Login',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lexend(
-                      fontSize: 16,
+                      fontSize: 18,
                       color: const Color(0xFF1A0F12),
                       fontWeight: FontWeight.w700,
                     ),
@@ -48,7 +52,7 @@ class LoginView extends GetWidget<LoginController> {
                 ),
               ),
 
-              const SizedBox(height: 35),
+              const SizedBox(height: 60),
 
               /// Mobile Number Label
               Align(
@@ -110,26 +114,31 @@ class LoginView extends GetWidget<LoginController> {
               ),
 
               const SizedBox(height: 16),
-                 Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Didn't have an account?",
-                      style: GoogleFonts.lexend(
-                          color: const Color(0xFF2596BE), fontSize: 12)),
+                  Text(
+                    "Didn't have an account?",
+                    style: GoogleFonts.lexend(
+                      color: const Color(0xFF2596BE),
+                      fontSize: 12,
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
-                     controller.register();
+                      controller.register();
                     },
-                  
-                    
-                    child: Text("register",
-                        style: GoogleFonts.lexend(
-                            color: const Color(0xFF2596BE), fontSize: 12)),
+
+                    child: Text(
+                      "register",
+                      style: GoogleFonts.lexend(
+                        color: const Color(0xFF2596BE),
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ],
               ),
-             
-             
             ],
           ),
         ),

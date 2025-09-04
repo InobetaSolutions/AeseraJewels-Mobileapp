@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:aesera_jewels/models/payment_model.dart';
-import 'package:aesera_jewels/modules/investment_details/portfolio_view.dart';
+import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -98,17 +98,10 @@ class Payment_Controller extends GetxController {
         "mobile": mobile,
         "others": isOwnNumber.value ? "" : enteredMobile.value,
         "amount": amount,
-        "gram_allocated": gramAllocated,
+        "gram_allocated": gramAllocated.toStringAsFixed(4),
         "gram": gram,
         "amount_allocated": amountAllocated,
       });
-
-      //  "mobile": mobile,
-      // "others": isOwnNumber.value ? "" : enteredMobile.value,
-      // "amount": amount,
-      // "gram": gram,
-      // "amount_allocated": amountAllocated,
-      // "gram_allocated": gramAllocated
 
       print("Request Body: $body");
 
@@ -123,10 +116,9 @@ class Payment_Controller extends GetxController {
         PaymentModel payment = PaymentModel.fromJson(data);
 
         Get.snackbar("Success", "Payment successfully created!");
-        int initialTabIndex = payment.amount == 0 ? 1 : 0;
-        Get.to(
-          () => InvestmentDetailScreen(initialTabIndex: initialTabIndex),
-        ); // Replace 0 with desired tab index
+
+        /// 👇 Navigate to DashboardScreen instead of InvestmentDetailScreen
+        Get.offAll(() => DashboardScreen());
       } else {
         Get.snackbar("Error", "Failed: ${response.reasonPhrase}");
       }
