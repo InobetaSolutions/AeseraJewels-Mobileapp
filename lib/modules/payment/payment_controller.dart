@@ -97,10 +97,12 @@ class Payment_Controller extends GetxController {
         "mobile": await StorageService().getMobile(), // sender always own
         "others": isOwnNumber.value ? "" : enteredMobile.value,
         "amount": amount,
-        "gram_allocated": gramAllocated.toStringAsFixed(4),
+        "gram_allocated": "",
         "gram": gram,
         "amount_allocated": amountAllocated,
       });
+
+      print("Request Body: $body");
 
       var response = await http.post(
         Uri.parse(baseUrl),

@@ -1,4 +1,3 @@
-
 import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,7 +39,6 @@ class InvestmentDetailScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildHeader(),
               const SizedBox(height: 16),
@@ -72,6 +70,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// HEADER: User name + logout
   Widget _buildHeader() {
     return Row(
       children: [
@@ -111,6 +110,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// TOTAL CARD: Investment & Allotment grams
   Widget _buildTotalCard(double width) {
     return Container(
       width: width,
@@ -158,6 +158,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// TAB BAR
   Widget _buildTabBar() {
     return Container(
       height: 48,
@@ -203,6 +204,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// SECTION TITLE
   Widget _buildSectionTitle() {
     switch (controller.selectedTab.value) {
       case InvestmentController.TAB_PAID:
@@ -223,6 +225,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     }
   }
 
+  /// HEADER ROW
   Widget _buildHeaderRow(List<String> titles) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -243,6 +246,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// TAB CONTENT
   Widget _buildTabContent() {
     switch (controller.selectedTab.value) {
       case InvestmentController.TAB_PAID:
@@ -254,6 +258,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     }
   }
 
+  /// PAID LIST
   Widget _buildPaidList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '');
     return _styledContainer(
@@ -268,13 +273,11 @@ class InvestmentDetailScreen extends StatelessWidget {
               : "N/A";
 
           return Padding(
-            padding: const EdgeInsets.only(bottom: 10.0), // space between rows
+            padding: const EdgeInsets.only(bottom: 10.0),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white, // White background for row
-                borderRadius: BorderRadius.circular(
-                  15,
-                ), // Optional rounded corners
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
               ),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
               child: Row(
@@ -320,27 +323,65 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// RECEIVED LIST (NEW API)
+  /// RECEIVED LIST (UI SAME AS PAID AMOUNT)
   Widget _buildReceivedList() {
+    final format = NumberFormat.currency(locale: 'en_IN', symbol: '');
     return _styledContainer(
       ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.receivedTransactions.length,
+        itemCount: controller.allotments.length,
         itemBuilder: (context, index) {
-          final rx = controller.receivedTransactions[index];
+          final rx = controller.allotments[index];
           final date = rx.timestamp != null
-              ? DateFormat('dd-MMM-yyyy').format(rx.timestamp!)
+              ? DateFormat('dd-MMM-yyyy').format(rx.timestamp)
               : "N/A";
-          return _transactionRow(
-            "${index + 1}",
-            date,
-            "${rx.gram.toStringAsFixed(3)} g",
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "${index + 1}",
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      date,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      "${rx.gram.toStringAsFixed(3)} g",
+                      style: const TextStyle(color: Colors.black),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
     );
   }
 
+  /// PURCHASED LIST
   Widget _buildPurchasedList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
     return ListView.builder(
@@ -406,6 +447,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// STYLED CONTAINER
   Widget _styledContainer(Widget child) {
     return Container(
       decoration: BoxDecoration(
@@ -417,6 +459,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// TRANSACTION ROW
   Widget _transactionRow(String ins, String date, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
