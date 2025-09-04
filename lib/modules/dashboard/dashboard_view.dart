@@ -1,13 +1,10 @@
 import 'package:aesera_jewels/modules/auth_controller.dart';
-import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dashboard_controller.dart';
-import 'package:aesera_jewels/modules/login/login_view.dart';
 
 class DashboardScreen extends StatelessWidget {
   final DashboardController controller = Get.put(DashboardController());
