@@ -65,3 +65,47 @@ class Transaction {
     );
   }
 }
+
+class Allotment {
+  final String id;
+  final String mobile;
+  final double gram;
+  final DateTime timestamp;
+  final double amountReduced;
+
+  Allotment({
+    required this.id,
+    required this.mobile,
+    required this.gram,
+    required this.timestamp,
+    required this.amountReduced,
+  });
+
+  factory Allotment.fromJson(Map<String, dynamic> json) {
+    return Allotment(
+      id: json['_id'] ?? '',
+      mobile: json['mobile'] ?? '',
+      gram: (json['gram'] ?? 0).toDouble(),
+      timestamp: DateTime.tryParse(json['timestamp'] ?? '') ?? DateTime.now(),
+      amountReduced: (json['amountReduced'] ?? 0).toDouble(),
+    );
+  }
+}
+
+class AllotmentResponse {
+  final String mobile;
+  final List<Allotment> allotments;
+
+  AllotmentResponse({required this.mobile, required this.allotments});
+
+  factory AllotmentResponse.fromJson(Map<String, dynamic> json) {
+    return AllotmentResponse(
+      mobile: json['mobile'] ?? '',
+      allotments: (json['allotments'] as List<dynamic>?)
+              ?.map((e) => Allotment.fromJson(e))
+              .toList() ??
+          [],
+    );
+  }
+}
+

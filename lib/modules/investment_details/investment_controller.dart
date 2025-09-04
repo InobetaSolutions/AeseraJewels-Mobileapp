@@ -14,6 +14,7 @@ class InvestmentController extends GetxController {
   final paidTransactions = <Transaction>[].obs;
   final receivedTransactions = <Transaction>[].obs;
   final purchasedHistory = <Transaction>[].obs;
+  final allotments = <Allotment>[].obs; // NEW for Received Gold
   final isLoading = false.obs;
 
   final userName = ''.obs;
@@ -40,7 +41,12 @@ class InvestmentController extends GetxController {
     userToken.value = await StorageService().getToken() ?? '';
   }
 
-  void changeTab(int index) => selectedTab.value = index;
+  void changeTab(int index) {
+    selectedTab.value = index;
+    if (index == TAB_RECEIVED) {
+      fetchAllotments(); // CALL NEW API WHEN RECEIVED TAB IS CLICKED
+    }
+  }
 
   Future<void> fetchTransactions() async {
     if (userMobile.value.isEmpty) return;
@@ -96,6 +102,37 @@ class InvestmentController extends GetxController {
     }
   }
 
+  // NEW METHOD: Fetch allotments for Received Gold
+  Future<void> fetchAllotments() async {
+    if (userMobile.value.isEmpty) return;
+
+    isLoading.value = true;
+    allotments.clear();
+
+    try {
+      final headers = {'Authorization': 'Bearer ${userToken.value}'};
+
+      final response = await http.get(
+        Uri.parse(
+          'http://13.204.96.244:3000/api/getByUserAllotment?mobile=${userMobile.value}',
+        ),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(await response.body) as Map<String, dynamic>;
+        final allotmentResponse = AllotmentResponse.fromJson(data);
+        allotments.value = allotmentResponse.allotments;
+      } else {
+        Get.snackbar('Error', response.reasonPhrase ?? 'Failed to fetch data');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Something went wrong: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   double get calculatedTotal =>
       paidTransactions.fold(0.0, (sum, tx) => sum + tx.amount);
   double get calculatedGrams =>
@@ -112,6 +149,6 @@ class InvestmentController extends GetxController {
     final grams = apiTotalGrams.value > 0
         ? apiTotalGrams.value
         : calculatedGrams;
-    return "${grams.toStringAsFixed(3)} g";
+    return "${grams.toStringAsFixed(2)} g";
   }
 }
