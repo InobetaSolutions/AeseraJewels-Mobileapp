@@ -114,7 +114,7 @@
 //     ),
 //     decoration: InputDecoration(
 //       hintText: 'Enter Payment Mobile Number',
-      
+
 //       hintStyle: GoogleFonts.plusJakartaSans(
 //         color: Color(0xFF2596BE),
 //         fontSize: 15,
@@ -197,7 +197,7 @@
 //               const SizedBox(height: 12),
 //               Wrap(
 //                 spacing: 12,
-                
+
 //                 children:
 //                     (controller.isRupees.value
 //                             ? controller.rupeesOptions
@@ -396,7 +396,9 @@ class Payment_Screen extends GetView<Payment_Controller> {
                       child: TextField(
                         controller: mobileController,
                         keyboardType: TextInputType.phone,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         onChanged: (v) => controller.enteredMobile.value = v,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 16,
@@ -427,7 +429,10 @@ class Payment_Screen extends GetView<Payment_Controller> {
               Text(controller.isRupees.value ? "Amount Paid" : "Weight (gm)"),
               const SizedBox(height: 6),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 2,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.blue.shade50,
                   borderRadius: BorderRadius.circular(12),
@@ -451,7 +456,11 @@ class Payment_Screen extends GetView<Payment_Controller> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 8, top: 10),
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 8,
+                        top: 10,
+                      ),
                       child: Text(
                         controller.isRupees.value ? "₹" : "gm",
                         style: const TextStyle(
@@ -476,36 +485,55 @@ class Payment_Screen extends GetView<Payment_Controller> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text("Quick Select", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text(
+                "Quick Select",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 12,
-                children: (controller.isRupees.value
-                        ? controller.rupeesOptions
-                        : controller.gramsOptions)
-                    .map((option) {
-                  final isSelected = controller.enteredAmount.value.toString() == option;
-                  return GestureDetector(
-                    onTap: () {
-                      controller.selectValue(option);
-                      textController.text = option;
-                      textController.selection = TextSelection.collapsed(offset: option.length);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.amber : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        controller.isRupees.value ? "₹$option" : "$option gm",
-                        style: TextStyle(
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                children:
+                    (controller.isRupees.value
+                            ? controller.rupeesOptions
+                            : controller.gramsOptions)
+                        .map((option) {
+                          final isSelected =
+                              controller.enteredAmount.value.toString() ==
+                              option;
+                          return GestureDetector(
+                            onTap: () {
+                              controller.selectValue(option);
+                              textController.text = option;
+                              textController.selection =
+                                  TextSelection.collapsed(
+                                    offset: option.length,
+                                  );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Colors.amber
+                                    : Colors.grey[200],
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                controller.isRupees.value
+                                    ? "₹$option"
+                                    : "$option gm",
+                                style: TextStyle(
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          );
+                        })
+                        .toList(),
               ),
               const Spacer(),
               ElevatedButton(
@@ -516,7 +544,7 @@ class Payment_Screen extends GetView<Payment_Controller> {
                   shape: const StadiumBorder(),
                 ),
                 child: const Text(
-                  "Proceed Paymentggggggggggggggg",
+                  "Proceed Payment",
 
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
@@ -528,7 +556,12 @@ class Payment_Screen extends GetView<Payment_Controller> {
     );
   }
 
-  Widget _buildToggleBar(bool isFirstSelected, String first, String second, Function(bool) onTap) {
+  Widget _buildToggleBar(
+    bool isFirstSelected,
+    String first,
+    String second,
+    Function(bool) onTap,
+  ) {
     return Container(
       height: 50,
       decoration: BoxDecoration(
