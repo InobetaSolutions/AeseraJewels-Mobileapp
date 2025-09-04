@@ -2,13 +2,13 @@ class InvestmentResponse {
   final double totalAmount;
   final double totalGrams;
   final List<Transaction> payments;
- 
+
   InvestmentResponse({
     required this.totalAmount,
     required this.totalGrams,
     required this.payments,
   });
- 
+
   factory InvestmentResponse.fromJson(Map<String, dynamic> json) {
     return InvestmentResponse(
       totalAmount: (json['totalAmount'] ?? 0).toDouble(),
@@ -19,7 +19,7 @@ class InvestmentResponse {
     );
   }
 }
- 
+
 class Transaction {
   final String id;
   final String mobile;
@@ -32,7 +32,7 @@ class Transaction {
   final double gold;
   final String? tag;
   final String? address;
- 
+
   Transaction({
     required this.id,
     required this.mobile,
@@ -46,7 +46,7 @@ class Transaction {
     this.tag,
     this.address,
   });
- 
+
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
       id: json['_id'] ?? '',
@@ -65,5 +65,3 @@ class Transaction {
     );
   }
 }
- 
- 

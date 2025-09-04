@@ -1,4 +1,3 @@
- 
 import 'package:aesera_jewels/modules/auth_controller.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -9,20 +8,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dashboard_controller.dart';
 import 'package:aesera_jewels/modules/login/login_view.dart';
- 
+
 class DashboardScreen extends StatelessWidget {
   final DashboardController controller = Get.put(DashboardController());
   final authController = Get.put(AuthController());
- 
+
   DashboardScreen({super.key}) {
     authController.loadUser(); // Load saved user
   }
- 
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
- 
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       appBar: AppBar(
@@ -37,50 +36,53 @@ class DashboardScreen extends StatelessWidget {
             color: const Color(0xFF1A0F12),
           ),
         ),
-actions: [
-  /// Logout (Text Button)
-  // TextButton(
-  //   onPressed: () async {
-  //     await StorageService().erase();
-  //     Get.offAllNamed('/login'); // ✅ Navigate to login
-  //   },
-  //   child: const Text(
-  //     "Logout",
-  //     style: TextStyle(color: Colors.white),
-  //   ),
-  // ),
+        actions: [
+          /// Logout (Text Button)
+          // TextButton(
+          //   onPressed: () async {
+          //     await StorageService().erase();
+          //     Get.offAllNamed('/login'); // ✅ Navigate to login
+          //   },
+          //   child: const Text(
+          //     "Logout",
+          //     style: TextStyle(color: Colors.white),
+          //   ),
+          // ),
 
-  /// Logout (Elevated Button)
-  Padding(
-    padding: const EdgeInsets.only(
-      left: 12,
-      right: 16,
-      top: 10.5,
-      bottom: 10.5,
-    ),
-    child: ElevatedButton(
-      onPressed: () async {
-        await StorageService().erase();
-        Get.offAllNamed('/login'); // ✅ Navigate to login
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFFB700),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 3),
-      ),
-      child: Text(
-        "Logout",
-        style: GoogleFonts.lexend(
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          color: const Color(0xFF000000),
-        ),
-      ),
-    ),
-  ),
-],
+          /// Logout (Elevated Button)
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 12,
+              right: 16,
+              top: 10.5,
+              bottom: 10.5,
+            ),
+            child: ElevatedButton(
+              onPressed: () async {
+                await StorageService().erase();
+                Get.offAllNamed('/login'); // ✅ Navigate to login
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFFB700),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 21,
+                  vertical: 3,
+                ),
+              ),
+              child: Text(
+                "Logout",
+                style: GoogleFonts.lexend(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF000000),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Scrollbar(
@@ -97,18 +99,20 @@ actions: [
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// Welcome Text
-                Obx(() => Text(
-                       " ${controller.userName.value}",
-                       
-                      style: GoogleFonts.lexend(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 22,
-                        color: const Color(0xFF1A0F12),
-                      ),
-                    )),
- 
+                Obx(
+                  () => Text(
+                    " ${controller.userName.value}",
+
+                    style: GoogleFonts.lexend(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22,
+                      color: const Color(0xFF1A0F12),
+                    ),
+                  ),
+                ),
+
                 const SizedBox(height: 16),
- 
+
                 /// GOLD RATE CARD
                 Align(
                   alignment: Alignment.center,
@@ -132,7 +136,7 @@ actions: [
                           ),
                         ),
                         const SizedBox(height: 8),
- 
+
                         /// Dynamic Gold Rate
                         Obx(() {
                           if (controller.isLoadingRate.value) {
@@ -178,7 +182,7 @@ actions: [
                             );
                           }
                         }),
- 
+
                         const Spacer(),
                         Align(
                           alignment: Alignment.centerRight,
@@ -208,9 +212,9 @@ actions: [
                     ),
                   ),
                 ),
- 
+
                 const SizedBox(height: 20),
- 
+
                 /// CATALOG CARD
                 Align(
                   alignment: Alignment.center,
@@ -243,14 +247,16 @@ actions: [
                                 fit: BoxFit.cover,
                               ),
                               const SizedBox(height: 12),
- 
+
                               /// Shop Now Button
                               TextButton(
                                 onPressed: controller.goToCatalog,
                                 style: TextButton.styleFrom(
                                   backgroundColor: const Color(0xFFFFB700),
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 23, vertical: 6),
+                                    horizontal: 23,
+                                    vertical: 6,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
@@ -268,11 +274,10 @@ actions: [
                             ],
                           ),
                           const SizedBox(width: 14),
- 
+
                           /// Right Image
                           Padding(
-                            padding:
-                                const EdgeInsets.only(top: 40, bottom: 0),
+                            padding: const EdgeInsets.only(top: 40, bottom: 0),
                             child: Image.asset(
                               "assets/images/catalog_gold_img.png",
                               width: 150,
@@ -285,9 +290,9 @@ actions: [
                     ),
                   ),
                 ),
- 
+
                 const SizedBox(height: 23),
- 
+
                 /// PORTFOLIO BUTTON
                 Align(
                   alignment: Alignment.center,
@@ -321,5 +326,3 @@ actions: [
     );
   }
 }
- 
- 
