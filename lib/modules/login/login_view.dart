@@ -113,7 +113,7 @@ class LoginView extends GetWidget<LoginController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Didn't have an account?",
+                    "Didn't have an account?register",
                     style: GoogleFonts.lexend(
                       color: const Color(0xFF2596BE),
                       fontSize: 12,
