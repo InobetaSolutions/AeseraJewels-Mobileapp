@@ -239,7 +239,8 @@ class Payment_Screen extends GetView<Payment_Controller> {
                   shape: const StadiumBorder(),
                 ),
                 child: const Text(
-                  "Proceed Payment",
+                  "Proceed Paymentggggggggggggggg",
+
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ),
