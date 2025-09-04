@@ -40,8 +40,8 @@ import 'package:aesera_jewels/modules/buy_gold/buy_gold_binding.dart';
 import 'package:aesera_jewels/modules/buy_gold/buy_gold_view.dart';
 
 // Portfolio
-import 'package:aesera_jewels/modules/investment_details/portfolio_binding.dart';
-import 'package:aesera_jewels/modules/investment_details/portfolio_view.dart';
+import 'package:aesera_jewels/modules/investment_details/investment_binding.dart';
+import 'package:aesera_jewels/modules/investment_details/investment_view.dart';
 
 // Payments
 import 'package:aesera_jewels/modules/payment_selection/payment_selection_controller.dart';

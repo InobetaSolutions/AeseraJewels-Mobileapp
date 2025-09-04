@@ -26,17 +26,12 @@ class LoginView extends GetWidget<LoginController> {
               const SizedBox(height: 60),
 
               /// Login card
-              Container(
-                width: 359,
-                height: 65,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
+              Container(width: 359,height: 65,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 // decoration: BoxDecoration(
                 //   color: const Color(0xFFFAFAFA),
                 //   borderRadius: BorderRadius.circular(8),
-
+                
                 // ),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),

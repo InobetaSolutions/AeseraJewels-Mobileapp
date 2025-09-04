@@ -1,4 +1,3 @@
- 
 import 'dart:convert';
 import 'package:aesera_jewels/models/investment_model.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -10,29 +9,18 @@ class InvestmentController extends GetxController {
   static const TAB_PAID = 0;
   static const TAB_RECEIVED = 1;
   static const TAB_PURCHASED = 2;
- 
-  final selectedTab = TAB_PAID.obs;
   final paidTransactions = <Transaction>[].obs;
-  final receivedTransactions = <Transaction>[].obs;
-  final purchasedHistory = <Transaction>[].obs;
-  final isLoading = false.obs;
  
   final userName = ''.obs;
   final userMobile = ''.obs;
   final userToken = ''.obs;
- 
+
   final apiTotalInvestment = 0.0.obs;
   final apiTotalGrams = 0.0.obs;
- 
+
   @override
   void onInit() {
     super.onInit();
-    _initController();
-  }
- 
-  Future<void> _initController() async {
-    await _loadUserData();
-    await fetchTransactions();
   }
  
   Future<void> _loadUserData() async {
@@ -40,9 +28,9 @@ class InvestmentController extends GetxController {
     userMobile.value = await StorageService().getMobile() ?? '';
     userToken.value = await StorageService().getToken() ?? '';
   }
- 
+
   void changeTab(int index) => selectedTab.value = index;
- 
+
   Future<void> fetchTransactions() async {
     if (userMobile.value.isEmpty) return;
  
@@ -52,13 +40,11 @@ class InvestmentController extends GetxController {
     purchasedHistory.clear();
     apiTotalInvestment.value = 0.0;
     apiTotalGrams.value = 0.0;
- 
     try {
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${userToken.value}',
       };
- 
       final response = await http.post(
         Uri.parse('http://13.204.96.244:3000/api/getpaymenthistory'),
         headers: headers,
@@ -71,7 +57,6 @@ class InvestmentController extends GetxController {
  
         apiTotalInvestment.value = investmentResponse.totalAmount;
         apiTotalGrams.value = investmentResponse.totalGrams;
- 
         paidTransactions.value = investmentResponse.payments
             .where((t) =>
                 t.status.toLowerCase() == 'pending' ||
@@ -94,24 +79,22 @@ class InvestmentController extends GetxController {
       isLoading.value = false;
     }
   }
- 
   double get calculatedTotal =>
       paidTransactions.fold(0.0, (sum, tx) => sum + tx.amount);
   double get calculatedGrams =>
       paidTransactions.fold(0.0, (sum, tx) => sum + tx.gram);
- 
   String get formattedTotal {
     final amount = apiTotalInvestment.value > 0
         ? apiTotalInvestment.value
         : calculatedTotal;
     return NumberFormat.currency(locale: 'en_IN', symbol: '₹').format(amount);
   }
- 
   String get formattedTotalGrams {
     final grams =
         apiTotalGrams.value > 0 ? apiTotalGrams.value : calculatedGrams;
     return "${grams.toStringAsFixed(3)} g";
   }
+  
 }
  
  

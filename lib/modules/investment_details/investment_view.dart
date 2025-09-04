@@ -1,4 +1,5 @@
-import 'package:aesera_jewels/modules/investment_details/portfolio_controller.dart';
+
+import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

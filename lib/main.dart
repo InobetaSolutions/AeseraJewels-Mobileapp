@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Aesera Jewels',
+      title: 'GoldPoint',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'Roboto',
