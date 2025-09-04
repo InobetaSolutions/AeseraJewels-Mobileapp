@@ -283,6 +283,7 @@ class Payment_Screen extends GetView<Payment_Controller> {
             borderRadius: BorderRadius.circular(30),
           ),
           alignment: Alignment.center,
+
           child: Text(
             text,
             style: TextStyle(
