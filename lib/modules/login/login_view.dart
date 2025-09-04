@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -110,26 +109,31 @@ class LoginView extends GetWidget<LoginController> {
               ),
 
               const SizedBox(height: 16),
-                 Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Didn't have an account?",
-                      style: GoogleFonts.lexend(
-                          color: const Color(0xFF2596BE), fontSize: 12)),
+                  Text(
+                    "Didn't have an account?",
+                    style: GoogleFonts.lexend(
+                      color: const Color(0xFF2596BE),
+                      fontSize: 12,
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
-                     controller.register();
+                      controller.register();
                     },
-                  
-                    
-                    child: Text("register",
-                        style: GoogleFonts.lexend(
-                            color: const Color(0xFF2596BE), fontSize: 12)),
+
+                    child: Text(
+                      "register",
+                      style: GoogleFonts.lexend(
+                        color: const Color(0xFF2596BE),
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ],
               ),
-             
-             
             ],
           ),
         ),

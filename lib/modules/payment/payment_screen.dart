@@ -369,7 +369,13 @@ class Payment_Screen extends GetView<Payment_Controller> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Payment Mobile Number"),
+                    const Text(
+                      "Payment Mobile Number",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     const SizedBox(height: 6),
                     Container(
                       width: 358,
@@ -414,9 +420,9 @@ class Payment_Screen extends GetView<Payment_Controller> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
                   ],
                 ),
+              const SizedBox(height: 25),
 
               Text(controller.isRupees.value ? "Amount Paid" : "Weight (gm)"),
               const SizedBox(height: 6),
@@ -437,6 +443,11 @@ class Payment_Screen extends GetView<Payment_Controller> {
                   controller: textController,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.teal,
+                  ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     prefixIcon: Padding(
@@ -444,8 +455,9 @@ class Payment_Screen extends GetView<Payment_Controller> {
                       child: Text(
                         controller.isRupees.value ? "₹" : "gm",
                         style: const TextStyle(
-                          fontSize: 30,
+                          fontSize: 25,
                           fontWeight: FontWeight.w600,
+                          color: Colors.teal,
                         ),
                       ),
                     ),
@@ -454,7 +466,7 @@ class Payment_Screen extends GetView<Payment_Controller> {
                       child: Text(
                         controller.getConversion(),
                         style: const TextStyle(
-                          fontSize: 30,
+                          fontSize: 25,
                           fontWeight: FontWeight.w600,
                           color: Colors.teal,
                         ),
@@ -504,7 +516,8 @@ class Payment_Screen extends GetView<Payment_Controller> {
                   shape: const StadiumBorder(),
                 ),
                 child: const Text(
-                  "Proceed Payment",
+                  "Proceed Paymentggggggggggggggg",
+
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ),
@@ -542,9 +555,11 @@ class Payment_Screen extends GetView<Payment_Controller> {
             borderRadius: BorderRadius.circular(30),
           ),
           alignment: Alignment.center,
+
           child: Text(
             text,
             style: TextStyle(
+              fontSize: 20, // ✅ Added font size
               color: selected ? Colors.black : Colors.white,
               fontWeight: FontWeight.bold,
             ),
