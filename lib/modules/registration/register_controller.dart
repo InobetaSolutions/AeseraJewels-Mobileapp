@@ -51,7 +51,8 @@ class RegisterController extends GetxController {
         if (otp != null && token != null) {
           print("OTP: $otp");
          // _showSnackBar("OTP Sent", "Check your SMS (OTP: $otp)");
-          _showSnackBar("OTP Sent", "Check your SMS (OTP: $resendotp)");
+         // _showSnackBar("OTP Sent", "Check your SMS (OTP: $resendotp)");
+            //_showSnackBar("OTP Sent", "Check your SMS (OTP:)");
 
           Get.toNamed('/otp', arguments: {
             "otp": otp,
