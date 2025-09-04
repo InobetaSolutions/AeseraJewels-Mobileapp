@@ -85,7 +85,7 @@ class OtpController extends GetxController {
         );
         print("Stored token: $userToken, ID: $userToken");
 
-        Get.snackbar('Success', 'OTP verified successfully');
+      // Get.snackbar('Success', 'OTP verified successfully');
 
         /// Navigate based on user type
         if (isNewUser) {
@@ -117,7 +117,9 @@ class OtpController extends GetxController {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         otp.value = data['otp']?.toString() ?? '';
-        Get.snackbar('OTP Resent', 'A new OTP has been sent to your number');
+        Get.snackbar('OTP Resent', 'A new OTP has been sent to your number',
+            backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+            
       } else {
         Get.snackbar('Error', 'Failed to resend OTP');
       }
