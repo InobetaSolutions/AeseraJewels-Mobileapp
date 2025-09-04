@@ -104,14 +104,14 @@ class RegisterView extends GetWidget<RegisterController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have an account?",
-                      style: GoogleFonts.lexend(
-                          color: const Color(0xFF2596BE), fontSize: 12)),
+                  // Text("Already have an account?",
+                  //     style: GoogleFonts.lexend(
+                  //         color: const Color(0xFF2596BE), fontSize: 12)),
                            GestureDetector(
                     onTap: ()  {
                     controller.login();
                     },
-                    child: Text("Login",
+                    child: Text("Already have an account? Login",
                         style: GoogleFonts.lexend(
                             color: const Color(0xFF2596BE), fontSize: 12)),
                   )
