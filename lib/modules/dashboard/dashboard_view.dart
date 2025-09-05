@@ -28,7 +28,7 @@ class DashboardScreen extends StatelessWidget {
         title: Text(
           "Dashboard",
           style: GoogleFonts.lexend(
-            fontSize: 16,
+            fontSize: 24,
             fontWeight: FontWeight.w700,
             color: const Color(0xFF1A0F12),
           ),
@@ -72,7 +72,7 @@ class DashboardScreen extends StatelessWidget {
               child: Text(
                 "Logout",
                 style: GoogleFonts.lexend(
-                  fontSize: 14,
+                  fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: const Color(0xFF000000),
                 ),
@@ -121,9 +121,20 @@ class DashboardScreen extends StatelessWidget {
                     () => Text(
                       " ${controller.userName.value}",
                       style: GoogleFonts.lexend(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 22,
+                        fontWeight: FontWeight.w800, // extra bold
+                        fontSize: 28, // bigger size
                         color: const Color(0xFF1A0F12),
+                        letterSpacing: 1.2, // more spacing for uniqueness
+                        height: 1.3, // better line height
+                        shadows: [
+                          Shadow(
+                            offset: const Offset(1.5, 1.5),
+                            blurRadius: 3,
+                            color: Colors.black.withOpacity(
+                              0.2,
+                            ), // soft shadow for depth
+                          ),
+                        ],
                       ),
                     ),
                   ),

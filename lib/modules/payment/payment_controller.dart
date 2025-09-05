@@ -80,12 +80,17 @@ class Payment_Controller extends GetxController {
         return;
       }
 
-      // ✅ Payment to others should work even if number not registered
+      // entered values
       double amount = isRupees.value ? enteredAmount.value.toDouble() : 0;
       double gram = isRupees.value ? 0 : enteredAmount.value.toDouble();
 
-      double amountAllocated = amount > 0 ? amount : gram * goldRate.value;
-      double gramAllocated = gram > 0 ? gram : amount / goldRate.value;
+      // ✅ FIXED allocation rule
+      double amountAllocated = isRupees.value
+          ? 0
+          : gram * goldRate.value; // only when buying in grams
+      double gramAllocated = isRupees.value
+          ? amount / goldRate.value
+          : 0; // only when buying in rupees
 
       var token = await StorageService.getTokenAsync();
       var headers = {
@@ -97,7 +102,7 @@ class Payment_Controller extends GetxController {
         "mobile": await StorageService().getMobile(), // sender always own
         "others": isOwnNumber.value ? "" : enteredMobile.value,
         "amount": amount,
-        "gram_allocated": "",
+        "gram_allocated": gramAllocated,
         "gram": gram,
         "amount_allocated": amountAllocated,
       });

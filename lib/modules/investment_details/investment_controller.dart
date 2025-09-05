@@ -14,7 +14,7 @@ class InvestmentController extends GetxController {
   final paidTransactions = <Transaction>[].obs;
   final receivedTransactions = <Transaction>[].obs;
   final purchasedHistory = <Transaction>[].obs;
-  final allotments = <Allotment>[].obs; // NEW for Received Gold
+  final allotments = <Allotment>[].obs;
   final isLoading = false.obs;
 
   final userName = ''.obs;
@@ -44,7 +44,15 @@ class InvestmentController extends GetxController {
   void changeTab(int index) {
     selectedTab.value = index;
     if (index == TAB_RECEIVED) {
-      fetchAllotments(); // CALL NEW API WHEN RECEIVED TAB IS CLICKED
+      fetchAllotments();
+    }
+  }
+
+  /// REFRESH: Re-fetch all transactions
+  Future<void> refreshData() async {
+    await fetchTransactions();
+    if (selectedTab.value == TAB_RECEIVED) {
+      await fetchAllotments();
     }
   }
 
@@ -102,7 +110,6 @@ class InvestmentController extends GetxController {
     }
   }
 
-  // NEW METHOD: Fetch allotments for Received Gold
   Future<void> fetchAllotments() async {
     if (userMobile.value.isEmpty) return;
 

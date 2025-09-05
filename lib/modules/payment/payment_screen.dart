@@ -40,12 +40,12 @@ class Payment_Screen extends GetView<Payment_Controller> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildToggleBar(
-                controller.isOwnNumber.value,
-                "Own Number",
-                "Others Number",
-                (own) => controller.toggleNumber(own),
-              ),
+              // _buildToggleBar(
+              //   controller.isOwnNumber.value,
+              //   "Own Number",
+              //   "Others Number",
+              //   (own) => controller.toggleNumber(own),
+              // ),
               const SizedBox(height: 20),
               _buildToggleBar(
                 controller.isRupees.value,
