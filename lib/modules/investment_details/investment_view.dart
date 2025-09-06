@@ -1,3 +1,4 @@
+import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -73,8 +74,13 @@ class InvestmentDetailScreen extends StatelessWidget {
                   _buildHeaderRow(
                     titles: ["Ins No.", "Date & Time", "Amount", "Grams"],
                     flexValues: [2, 4, 2, 2],
-                  ),
-                const SizedBox(height: 8),
+                  )
+                else
+                  // _buildHeaderRow(
+                  //   titles: ["Tag", "Date & Time", "Paid Amount", "Paid Grams"],
+                  //   flexValues: [3, 3, 3, 3],
+                  // ),
+                  const SizedBox(height: 8),
                 _buildTabContent(),
               ],
             ),
@@ -92,16 +98,16 @@ class InvestmentDetailScreen extends StatelessWidget {
             controller.userName.value,
             textAlign: TextAlign.start,
             style: GoogleFonts.lexend(
-              fontWeight: FontWeight.w800, // extra bold
-              fontSize: 28, // bigger size
+              fontWeight: FontWeight.w800,
+              fontSize: 28,
               color: const Color(0xFF1A0F12),
-              letterSpacing: 1.2, // more spacing for uniqueness
-              height: 1.3, // better line height
+              letterSpacing: 1.2,
+              height: 1.3,
               shadows: [
                 Shadow(
                   offset: const Offset(1.5, 1.5),
                   blurRadius: 3,
-                  color: Colors.black.withOpacity(0.2), // soft shadow for depth
+                  color: Colors.black.withOpacity(0.2),
                 ),
               ],
             ),
@@ -214,7 +220,7 @@ class InvestmentDetailScreen extends StatelessWidget {
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: 20, // 👈 Added font size here
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: selected ? Colors.black : Colors.white,
                 ),
@@ -292,10 +298,10 @@ class InvestmentDetailScreen extends StatelessWidget {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '');
     if (controller.paidTransactions.isEmpty) {
       return _styledContainer(
-        Center(
+        const Center(
           child: Text(
             "No Data Available",
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -304,106 +310,31 @@ class InvestmentDetailScreen extends StatelessWidget {
         ),
       );
     }
-    return _styledContainer(
-      Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.paidTransactions.length,
-            itemBuilder: (context, index) {
-              final tx = controller.paidTransactions[index];
-              final dateTimeString = tx.timestamp != null
-                  ? DateFormat('dd-MMM-yyyy h:mm a').format(tx.timestamp!)
-                  : "N/A";
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 4,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 18.0, left: 8.0),
-                        child: Expanded(
-                          flex: 2,
-                          child: Text(
-                            "${index + 1}",
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 8.0),
-                        child: Expanded(
-                          flex: 4,
-                          child: Text(
-                            dateTimeString,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Expanded(
-                          flex: 2,
-                          child: Text(
-                            format.format(tx.amount),
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "${(tx.gramAllocated > 0 ? tx.gramAllocated : tx.gram).toStringAsFixed(3)}",
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+    return _listContainer(
+      items: controller.paidTransactions.map((tx) {
+        final dateTimeString = tx.timestamp != null
+            ? DateFormat('dd-MMM-yyyy h:mm a').format(tx.timestamp!)
+            : "N/A";
+        return [
+          "${controller.paidTransactions.indexOf(tx) + 1}",
+          dateTimeString,
+          format.format(tx.amount),
+          tx.gramAllocated > 0
+              ? tx.gramAllocated.toStringAsFixed(3)
+              : tx.gram.toStringAsFixed(3),
+        ];
+      }).toList(),
     );
   }
 
-  /// RECEIVED LIST SAME AS PAID LIST
   Widget _buildReceivedList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
     if (controller.allotments.isEmpty) {
       return _styledContainer(
-        Center(
+        const Center(
           child: Text(
             "No Data Available",
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -412,147 +343,111 @@ class InvestmentDetailScreen extends StatelessWidget {
         ),
       );
     }
-    return _styledContainer(
-      Column(
-        // 👈 Changed from ListView to Column
-        children: List.generate(controller.allotments.length, (index) {
-          final rx = controller.allotments[index];
-          final dateTimeString = rx.timestamp != null
-              ? DateFormat('dd-MMM-yyyy h:mm a').format(rx.timestamp)
-              : "N/A";
-
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 18.0, left: 8.0),
-                    child: Expanded(
-                      flex: 2,
-                      child: Text(
-                        "${index + 1}",
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 8.0),
-                    child: Expanded(
-                      flex: 4,
-                      child: Text(
-                        dateTimeString,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Expanded(
-                      flex: 2,
-                      child: Text(
-                        format.format(rx.amountReduced ?? 0),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                        ),
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      "${rx.gram.toStringAsFixed(3)} g",
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }),
-      ),
+    return _listContainer(
+      items: controller.allotments.map((rx) {
+        final dateTimeString = rx.timestamp != null
+            ? DateFormat('dd-MMM-yyyy h:mm a').format(rx.timestamp)
+            : "N/A";
+        return [
+          "${controller.allotments.indexOf(rx) + 1}",
+          dateTimeString,
+          format.format(rx.amountReduced ?? 0),
+          rx.gram.toStringAsFixed(3),
+        ];
+      }).toList(),
     );
   }
 
   Widget _buildPurchasedList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: controller.purchasedHistory.length,
-      itemBuilder: (context, index) {
-        final p = controller.purchasedHistory[index];
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 232, 240, 242),
-            borderRadius: BorderRadius.circular(16),
+
+    if (controller.purchasedHistory.isEmpty) {
+      return _styledContainer(
+        const Center(
+          child: Text(
+            "No Data Available",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    p.tag ?? '',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0A2A4D),
+        ),
+      );
+    }
+
+    return Column(
+      children: controller.purchasedHistory.map((p) {
+        final dateString = p.createdAt != null
+            ? DateFormat('dd-MMM-yyyy').format(p.createdAt!)
+            : "N/A";
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Tag ID & Date
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Tag #${p.tagid}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    p.timestamp != null
-                        ? DateFormat('dd-MMM-yyyy hh:mm a').format(p.timestamp!)
-                        : "N/A",
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(p.address ?? ''),
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFCADBEA),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    format.format(p.amount),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0A2A4D),
+                    Text(
+                      dateString,
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // Address
+                Text(p.address ?? "N/A", style: const TextStyle(fontSize: 14)),
+                const SizedBox(height: 8),
+                // Paid Amount
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      format.format(p.paidAmount),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
-      },
+      }).toList(),
     );
   }
 
@@ -564,6 +459,36 @@ class InvestmentDetailScreen extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(10),
       child: child,
+    );
+  }
+
+  Widget _listContainer({required List<List<String>> items}) {
+    return Column(
+      children: items.map((row) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            child: Row(
+              children: row.map((cell) {
+                int index = row.indexOf(cell);
+                return Expanded(
+                  flex: 2,
+                  child: Text(
+                    cell,
+                    style: const TextStyle(color: Colors.black, fontSize: 17),
+                    textAlign: index < 2 ? TextAlign.start : TextAlign.right,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

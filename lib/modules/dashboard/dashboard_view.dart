@@ -1,7 +1,6 @@
 import 'package:aesera_jewels/modules/auth_controller.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dashboard_controller.dart';
@@ -16,9 +15,6 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
-
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       appBar: AppBar(
@@ -34,19 +30,6 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          /// Logout (Text Button)
-          // TextButton(
-          //   onPressed: () async {
-          //     await StorageService().erase();
-          //     Get.offAllNamed('/login'); // ✅ Navigate to login
-          //   },
-          //   child: const Text(
-          //     "Logout",
-          //     style: TextStyle(color: Colors.white),
-          //   ),
-          // ),
-
-          /// Logout (Elevated Button)
           Padding(
             padding: const EdgeInsets.only(
               left: 12,
@@ -55,10 +38,7 @@ class DashboardScreen extends StatelessWidget {
               bottom: 10.5,
             ),
             child: ElevatedButton(
-              onPressed: () async {
-                await StorageService().erase();
-                Get.offAllNamed('/login'); // ✅ Navigate to login
-              },
+              onPressed: controller.logout,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFB700),
                 shape: RoundedRectangleBorder(
@@ -83,7 +63,6 @@ class DashboardScreen extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.isOffline.value) {
-          // ✅ Show offline full-screen loader
           return const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -97,22 +76,15 @@ class DashboardScreen extends StatelessWidget {
         }
 
         if (controller.isLoadingRate.value) {
-          // ✅ Show loading until API/cache resolves
           return const Center(child: CircularProgressIndicator());
         }
 
-        // ✅ Your normal UI when online + data loaded
         return SafeArea(
           child: Scrollbar(
             thickness: 6,
             radius: const Radius.circular(10),
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 20,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 40,
-              ),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -121,20 +93,9 @@ class DashboardScreen extends StatelessWidget {
                     () => Text(
                       " ${controller.userName.value}",
                       style: GoogleFonts.lexend(
-                        fontWeight: FontWeight.w800, // extra bold
-                        fontSize: 28, // bigger size
+                        fontWeight: FontWeight.w800,
+                        fontSize: 28,
                         color: const Color(0xFF1A0F12),
-                        letterSpacing: 1.2, // more spacing for uniqueness
-                        height: 1.3, // better line height
-                        shadows: [
-                          Shadow(
-                            offset: const Offset(1.5, 1.5),
-                            blurRadius: 3,
-                            color: Colors.black.withOpacity(
-                              0.2,
-                            ), // soft shadow for depth
-                          ),
-                        ],
                       ),
                     ),
                   ),
@@ -164,8 +125,6 @@ class DashboardScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-
-                          /// Dynamic Gold Rate
                           Obx(() {
                             if (controller.goldRate.value != null) {
                               return Column(
@@ -201,7 +160,6 @@ class DashboardScreen extends StatelessWidget {
                               );
                             }
                           }),
-
                           const Spacer(),
                           Align(
                             alignment: Alignment.centerRight,
@@ -250,7 +208,6 @@ class DashboardScreen extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            /// Left Section: Images + Button
                             Column(
                               children: [
                                 Image.asset(
@@ -267,8 +224,6 @@ class DashboardScreen extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                                 const SizedBox(height: 12),
-
-                                /// Shop Now Button
                                 TextButton(
                                   onPressed: controller.goToCatalog,
                                   style: TextButton.styleFrom(
@@ -294,8 +249,6 @@ class DashboardScreen extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(width: 14),
-
-                            /// Right Image
                             Padding(
                               padding: const EdgeInsets.only(
                                 top: 40,
@@ -341,7 +294,63 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+
+                  const SizedBox(height: 16),
+
+                  /// CONTACT SUPPORT CARD
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 310,
+                      decoration: BoxDecoration(
+                        color: const Color(
+                          0xFF09243D,
+                        ), // Same dark blue as other cards
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Obx(() {
+                        if (controller.isLoadingSupport.value) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Contact Support:",
+                              style: GoogleFonts.lexend(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                                color: const Color(0xFFFFB700),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              "Mobile: ${controller.supportMobile.value}",
+                              style: GoogleFonts.lexend(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              "Email: ${controller.supportEmail.value}",
+                              style: GoogleFonts.lexend(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
                 ],
               ),
             ),

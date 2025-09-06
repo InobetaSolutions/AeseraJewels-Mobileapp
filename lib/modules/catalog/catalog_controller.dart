@@ -1,14 +1,14 @@
-
-
 import 'dart:convert';
 import 'package:aesera_jewels/models/catalog_model.dart';
-import 'package:aesera_jewels/modules/payment/payment_screen.dart';
-import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
+import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+
+// ✅ Import your dashboard screen
+import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
 
 class CatalogController extends GetxController {
   var isLoading = true.obs;
@@ -18,7 +18,7 @@ class CatalogController extends GetxController {
   final cityController = TextEditingController();
   final postalCodeController = TextEditingController();
 
-  final selectedValue = 0.0.obs;
+  var selectedProduct = Rxn<ProductModel>();
 
   @override
   void onInit() {
@@ -26,30 +26,43 @@ class CatalogController extends GetxController {
     fetchProducts();
   }
 
-  /// Fetch products from API
+  /// Fetch products
   Future<void> fetchProducts() async {
     try {
       isLoading(true);
-      var response = await http.get(Uri.parse("http://13.204.96.244:3000/api/get-products"));
+      var response = await http.get(
+        Uri.parse("http://13.204.96.244:3000/api/get-products"),
+      );
 
       if (response.statusCode == 200) {
         final List decoded = jsonDecode(response.body);
-        productList.value =
-            decoded.map((json) => ProductModel.fromJson(json)).toList();
+        productList.value = decoded
+            .map((json) => ProductModel.fromJson(json))
+            .toList();
       } else {
-        Get.snackbar("Error", "Failed to fetch products",
-            backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar(
+          "Error",
+          "Failed to fetch products",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
   }
 
-  /// Open Bottom Sheet for Address Input
-  void openAddressBottomSheet() {
+  /// Open Address BottomSheet
+  void openAddressBottomSheet(ProductModel product) {
+    selectedProduct.value = product;
+
     Get.bottomSheet(
       SingleChildScrollView(
         padding: EdgeInsets.only(
@@ -74,42 +87,94 @@ class CatalogController extends GetxController {
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
                       color: const Color(0xFF0D0F1C),
-                      height: 28 / 22,
                     ),
                   ),
                   IconButton(
                     onPressed: () => Get.back(),
                     icon: const Icon(Icons.close, color: Colors.black),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
 
-              buildInputField("Address", addressController, "Enter your address",
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(35),
-                  ]),
-              const SizedBox(height: 16),
+              /// Show Product Amount (Non-Editable)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Product Amount",
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF0D0F1C),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF6FDFF),
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4,
+                          offset: Offset(0, 3),
+                          spreadRadius: 0.02,
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      "₹ ${product.price} (${product.grams ?? 0} gm)",
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
 
-              buildInputField("City", cityController, "Enter your city",
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(35),
-                    FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
-                  ]),
               const SizedBox(height: 16),
-
-              buildInputField("Postal Code", postalCodeController, "Enter your postal code",
-                  type: TextInputType.number, inputFormatters: [
-                LengthLimitingTextInputFormatter(6),
-                FilteringTextInputFormatter.digitsOnly,
-              ]),
+              buildInputField(
+                "Address",
+                addressController,
+                "Enter your address",
+                inputFormatters: [LengthLimitingTextInputFormatter(35)],
+              ),
+              const SizedBox(height: 16),
+              buildInputField(
+                "City",
+                cityController,
+                "Enter your city",
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(35),
+                  FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
+                ],
+              ),
+              const SizedBox(height: 16),
+              buildInputField(
+                "Postal Code",
+                postalCodeController,
+                "Enter your postal code",
+                type: TextInputType.number,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(6),
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+              ),
 
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: submitAddress,
+                  onPressed: submitCatalogPayment,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF09243D),
                     shape: RoundedRectangleBorder(
@@ -130,7 +195,7 @@ class CatalogController extends GetxController {
     );
   }
 
-  /// Custom Input Field Widget
+  /// Build input field
   Widget buildInputField(
     String label,
     TextEditingController controller,
@@ -171,11 +236,13 @@ class CatalogController extends GetxController {
               hintText: hint,
               hintStyle: GoogleFonts.plusJakartaSans(
                 fontSize: 14,
-                color: Color(0xFF2596BE),
+                color: const Color(0xFF2596BE),
               ),
               border: InputBorder.none,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
               counterText: "",
             ),
           ),
@@ -184,45 +251,89 @@ class CatalogController extends GetxController {
     );
   }
 
-  /// Validate and Submit Address
-  void submitAddress() {
+  /// Submit catalog payment
+  Future<void> submitCatalogPayment() async {
+    final product = selectedProduct.value;
+    if (product == null) return;
+
     final address = addressController.text.trim();
     final city = cityController.text.trim();
     final postal = postalCodeController.text.trim();
 
     if (address.isEmpty || city.isEmpty || postal.isEmpty) {
-      _showError("All fields are required");
-      return;
-    }
-    if (city.length > 35 || !RegExp(r'^[a-zA-Z\s]+$').hasMatch(city)) {
-      _showError("City must be letters up to 35 chars");
-      return;
-    }
-    if (address.length > 35) {
-      _showError("Address must be within 35 characters");
-      return;
-    }
-    if (!RegExp(r'^\d{6}$').hasMatch(postal)) {
-      _showError("Postal code must be exactly 6 digits");
+      Get.snackbar(
+        "Validation",
+        "All fields are required",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
       return;
     }
 
-    Get.back();
-    Get.to(
-      () => Payment_Screen(),
-      arguments: {
-        "amount": selectedValue.value.toStringAsFixed(2),
-        "source": "catalog",
-      },
-    );
-  }
+    final mobile = StorageService().getMobile() ?? "Unknown";
 
-  void _showError(String msg) {
-    Get.snackbar(
-      "Validation",
-      msg,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-    );
+    final body = {
+      "mobileNumber": mobile,
+      "tagid": product.tagId,
+      "goldType": product.goldtype,
+      "description": product.description,
+      "amount": product.price,
+      "grams": product.grams ?? 0,
+      "address": address,
+      "city": city,
+      "postCode": postal,
+      "Paidamount": product.price,
+      "Paidgrams": product.grams ?? 0,
+    };
+
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request(
+        'POST',
+        Uri.parse('http://13.204.96.244:3000/api/catalogPayment'),
+      );
+      request.body = json.encode(body);
+      print("Request Body: ${request.body}");
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = jsonDecode(await response.stream.bytesToString());
+        CatalogPaymentModel payment = CatalogPaymentModel.fromJson(
+          responseData["data"],
+        );
+
+        // ✅ Close bottomsheet
+        Get.back();
+
+        // ✅ Show success message
+        Get.snackbar(
+          "Success",
+          "Catalog Payment Created Successfully",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        // ✅ Navigate to DashboardScreen
+        Get.offAll(() => DashboardScreen());
+
+        print("✅ Catalog Payment ID: ${payment.id}");
+        print("✅ Grams: ${payment.grams}, Paid Grams: ${payment.paidGrams}");
+      } else {
+        Get.snackbar(
+          "Error",
+          response.reasonPhrase ?? "Failed",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }
