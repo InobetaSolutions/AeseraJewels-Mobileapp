@@ -101,7 +101,8 @@ class AllotmentResponse {
   factory AllotmentResponse.fromJson(Map<String, dynamic> json) {
     return AllotmentResponse(
       mobile: json['mobile'] ?? '',
-      allotments: (json['allotments'] as List<dynamic>?)
+      allotments:
+          (json['allotments'] as List<dynamic>?)
               ?.map((e) => Allotment.fromJson(e))
               .toList() ??
           [],
@@ -109,3 +110,62 @@ class AllotmentResponse {
   }
 }
 
+class UserCatalog {
+  String id;
+  String mobileNumber;
+  String tagid;
+  String goldType;
+  String description;
+  double amount;
+  double grams;
+  String address;
+  String city;
+  String postCode;
+  double paidAmount;
+  double paidGrams;
+  String allotmentStatus;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  UserCatalog({
+    required this.id,
+    required this.mobileNumber,
+    required this.tagid,
+    required this.goldType,
+    required this.description,
+    required this.amount,
+    required this.grams,
+    required this.address,
+    required this.city,
+    required this.postCode,
+    required this.paidAmount,
+    required this.paidGrams,
+    required this.allotmentStatus,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory UserCatalog.fromJson(Map<String, dynamic> json) {
+    return UserCatalog(
+      id: json['_id'] ?? '',
+      mobileNumber: json['mobileNumber'] ?? '',
+      tagid: json['tagid'] ?? '',
+      goldType: json['goldType'] ?? '',
+      description: json['description'] ?? '',
+      amount: (json['amount']?.toDouble() ?? 0.0),
+      grams: (json['grams']?.toDouble() ?? 0.0),
+      address: json['address'] ?? '',
+      city: json['city'] ?? '',
+      postCode: json['postCode'] ?? '',
+      paidAmount: (json['Paidamount']?.toDouble() ?? 0.0),
+      paidGrams: (json['Paidgrams']?.toDouble() ?? 0.0),
+      allotmentStatus: json['allotmentStatus'] ?? '',
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
+  }
+
+  static List<UserCatalog> listFromJson(List<dynamic> jsonList) {
+    return jsonList.map((json) => UserCatalog.fromJson(json)).toList();
+  }
+}

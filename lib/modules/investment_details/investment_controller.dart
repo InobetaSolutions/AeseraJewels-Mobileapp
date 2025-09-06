@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:aesera_jewels/models/investment_model.dart';
+import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +14,7 @@ class InvestmentController extends GetxController {
   final selectedTab = TAB_PAID.obs;
   final paidTransactions = <Transaction>[].obs;
   final receivedTransactions = <Transaction>[].obs;
-  final purchasedHistory = <Transaction>[].obs;
+  final purchasedHistory = <UserCatalog>[].obs; // 👈 Updated
   final allotments = <Allotment>[].obs;
   final isLoading = false.obs;
 
@@ -45,14 +46,18 @@ class InvestmentController extends GetxController {
     selectedTab.value = index;
     if (index == TAB_RECEIVED) {
       fetchAllotments();
+    } else if (index == TAB_PURCHASED) {
+      fetchPurchasedCatalog(); // 👈 Call Purchased API
     }
   }
 
-  /// REFRESH: Re-fetch all transactions
+  /// REFRESH: Re-fetch all data
   Future<void> refreshData() async {
     await fetchTransactions();
     if (selectedTab.value == TAB_RECEIVED) {
       await fetchAllotments();
+    } else if (selectedTab.value == TAB_PURCHASED) {
+      await fetchPurchasedCatalog();
     }
   }
 
@@ -96,10 +101,6 @@ class InvestmentController extends GetxController {
         receivedTransactions.value = investmentResponse.payments
             .where((t) => t.status.toLowerCase() == 'received')
             .toList();
-
-        purchasedHistory.value = investmentResponse.payments
-            .where((t) => t.status.toLowerCase() == 'purchased')
-            .toList();
       } else {
         Get.snackbar('Error', response.reasonPhrase ?? 'Failed to fetch data');
       }
@@ -132,6 +133,39 @@ class InvestmentController extends GetxController {
         allotments.value = allotmentResponse.allotments;
       } else {
         Get.snackbar('Error', response.reasonPhrase ?? 'Failed to fetch data');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Something went wrong: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// 👈 NEW: Fetch Purchased Catalog
+  Future<void> fetchPurchasedCatalog() async {
+    if (userMobile.value.isEmpty) return;
+
+    isLoading.value = true;
+    purchasedHistory.clear();
+
+    try {
+      final headers = {'Content-Type': 'application/json'};
+      final body = jsonEncode({'mobileNumber': userMobile.value});
+
+      final response = await http.post(
+        Uri.parse('http://13.204.96.244:3000/api/getbyUserCatalog'),
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        purchasedHistory.value = UserCatalog.listFromJson(data['data']);
+      } else {
+        Get.snackbar(
+          'Error',
+          response.reasonPhrase ?? 'Failed to fetch catalog',
+        );
       }
     } catch (e) {
       Get.snackbar('Error', 'Something went wrong: $e');
