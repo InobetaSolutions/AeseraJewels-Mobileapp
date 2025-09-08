@@ -14,7 +14,7 @@ class InvestmentController extends GetxController {
   final selectedTab = TAB_PAID.obs;
   final paidTransactions = <Transaction>[].obs;
   final receivedTransactions = <Transaction>[].obs;
-  final purchasedHistory = <UserCatalog>[].obs; // 👈 Updated
+  final purchasedHistory = <UserCatalog>[].obs;
   final allotments = <Allotment>[].obs;
   final isLoading = false.obs;
 
@@ -47,11 +47,10 @@ class InvestmentController extends GetxController {
     if (index == TAB_RECEIVED) {
       fetchAllotments();
     } else if (index == TAB_PURCHASED) {
-      fetchPurchasedCatalog(); // 👈 Call Purchased API
+      fetchPurchasedCatalog();
     }
   }
 
-  /// REFRESH: Re-fetch all data
   Future<void> refreshData() async {
     await fetchTransactions();
     if (selectedTab.value == TAB_RECEIVED) {
@@ -61,26 +60,23 @@ class InvestmentController extends GetxController {
     }
   }
 
+  /// ---- Fetch Paid + Received ----
   Future<void> fetchTransactions() async {
     if (userMobile.value.isEmpty) return;
 
     isLoading.value = true;
     paidTransactions.clear();
     receivedTransactions.clear();
-    purchasedHistory.clear();
     apiTotalInvestment.value = 0.0;
     apiTotalGrams.value = 0.0;
 
     try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${userToken.value}',
-      };
+      final headers = await StorageService().getAuthHeaders();
 
       final response = await http.post(
         Uri.parse('http://13.204.96.244:3000/api/getpaymenthistory'),
         headers: headers,
-        body: jsonEncode({'mobile': userMobile.value}),
+        body: jsonEncode({"mobile": userMobile.value}), // ✅ dynamic mobile
       );
 
       if (response.statusCode == 200) {
@@ -91,18 +87,16 @@ class InvestmentController extends GetxController {
         apiTotalGrams.value = investmentResponse.totalGrams;
 
         paidTransactions.value = investmentResponse.payments
-            .where(
-              (t) =>
-                  t.status.toLowerCase() == 'pending' ||
-                  t.status.toLowerCase() == 'approved',
-            )
+            .where((t) =>
+                t.status.toLowerCase() == 'pending' ||
+                t.status.toLowerCase() == 'approved')
             .toList();
 
         receivedTransactions.value = investmentResponse.payments
             .where((t) => t.status.toLowerCase() == 'received')
             .toList();
       } else {
-        Get.snackbar('Error', response.reasonPhrase ?? 'Failed to fetch data');
+        Get.snackbar('Error', response.body);
       }
     } catch (e) {
       Get.snackbar('Error', 'Something went wrong: $e');
@@ -111,6 +105,7 @@ class InvestmentController extends GetxController {
     }
   }
 
+  /// ---- Fetch Received Allotments ----
   Future<void> fetchAllotments() async {
     if (userMobile.value.isEmpty) return;
 
@@ -118,21 +113,21 @@ class InvestmentController extends GetxController {
     allotments.clear();
 
     try {
-      final headers = {'Authorization': 'Bearer ${userToken.value}'};
+      final headers = await StorageService().getAuthHeaders();
 
       final response = await http.get(
         Uri.parse(
-          'http://13.204.96.244:3000/api/getByUserAllotment?mobile=${userMobile.value}',
-        ),
+            'http://13.204.96.244:3000/api/getByUserAllotment?mobile=${userMobile.value}'),
         headers: headers,
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(await response.body) as Map<String, dynamic>;
+        final data = json.decode(response.body) as Map<String, dynamic>;
         final allotmentResponse = AllotmentResponse.fromJson(data);
         allotments.value = allotmentResponse.allotments;
+        print(allotmentResponse.allotments);
       } else {
-        Get.snackbar('Error', response.reasonPhrase ?? 'Failed to fetch data');
+        Get.snackbar('Error', response.body);
       }
     } catch (e) {
       Get.snackbar('Error', 'Something went wrong: $e');
@@ -141,7 +136,7 @@ class InvestmentController extends GetxController {
     }
   }
 
-  /// 👈 NEW: Fetch Purchased Catalog
+  /// ---- Fetch Purchased ----
   Future<void> fetchPurchasedCatalog() async {
     if (userMobile.value.isEmpty) return;
 
@@ -149,23 +144,19 @@ class InvestmentController extends GetxController {
     purchasedHistory.clear();
 
     try {
-      final headers = {'Content-Type': 'application/json'};
-      final body = jsonEncode({'mobileNumber': userMobile.value});
+      final headers = await StorageService().getAuthHeaders();
 
       final response = await http.post(
         Uri.parse('http://13.204.96.244:3000/api/getbyUserCatalog'),
         headers: headers,
-        body: body,
+        body: jsonEncode({'mobileNumber': userMobile.value}),
       );
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         purchasedHistory.value = UserCatalog.listFromJson(data['data']);
       } else {
-        Get.snackbar(
-          'Error',
-          response.reasonPhrase ?? 'Failed to fetch catalog',
-        );
+        Get.snackbar('Error', response.body);
       }
     } catch (e) {
       Get.snackbar('Error', 'Something went wrong: $e');
@@ -174,8 +165,10 @@ class InvestmentController extends GetxController {
     }
   }
 
+  /// ---- Totals ----
   double get calculatedTotal =>
       paidTransactions.fold(0.0, (sum, tx) => sum + tx.amount);
+
   double get calculatedGrams =>
       paidTransactions.fold(0.0, (sum, tx) => sum + tx.gram);
 
@@ -187,9 +180,8 @@ class InvestmentController extends GetxController {
   }
 
   String get formattedTotalGrams {
-    final grams = apiTotalGrams.value > 0
-        ? apiTotalGrams.value
-        : calculatedGrams;
+    final grams =
+        apiTotalGrams.value > 0 ? apiTotalGrams.value : calculatedGrams;
     return "${grams.toStringAsFixed(2)} g";
   }
 }
