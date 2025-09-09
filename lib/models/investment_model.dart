@@ -1,3 +1,6 @@
+// lib/models/catalog_model.dart
+
+/// ---- Investment Response ----
 class InvestmentResponse {
   final double totalAmount;
   final double totalGrams;
@@ -20,6 +23,7 @@ class InvestmentResponse {
   }
 }
 
+/// ---- Transaction Model (Paid Tab) ----
 class Transaction {
   final String id;
   final String mobile;
@@ -30,8 +34,10 @@ class Transaction {
   final double amountAllocated;
   final double gramAllocated;
   final double gold;
+
   final String? tag;
   final String? address;
+  final String? admin; // ✅ Admin status (approved/pending/etc.)
 
   Transaction({
     required this.id,
@@ -45,6 +51,7 @@ class Transaction {
     required this.gold,
     this.tag,
     this.address,
+    this.admin,
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
@@ -62,14 +69,17 @@ class Transaction {
       gold: (json['gold'] ?? 0).toDouble(),
       tag: json['tag'],
       address: json['address'],
+      admin: json['admin'], // ✅ safe mapping
     );
   }
 }
 
+/// ---- Allotment Model (Received Tab) ----
 class Allotment {
   final String id;
   final String mobile;
   final double gram;
+  final String? gold; // ✅ keep gold field
   final DateTime timestamp;
   final double amountReduced;
 
@@ -77,6 +87,7 @@ class Allotment {
     required this.id,
     required this.mobile,
     required this.gram,
+    required this.gold,
     required this.timestamp,
     required this.amountReduced,
   });
@@ -86,6 +97,7 @@ class Allotment {
       id: json['_id'] ?? '',
       mobile: json['mobile'] ?? '',
       gram: (json['gram'] ?? 0).toDouble(),
+      gold: json['gold'], // ✅ corrected mapping
       timestamp: DateTime.tryParse(json['timestamp'] ?? '') ?? DateTime.now(),
       amountReduced: (json['amountReduced'] ?? 0).toDouble(),
     );
@@ -101,31 +113,30 @@ class AllotmentResponse {
   factory AllotmentResponse.fromJson(Map<String, dynamic> json) {
     return AllotmentResponse(
       mobile: json['mobile'] ?? '',
-      allotments:
-          (json['allotments'] as List<dynamic>?)
-              ?.map((e) => Allotment.fromJson(e))
-              .toList() ??
-          [],
+      allotments: (json['allotments'] as List<dynamic>? ?? [])
+          .map((e) => Allotment.fromJson(e))
+          .toList(),
     );
   }
 }
 
+/// ---- Purchased Tab (User Catalog) ----
 class UserCatalog {
-  String id;
-  String mobileNumber;
-  String tagid;
-  String goldType;
-  String description;
-  double amount;
-  double grams;
-  String address;
-  String city;
-  String postCode;
-  double paidAmount;
-  double paidGrams;
-  String allotmentStatus;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final String id;
+  final String mobileNumber;
+  final String tagid;
+  final String goldType;
+  final String description;
+  final double amount;
+  final double grams;
+  final String address;
+  final String city;
+  final String postCode;
+  final double paidAmount;
+  final double paidGrams;
+  final String allotmentStatus;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   UserCatalog({
     required this.id,
