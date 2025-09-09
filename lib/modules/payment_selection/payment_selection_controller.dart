@@ -85,13 +85,13 @@ class PaymentSelectionController extends GetxController {
 
         /// ✅ Navigation after success
         if (sourceScreen == "catalog") {
-          Get.offAll(() => InvestmentDetailScreen(initialTabIndex: 2));
+         // Get.offAll(() => InvestmentDetailScreen(initialTabIndex: 2));
         } else if (sourceScreen == "") {
           final buyGoldCtrl = Get.find<BuyGoldController>();
           int tabIndex = buyGoldCtrl.isRupees.value ? 0 : 1;
-          Get.offAll(() => InvestmentDetailScreen(initialTabIndex: tabIndex));
+         // Get.offAll(() => InvestmentDetailScreen(initialTabIndex: tabIndex));
         } else {
-          Get.offAll(() => InvestmentDetailScreen(initialTabIndex: 0));
+         // Get.offAll(() => InvestmentDetailScreen(initialTabIndex: 0));
         }
       } else {
         final msg = response.body.isNotEmpty

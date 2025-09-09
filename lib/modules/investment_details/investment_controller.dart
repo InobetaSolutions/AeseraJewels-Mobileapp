@@ -78,6 +78,10 @@ class InvestmentController extends GetxController {
         headers: headers,
         body: jsonEncode({"mobile": userMobile.value}), // ✅ dynamic mobile
       );
+     print("🔑 Request Headers => $headers");
+print("📡 Request Body => ${jsonEncode({"mobile": userMobile.value})}");
+print("💬 Response (${response.statusCode}) => ${response.body}");
+
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -120,6 +124,7 @@ class InvestmentController extends GetxController {
             'http://13.204.96.244:3000/api/getByUserAllotment?mobile=${userMobile.value}'),
         headers: headers,
       );
+      print("myresonse,${response.body}"); 
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body) as Map<String, dynamic>;
