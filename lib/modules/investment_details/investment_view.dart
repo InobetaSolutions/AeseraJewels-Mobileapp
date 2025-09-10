@@ -262,11 +262,7 @@ class InvestmentDetailScreen extends StatelessWidget {
           _alignedRow("Amount", format.format(p.amount)),
           _alignedRow("Grams",
               (p.gramAllocated > 0 ? p.gramAllocated : p.gram).toStringAsFixed(3)),
-          // _alignedRow("Payment Status", p.status,
-          //     valueWeight: FontWeight.w600,
-          //     valueColor: p.status == "Payment Confirmed"
-          //         ? Colors.green
-          //         : Colors.red),  
+          
           _alignedRow(
   "Payment Status",
   p.status,

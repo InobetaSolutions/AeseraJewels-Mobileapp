@@ -1,3 +1,4 @@
+
 import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/modules/catalog/catalog_controller.dart';
@@ -21,8 +22,8 @@ class CatalogScreen extends GetWidget<CatalogController> {
             fontWeight: FontWeight.w700,
             color: const Color(0xFF1A0F12),
           ),
-          textAlign: TextAlign.center,
         ),
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
@@ -49,8 +50,6 @@ class CatalogScreen extends GetWidget<CatalogController> {
         }
 
         final screenWidth = MediaQuery.of(context).size.width;
-        final cardWidth = (screenWidth / 2) - 20;
-        final cardHeight = cardWidth * 1.6;
 
         return GridView.builder(
           padding: const EdgeInsets.all(12),
@@ -63,11 +62,7 @@ class CatalogScreen extends GetWidget<CatalogController> {
           ),
           itemBuilder: (_, index) {
             final item = controller.productList[index];
-            return CatalogItemCard(
-              item: item,
-              cardWidth: cardWidth,
-              cardHeight: cardHeight,
-            );
+            return CatalogItemCard(item: item, screenWidth: screenWidth);
           },
         );
       }),
@@ -77,27 +72,61 @@ class CatalogScreen extends GetWidget<CatalogController> {
 
 class CatalogItemCard extends StatelessWidget {
   final ProductModel item;
-  final double cardWidth;
-  final double cardHeight;
+  final double screenWidth;
 
   const CatalogItemCard({
     super.key,
     required this.item,
-    required this.cardWidth,
-    required this.cardHeight,
+    required this.screenWidth,
   });
+
+  Widget _alignedRow(String label, String value,
+      {FontWeight labelWeight = FontWeight.w600,
+      FontWeight valueWeight = FontWeight.w400,
+      Color valueColor = Colors.black}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Label
+          Text(
+            "$label: ",
+            style: TextStyle(
+              fontWeight: labelWeight,
+              fontSize: 12,
+              color: Colors.black,
+            ),
+          ),
+          // Value
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontWeight: valueWeight,
+                fontSize: 12,
+                color: valueColor,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<CatalogController>();
 
     return Container(
-      width: cardWidth,
-      height: cardHeight,
-      padding: const EdgeInsets.all(12),
+      width:double.infinity,
+       height: 120,
+      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 4 ),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFF09243D), width: 3),
-        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFF09243D), width: 2.5),
+        borderRadius: BorderRadius.circular(16),
         color: Colors.white,
       ),
       child: Column(
@@ -106,122 +135,75 @@ class CatalogItemCard extends StatelessWidget {
           /// ✅ Product Image
           Center(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 "${ImageUrl.imageUrl}${item.image}",
-                width: cardWidth - 25,
-                height: cardWidth - 30,
+                width: double.infinity,
+                height:120,
                 fit: BoxFit.fill,
-                errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.broken_image, size: 50),
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.broken_image,
+                  size: 60,
+                  color: Color(0xFF09243D),
+                ),
               ),
             ),
           ),
           const SizedBox(height: 1),
 
-          /// ✅ Tag
-          Text(
-            'Tag #${item.tagId}',
-            style: GoogleFonts.lexend(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF09243D),
-            ),
-          ),
+          /// ✅ Details Section
+          _alignedRow("Tag", item.tagId ?? ""),
+          _alignedRow("GoldType", item.goldtype ?? ""),
+          _alignedRow("Grams", "${item.grams ?? 0} gm"),
+         // _alignedRow("Original Price", (item.originalPrice ?? "").toString()),
 
-          /// ✅ Gold Type
-          Text(
-            item.goldtype,
-            style: GoogleFonts.lexend(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xFF09243D),
-            ),
-          ),
-
-          /// ✅ Description
-          SizedBox(
-            height: 35,
-            child: Text(
-              item.description,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.lexend(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFF09243D),
-              ),
-            ),
-          ),
-
+          _alignedRow("Description", item.description ?? ""),
+        
           const Spacer(),
 
-          /// ✅ Price + Grams + Buy
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// ✅ Grams (Now Above)
-                    Text(
-                      "${item.grams ?? 0} gm",
-                      style: GoogleFonts.lexend(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-
-                    /// ✅ Price Container
-                    Container(
-                      height: 27,
-                      width: 78,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF09243D).withOpacity(0.56),
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                      child: Text(
-                        '₹${item.price.toStringAsFixed(2)}',
-                        style: GoogleFonts.lexend(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
+          /// ✅ Price + Buy Button at bottom
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF09243D).withOpacity(0.85),
+                  borderRadius: BorderRadius.circular(15),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    /// ✅ Pass selected product here
-                    controller.openAddressBottomSheet(item);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFB700),
-                    minimumSize: const Size(60, 40),
-                    padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: Text(
-                    "Buy",
-                    style: GoogleFonts.lexend(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
+                child: Text(
+                  '₹${item.price.toStringAsFixed(2)}',
+                  style: GoogleFonts.lexend(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
                   ),
                 ),
-              ],
-            ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  controller.openAddressBottomSheet(item);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFB700),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  "Buy",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -23,5 +23,11 @@ class OnboardingController extends GetxController {
 
   void skipOnboarding() {
     Get.offAllNamed('/login');
+
+  }
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
   }
 }

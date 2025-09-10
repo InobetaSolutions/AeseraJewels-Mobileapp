@@ -54,7 +54,7 @@ class RegisterController extends GetxController {
          // _showSnackBar("OTP Sent", "Check your SMS (OTP: $resendotp)");
             //_showSnackBar("OTP Sent", "Check your SMS (OTP:)");
 
-          Get.toNamed('/otp', arguments: {
+          Get.offNamed('/otp', arguments: {
             "otp": otp,
             "resendotp": resendotp,
             "name": name,
@@ -87,7 +87,7 @@ class RegisterController extends GetxController {
         colorText: Colors.white);
   }
 
-  void login() => Get.toNamed('/login');
+  void login() => Get.offAllNamed('/login');
 
   @override
   void onClose() {
