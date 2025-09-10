@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -26,13 +27,11 @@ class LoginView extends GetWidget<LoginController> {
               const SizedBox(height: 68),
 
               /// Login card
-              Container(width: 359,height: 65,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                // decoration: BoxDecoration(
-                //   color: const Color(0xFFFAFAFA),
-                //   borderRadius: BorderRadius.circular(8),
-                
-                // ),
+              Container(
+                width: 359,
+                height: 65,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
                   child: Text(
@@ -47,12 +46,13 @@ class LoginView extends GetWidget<LoginController> {
                 ),
               ),
 
-              
               const SizedBox(height: 40),
 
               /// ✅ Mobile Number label aligned left (same as Register screen)
-              _buildLabel('Mobile Number'),
-              SizedBox(height: 8), // Small spacing between label and input
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: _buildLabel('Mobile Number')),
+              const SizedBox(height: 8),
 
               _buildInputField(
                 controller: controller.mobileController,
@@ -74,12 +74,11 @@ class LoginView extends GetWidget<LoginController> {
               /// Submit button
               Obx(
                 () => SizedBox(
-                  width: 358,
+                  width: double.infinity, // ✅ full width like Register
                   height: 48,
                   child: ElevatedButton(
-                    onPressed: controller.isLoading.value
-                        ? null
-                        : controller.login,
+                    onPressed:
+                        controller.isLoading.value ? null : controller.login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0A2342),
                       shape: RoundedRectangleBorder(
@@ -108,12 +107,10 @@ class LoginView extends GetWidget<LoginController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-             
                   GestureDetector(
                     onTap: () {
                       controller.register();
                     },
-
                     child: Text(
                       "Don't have an account ? Register",
                       style: GoogleFonts.lexend(
@@ -152,7 +149,7 @@ class LoginView extends GetWidget<LoginController> {
     List<TextInputFormatter>? inputFormatters,
   }) {
     return Container(
-      width: 358,
+      width: double.infinity, // ✅ full width like Register
       height: 56,
       decoration: BoxDecoration(
         color: const Color(0xFFF6FDFF),
