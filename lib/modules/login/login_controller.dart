@@ -52,7 +52,7 @@ class LoginController extends GetxController {
 
         final otp = data['otp'];
         final token = data['token'];
-       
+       print( 'token $token');  
         if (otp != null && token != null) {
           // Show OTP for debugging (remove in production)
          // Get.snackbar("Success", "OTP sent successfully: $otp");

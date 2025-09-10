@@ -16,7 +16,7 @@ class Payment_Controller extends GetxController {
   RxString selectedValue = ''.obs;
 
   /// Quick select options
-  List<String> rupeesOptions = ["5000", "10000", "20000", "50000"];
+  List<String> rupeesOptions = ["5000", "10000", "20000"];
   List<String> gramsOptions = ["1", "2", "5", "10"];
 
   /// API base URL

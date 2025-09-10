@@ -38,17 +38,16 @@ class DashboardScreen extends StatelessWidget {
               bottom: 10.5,
             ),
             child: ElevatedButton(
-              onPressed: controller.logout,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFFB700),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 21,
-                  vertical: 3,
-                ),
-              ),
+          onPressed: () async {
+            await StorageService().erase();
+            Get.offNamed('/login');
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFFFB700),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+ ),
               child: Text(
                 "Logout",
                 style: GoogleFonts.lexend(
