@@ -127,6 +127,7 @@ class UserCatalog {
   final String goldType;
   final String description;
   final double amount;
+  final String  paymentStatus;
   final double grams;
   final String address;
   final String city;
@@ -142,6 +143,7 @@ class UserCatalog {
     required this.mobileNumber,
     required this.tagid,
     required this.goldType,
+    required this.paymentStatus,
     required this.description,
     required this.amount,
     required this.grams,
@@ -162,6 +164,7 @@ class UserCatalog {
       tagid: json['tagid'] ?? '',
       goldType: json['goldType'] ?? '',
       description: json['description'] ?? '',
+      paymentStatus: json['paymentStatus'] ?? '',
       amount: (json['amount']?.toDouble() ?? 0.0),
       grams: (json['grams']?.toDouble() ?? 0.0),
       address: json['address'] ?? '',
