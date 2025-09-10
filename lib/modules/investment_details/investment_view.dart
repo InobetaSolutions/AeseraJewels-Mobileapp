@@ -262,7 +262,21 @@ class InvestmentDetailScreen extends StatelessWidget {
           _alignedRow("Amount", format.format(p.amount)),
           _alignedRow("Grams",
               (p.gramAllocated > 0 ? p.gramAllocated : p.gram).toStringAsFixed(3)),
-          _alignedRow("Payment Status", p.status),
+          // _alignedRow("Payment Status", p.status,
+          //     valueWeight: FontWeight.w600,
+          //     valueColor: p.status == "Payment Confirmed"
+          //         ? Colors.green
+          //         : Colors.red),  
+          _alignedRow(
+  "Payment Status",
+  p.status,
+  valueWeight: FontWeight.w600,
+  valueColor: p.status.toLowerCase().trim() == "payment confirmed" ||
+             p.status.toLowerCase().trim() == "delivered"
+      ? Colors.green
+      : Colors.red,
+),
+
         ]);
       }).toList(),
     );
@@ -334,7 +348,12 @@ class InvestmentDetailScreen extends StatelessWidget {
               ),
             ],
           ),
-          _alignedRow("Status", p.allotmentStatus,
+           _alignedRow("Payment Status", p.paymentStatus,
+              valueWeight: FontWeight.w600,
+              valueColor: p.paymentStatus.toLowerCase() == "paid"
+                  ? Colors.green
+                  : Colors.red),
+          _alignedRow("Delivered Status", p.allotmentStatus,
               valueWeight: FontWeight.w600,
               valueColor: p.allotmentStatus.toLowerCase() == "delivered"
                   ? Colors.green
