@@ -39,6 +39,7 @@ class CatalogController extends GetxController {
         productList.value = decoded
             .map((json) => ProductModel.fromJson(json))
             .toList();
+            print("Fetched ${productList.length} products");
       } else {
         Get.snackbar(
           "Error",
