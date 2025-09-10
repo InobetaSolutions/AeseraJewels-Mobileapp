@@ -23,7 +23,7 @@ class LoginView extends GetWidget<LoginController> {
                 height: 100,
                 width: 100,
               ),
-              const SizedBox(height: 60),
+              const SizedBox(height: 68),
 
               /// Login card
               Container(width: 359,height: 65,
@@ -47,17 +47,13 @@ class LoginView extends GetWidget<LoginController> {
                 ),
               ),
 
-              const SizedBox(height: 60),
+              
+              const SizedBox(height: 40),
 
-              /// Mobile Number Label
-              Align(
-                alignment: Alignment.centerLeft,
-                child: _buildLabel('Mobile Number'),
-              ),
+              /// ✅ Mobile Number label aligned left (same as Register screen)
+              _buildLabel('Mobile Number'),
+              SizedBox(height: 8), // Small spacing between label and input
 
-              const SizedBox(height: 8),
-
-              /// Mobile Number Input
               _buildInputField(
                 controller: controller.mobileController,
                 hintText: 'Enter your mobile number',
@@ -112,20 +108,14 @@ class LoginView extends GetWidget<LoginController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Text(
-                  //   "Didn't have an account?register",
-                  //   style: GoogleFonts.lexend(
-                  //     color: const Color(0xFF2596BE),
-                  //     fontSize: 12,
-                  //   ),
-                  // ),
+             
                   GestureDetector(
                     onTap: () {
                       controller.register();
                     },
 
                     child: Text(
-                      "Don't have the account ? Register",
+                      "Don't have an account ? Register",
                       style: GoogleFonts.lexend(
                         color: const Color(0xFF2596BE),
                         fontSize: 12,

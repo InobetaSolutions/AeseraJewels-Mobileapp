@@ -34,7 +34,6 @@ class Transaction {
   final double amountAllocated;
   final double gramAllocated;
   final double gold;
-
   final String? tag;
   final String? address;
   final String? admin; // ✅ Admin status (approved/pending/etc.)
