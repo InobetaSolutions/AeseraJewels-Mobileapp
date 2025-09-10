@@ -1,3 +1,4 @@
+
 // import 'package:aesera_jewels/models/catalog_model.dart';
 // import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
 // import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@
 //     );
 //   }
 
-//   /// Header with username and logout button
+//   /// Header with username and logout
 //   Widget _buildHeader() {
 //     return Row(
 //       children: [
@@ -107,7 +108,7 @@
 //     );
 //   }
 
-//   /// Total investment card
+//   /// Total card
 //   Widget _buildTotalCard(double width) {
 //     return Container(
 //       width: width,
@@ -141,7 +142,7 @@
 //     );
 //   }
 
-//   /// TabBar for Paid, Received, Purchased
+//   /// TabBar
 //   Widget _buildTabBar() {
 //     return Container(
 //       height: 48,
@@ -213,7 +214,7 @@
 //     }
 //   }
 
-//   /// --- Paid Transactions List ---
+//   /// Paid List
 //   Widget _buildPaidList() {
 //     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
 //     if (controller.paidTransactions.isEmpty) {
@@ -230,17 +231,10 @@
 //           children: [
 //             SizedBox(
 //               width: labelWidth,
-//               child: Text(
-//                 "$label :",
-//                 style: const TextStyle(fontWeight: FontWeight.bold),
-//               ),
+//               child: Text("$label :",
+//                   style: const TextStyle(fontWeight: FontWeight.bold)),
 //             ),
-//             Expanded(
-//               child: Text(
-//                 value,
-//                 style: const TextStyle(fontWeight: FontWeight.normal),
-//               ),
-//             ),
+//             Expanded(child: Text(value)),
 //           ],
 //         ),
 //       );
@@ -248,24 +242,19 @@
 
 //     return Column(
 //       children: controller.paidTransactions.map((p) {
-//         final dateString = p.timestamp != null
-//             ? DateFormat('dd-MMM-yyyy h:mm a').format(p.timestamp!)
-//             : "N/A";
 //         return _cardContainer([
 //           buildRow("Ins No", "${controller.paidTransactions.indexOf(p) + 1}"),
-//           buildRow("Date and Time", dateString),
+//           buildRow("Date & Time", controller.formatDate(p.timestamp)),
 //           buildRow("Amount", format.format(p.amount)),
-//           buildRow(
-//               "Grams",
-//               (p.gramAllocated > 0 ? p.gramAllocated : p.gram)
-//                   .toStringAsFixed(3)),
-//           buildRow("Admin Status", p.status ),
+//           buildRow("Grams",
+//               (p.gramAllocated > 0 ? p.gramAllocated : p.gram).toStringAsFixed(3)),
+//           buildRow("Admin Status", p.status),
 //         ]);
 //       }).toList(),
 //     );
 //   }
 
-//   /// --- Received Gold List ---
+//   /// Received List
 //   Widget _buildReceivedList() {
 //     if (controller.allotments.isEmpty) {
 //       return _styledContainer(const Center(child: Text("No Data Available")));
@@ -281,17 +270,10 @@
 //           children: [
 //             SizedBox(
 //               width: labelWidth,
-//               child: Text(
-//                 "$label :",
-//                 style: const TextStyle(fontWeight: FontWeight.bold),
-//               ),
+//               child: Text("$label :",
+//                   style: const TextStyle(fontWeight: FontWeight.bold)),
 //             ),
-//             Expanded(
-//               child: Text(
-//                 value,
-//                 style: const TextStyle(fontWeight: FontWeight.normal),
-//               ),
-//             ),
+//             Expanded(child: Text(value)),
 //           ],
 //         ),
 //       );
@@ -299,19 +281,16 @@
 
 //     return Column(
 //       children: controller.allotments.map((r) {
-//         final dateString = r.timestamp != null
-//             ? DateFormat('dd-MMM-yyyy h:mm a').format(r.timestamp)
-//             : "N/A";
 //         return _cardContainer([
 //           buildRow("Ins No", "${controller.allotments.indexOf(r) + 1}"),
-//           buildRow("Date and Time", dateString),
+//           buildRow("Date & Time", controller.formatDate(r.timestamp)),
 //           buildRow("Gold", "${r.gram.toStringAsFixed(3)} g"),
 //         ]);
 //       }).toList(),
 //     );
 //   }
 
-//   /// --- Purchased History List ---
+//   /// Purchased List
 //   Widget _buildPurchasedList() {
 //     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
 
@@ -332,16 +311,13 @@
 //           children: [
 //             SizedBox(
 //               width: labelWidth,
-//               child: Text(
-//                 "$label :",
-//                 style: TextStyle(fontWeight: labelWeight),
-//               ),
+//               child: Text("$label :",
+//                   style: TextStyle(fontWeight: labelWeight)),
 //             ),
 //             Expanded(
-//               child: Text(
-//                 value,
-//                 style: TextStyle(fontWeight: valueWeight, color: valueColor),
-//               ),
+//               child: Text(value,
+//                   style: TextStyle(
+//                       fontWeight: valueWeight, color: valueColor)),
 //             ),
 //           ],
 //         ),
@@ -351,118 +327,57 @@
 //     return Column(
 //       children: controller.purchasedHistory.map((p) {
 //         final dateString = DateFormat('dd-MMM-yyyy').format(p.createdAt);
-//         return Padding(
-//           padding: const EdgeInsets.only(bottom: 10),
-//           child: Container(
-//             padding: const EdgeInsets.all(16),
-//             decoration: BoxDecoration(
-//               color: Colors.white,
-//               borderRadius: BorderRadius.circular(12),
-//               boxShadow: [
-//                 BoxShadow(
-//                   color: Colors.black.withOpacity(0.05),
-//                   blurRadius: 5,
-//                   offset: const Offset(0, 3),
+//         return _cardContainer([
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Text("Tag ID #${p.tagid}",
+//                   style: const TextStyle(
+//                       fontSize: 16, fontWeight: FontWeight.bold)),
+//               Text(dateString,
+//                   style: const TextStyle(
+//                       fontSize: 14, color: Colors.grey)),
+//             ],
+//           ),
+//           buildRow("Address", p.address),
+//           buildRow("City", p.city),
+//           buildRow("Post Code", p.postCode),
+//           buildRow("Price", format.format(p.amount)),
+//           buildRow("Weight (gms)", "${p.grams}"),
+//           buildRow("Gold Type", p.goldType),
+//           buildRow("Description", p.description),
+//           Row(
+//             children: [
+//               const Text("Paid Amount:",
+//                   style:
+//                       TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+//               const Spacer(),
+//               Container(
+//                 padding:
+//                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+//                 decoration: BoxDecoration(
+//                   color: Colors.grey.shade200,
+//                   borderRadius: BorderRadius.circular(12),
 //                 ),
-//               ],
-//             ),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 /// Top Row → Tag ID & Date
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     RichText(
-//                       text: TextSpan(
-//                         children: [
-//                           const TextSpan(
-//                             text: "Tag ID",
-//                             style: TextStyle(
-//                                 fontWeight: FontWeight.bold,
-//                                 fontSize: 16,
-//                                 color: Colors.black),
-//                           ),
-//                           TextSpan(
-//                             text: " # ${p.tagid}",
-//                             style: const TextStyle(
-//                                 fontWeight: FontWeight.normal,
-//                                 fontSize: 16,
-//                                 color: Colors.black),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     Text(
-//                       dateString,
-//                       style: const TextStyle(
-//                           color: Color.fromARGB(255, 131, 130, 130),
-//                           fontSize: 14),
-//                     ),
-//                   ],
+//                 child: Text(
+//                   format.format(p.paidAmount),
+//                   style: const TextStyle(
+//                       fontWeight: FontWeight.bold, fontSize: 15),
 //                 ),
-
-//                 const SizedBox(height: 6),
-
-//                 /// Detail Rows
-//                 buildRow("Address", p.address),
-//                 buildRow("City", p.city),
-//                 buildRow("Post Code", p.postCode),
-//                 buildRow("Price", format.format(p.amount)),
-//                 buildRow("Weight (gms)", "${p.grams}"),
-//                 buildRow("Gold Type", p.goldType),
-//                 buildRow("Description", p.description),
-
-//                 /// Paid Amount row
-//                 Row(
-//                   children: [
-//                     const Text(
-//                       "Paid Amount:",
-//                       style: TextStyle(
-//                           fontWeight: FontWeight.bold, fontSize: 15),
-//                     ),
-                    
-//                   Align(
-//                     alignment: Alignment.centerRight,
-//                     child: Padding(
-//                       padding: const EdgeInsets.only(left: 20.0),
-//                       child: Container(
-//                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-//                         decoration: BoxDecoration(
-//                           color: Colors.grey.shade200,
-//                           borderRadius: BorderRadius.circular(12),
-//                         ),
-//                         child: Text(
-//                           " ${format.format(p.paidAmount)}",
-//                           style: const TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                             fontSize: 15,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
 //               ),
-
-//                 buildRow(
-//                   "Status",
-//                   p.allotmentStatus,
-//                   valueColor: p.allotmentStatus.toLowerCase() == 'delivered'
-//                       ? Colors.green
-//                       : Colors.pink,
-//                   valueWeight: FontWeight.w600,
-//                 ),
-              
-//               ],
+//             ],
 //           ),
-//           ),
-//         );
+//           buildRow("Status", p.allotmentStatus,
+//               valueWeight: FontWeight.w600,
+//               valueColor: p.allotmentStatus.toLowerCase() == "delivered"
+//                   ? Colors.green
+//                   : Colors.pink),
+//         ]);
 //       }).toList(),
 //     );
 //   }
 
-//   /// Common card container
+//   /// Common card
 //   Widget _cardContainer(List<Widget> children) {
 //     return Padding(
 //       padding: const EdgeInsets.only(bottom: 10.0),
@@ -488,7 +403,6 @@
 //     );
 //   }
 
-//   /// Styled container for empty states
 //   Widget _styledContainer(Widget child) {
 //     return Container(
 //       width: double.infinity,
@@ -501,17 +415,16 @@
 //     );
 //   }
 // }
-import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
+import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:aesera_jewels/services/storage_service.dart';
+import 'package:intl/intl.dart';
 
 class InvestmentDetailScreen extends StatelessWidget {
-  final InvestmentController controller = Get.put(InvestmentController());
   final int initialTabIndex;
+  final InvestmentController controller = Get.put(InvestmentController());
 
   InvestmentDetailScreen({super.key, required this.initialTabIndex});
 
@@ -531,7 +444,7 @@ class InvestmentDetailScreen extends StatelessWidget {
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
-            fontSize: 25,
+            fontSize: 22,
           ),
         ),
         leading: IconButton(
@@ -545,19 +458,17 @@ class InvestmentDetailScreen extends StatelessWidget {
         }
 
         return RefreshIndicator(
-          onRefresh: () async {
-            await controller.refreshData();
-          },
+          onRefresh: controller.refreshData,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
             physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeader(),
                 const SizedBox(height: 16),
                 _buildTotalCard(width),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 _buildTabBar(),
                 const SizedBox(height: 16),
                 _buildSectionTitle(),
@@ -571,25 +482,23 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
-  /// Header with username and logout
+  /// -------------------- Header (Name + Logout) --------------------
   Widget _buildHeader() {
     return Row(
       children: [
-        Obx(
-          () => Text(
-            controller.userName.value,
-            style: GoogleFonts.lexend(
-              fontWeight: FontWeight.w800,
-              fontSize: 28,
-              color: const Color(0xFF1A0F12),
-            ),
-          ),
-        ),
+        Obx(() => Text(
+              controller.userName.value,
+              style: GoogleFonts.lexend(
+                fontWeight: FontWeight.w800,
+                fontSize: 26,
+                color: const Color(0xFF1A0F12),
+              ),
+            )),
         const Spacer(),
         ElevatedButton(
           onPressed: () async {
             await StorageService().erase();
-            Get.offNamed('/login');
+            Get.offAllNamed('/login');
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFFB700),
@@ -600,7 +509,7 @@ class InvestmentDetailScreen extends StatelessWidget {
           child: Text(
             "Logout",
             style: GoogleFonts.lexend(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
@@ -610,7 +519,7 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
-  /// Total card
+  /// -------------------- Total Card --------------------
   Widget _buildTotalCard(double width) {
     return Container(
       width: width,
@@ -628,23 +537,23 @@ class InvestmentDetailScreen extends StatelessWidget {
           Obx(() => Text(controller.formattedTotal,
               style: const TextStyle(
                   color: Colors.amber,
-                  fontSize: 25,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold))),
-          const SizedBox(height: 7),
+          const SizedBox(height: 12),
           const Text("Total Allotment Grams",
               style: TextStyle(color: Colors.amber, fontSize: 16)),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Obx(() => Text(controller.formattedTotalGrams,
               style: const TextStyle(
                   color: Colors.amber,
-                  fontSize: 25,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold))),
         ],
       ),
     );
   }
 
-  /// TabBar
+  /// -------------------- Tab Bar --------------------
   Widget _buildTabBar() {
     return Container(
       height: 48,
@@ -668,22 +577,19 @@ class InvestmentDetailScreen extends StatelessWidget {
         final selected = controller.selectedTab.value == index;
         return GestureDetector(
           onTap: () => controller.changeTab(index),
-          child: Padding(
-            padding: const EdgeInsets.all(3.5),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: selected ? Colors.amber : Colors.transparent,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Text(
-                title,
-                style: TextStyle(
+          child: Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.all(3.5),
+            decoration: BoxDecoration(
+              color: selected ? Colors.amber : Colors.transparent,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: selected ? Colors.black : Colors.white,
-                ),
-              ),
+                  color: selected ? Colors.black : Colors.white),
             ),
           ),
         );
@@ -691,20 +597,22 @@ class InvestmentDetailScreen extends StatelessWidget {
     );
   }
 
+  /// -------------------- Section Title --------------------
   Widget _buildSectionTitle() {
     switch (controller.selectedTab.value) {
       case InvestmentController.TAB_PAID:
         return const Text("Paid Transactions",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
       case InvestmentController.TAB_RECEIVED:
         return const Text("Gold Received",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
       default:
         return const Text("Purchased History",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
     }
   }
 
+  /// -------------------- Tab Content --------------------
   Widget _buildTabContent() {
     switch (controller.selectedTab.value) {
       case InvestmentController.TAB_PAID:
@@ -716,116 +624,46 @@ class InvestmentDetailScreen extends StatelessWidget {
     }
   }
 
-  /// Paid List
+  /// -------------------- Paid List --------------------
   Widget _buildPaidList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
     if (controller.paidTransactions.isEmpty) {
       return _styledContainer(const Center(child: Text("No Data Available")));
     }
-
-    const double labelWidth = 120;
-
-    Widget buildRow(String label, String value) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: labelWidth,
-              child: Text("$label :",
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-            ),
-            Expanded(child: Text(value)),
-          ],
-        ),
-      );
-    }
-
     return Column(
       children: controller.paidTransactions.map((p) {
         return _cardContainer([
-          buildRow("Ins No", "${controller.paidTransactions.indexOf(p) + 1}"),
-          buildRow("Date & Time", controller.formatDate(p.timestamp)),
-          buildRow("Amount", format.format(p.amount)),
-          buildRow("Grams",
+          _row("Date & Time", controller.formatDate(p.timestamp)),
+          _row("Amount", format.format(p.amount)),
+          _row("Grams",
               (p.gramAllocated > 0 ? p.gramAllocated : p.gram).toStringAsFixed(3)),
-          buildRow("Admin Status", p.status),
+          _row("Admin Status", p.status),
         ]);
       }).toList(),
     );
   }
 
-  /// Received List
+  /// -------------------- Received List --------------------
   Widget _buildReceivedList() {
     if (controller.allotments.isEmpty) {
       return _styledContainer(const Center(child: Text("No Data Available")));
     }
-
-    const double labelWidth = 120;
-
-    Widget buildRow(String label, String value) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: labelWidth,
-              child: Text("$label :",
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-            ),
-            Expanded(child: Text(value)),
-          ],
-        ),
-      );
-    }
-
     return Column(
       children: controller.allotments.map((r) {
         return _cardContainer([
-          buildRow("Ins No", "${controller.allotments.indexOf(r) + 1}"),
-          buildRow("Date & Time", controller.formatDate(r.timestamp)),
-          buildRow("Gold", "${r.gram.toStringAsFixed(3)} g"),
+          _row("Date & Time", controller.formatDate(r.timestamp)),
+          _row("Gold", "${r.gram.toStringAsFixed(3)} g"),
         ]);
       }).toList(),
     );
   }
 
-  /// Purchased List
+  /// -------------------- Purchased List --------------------
   Widget _buildPurchasedList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
-
     if (controller.purchasedHistory.isEmpty) {
       return _styledContainer(const Center(child: Text("No Data Available")));
     }
-
-    const double labelWidth = 120;
-
-    Widget buildRow(String label, String value,
-        {FontWeight labelWeight = FontWeight.bold,
-        FontWeight valueWeight = FontWeight.normal,
-        Color valueColor = Colors.black}) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: labelWidth,
-              child: Text("$label :",
-                  style: TextStyle(fontWeight: labelWeight)),
-            ),
-            Expanded(
-              child: Text(value,
-                  style: TextStyle(
-                      fontWeight: valueWeight, color: valueColor)),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Column(
       children: controller.purchasedHistory.map((p) {
         final dateString = DateFormat('dd-MMM-yyyy').format(p.createdAt);
@@ -837,49 +675,19 @@ class InvestmentDetailScreen extends StatelessWidget {
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold)),
               Text(dateString,
-                  style: const TextStyle(
-                      fontSize: 14, color: Colors.grey)),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey)),
             ],
           ),
-          buildRow("Address", p.address),
-          buildRow("City", p.city),
-          buildRow("Post Code", p.postCode),
-          buildRow("Price", format.format(p.amount)),
-          buildRow("Weight (gms)", "${p.grams}"),
-          buildRow("Gold Type", p.goldType),
-          buildRow("Description", p.description),
-          Row(
-            children: [
-              const Text("Paid Amount:",
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-              const Spacer(),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  format.format(p.paidAmount),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
-              ),
-            ],
-          ),
-          buildRow("Status", p.allotmentStatus,
-              valueWeight: FontWeight.w600,
-              valueColor: p.allotmentStatus.toLowerCase() == "delivered"
-                  ? Colors.green
-                  : Colors.pink),
+          _row("Price", format.format(p.amount)),
+          _row("Gold Type", p.goldType),
+          _row("Weight (gms)", "${p.grams}"),
+          _row("Status", p.allotmentStatus),
         ]);
       }).toList(),
     );
   }
 
-  /// Common card
+  /// -------------------- Helpers --------------------
   Widget _cardContainer(List<Widget> children) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
@@ -901,6 +709,20 @@ class InvestmentDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: children,
         ),
+      ),
+    );
+  }
+
+  Widget _row(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Text("$label: ",
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+          Expanded(child: Text(value, style: const TextStyle(fontSize: 14))),
+        ],
       ),
     );
   }
