@@ -22,10 +22,10 @@ class SplashController extends GetxController {
 
     if (userId != null && userId.isNotEmpty && isLoggedIn) {
       // ✅ User already registered → Go Dashboard
-      Get.offAll(() => DashboardScreen());
+      Get.offAllNamed('/dashboard');
     } else {
       // ❌ Not registered → Go Onboarding
-      Get.offAll(() => OnboardingScreen());
+      Get.offAllNamed('/onboard');
     }
   }
 

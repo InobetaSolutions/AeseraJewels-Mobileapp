@@ -13,6 +13,7 @@ class ProductModel {
   ProductModel({
     required this.id,
     required this.tagId,
+    
     required this.goldtype,
     required this.description,
     required this.price,
