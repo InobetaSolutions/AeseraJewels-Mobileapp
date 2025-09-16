@@ -1,4 +1,4 @@
-// lib/models/catalog_model.dart
+import 'package:intl/intl.dart';
 
 /// ---- Investment Response ----
 class InvestmentResponse {
@@ -36,7 +36,7 @@ class Transaction {
   final double gold;
   final String? tag;
   final String? address;
-  final String? admin; // ✅ Admin status (approved/pending/etc.)
+  final String? admin;
 
   Transaction({
     required this.id,
@@ -54,21 +54,35 @@ class Transaction {
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
+    DateTime? parsedDate;
+    final raw = json['timestamp']?.toString().trim();
+
+    if (raw != null && raw.isNotEmpty) {
+      try {
+        if (raw.contains("/")) {
+          // ✅ handles "16/9/2025, 3:38:02 pm"
+          parsedDate = DateFormat("d/M/yyyy, h:mm:ss a").parseLoose(raw);
+        } else {
+          parsedDate = DateTime.tryParse(raw);
+        }
+      } catch (_) {
+        parsedDate = null;
+      }
+    }
+
     return Transaction(
       id: json['_id'] ?? '',
       mobile: json['mobile'] ?? '',
       status: json['status'] ?? '',
       amount: (json['amount'] ?? 0).toDouble(),
-      timestamp: json['timestamp'] != null
-          ? DateTime.tryParse(json['timestamp'])
-          : null,
+      timestamp: parsedDate,
       gram: (json['gram'] ?? 0).toDouble(),
       amountAllocated: (json['amount_allocated'] ?? 0).toDouble(),
       gramAllocated: (json['gram_allocated'] ?? 0).toDouble(),
       gold: (json['gold'] ?? 0).toDouble(),
       tag: json['tag'],
       address: json['address'],
-      admin: json['admin'], // ✅ safe mapping
+      admin: json['admin'],
     );
   }
 }
@@ -78,8 +92,8 @@ class Allotment {
   final String id;
   final String mobile;
   final double gram;
-  final String? gold; // ✅ keep gold field
-  final DateTime timestamp;
+  final String? gold;
+  final DateTime? timestamp;
   final double amountReduced;
 
   Allotment({
@@ -92,12 +106,27 @@ class Allotment {
   });
 
   factory Allotment.fromJson(Map<String, dynamic> json) {
+    DateTime? parsedDate;
+    final raw = json['timestamp']?.toString().trim();
+
+    if (raw != null && raw.isNotEmpty) {
+      try {
+        if (raw.contains("/")) {
+          parsedDate = DateFormat("d/M/yyyy, h:mm:ss a").parseLoose(raw);
+        } else {
+          parsedDate = DateTime.tryParse(raw);
+        }
+      } catch (_) {
+        parsedDate = null;
+      }
+    }
+
     return Allotment(
       id: json['_id'] ?? '',
       mobile: json['mobile'] ?? '',
       gram: (json['gram'] ?? 0).toDouble(),
-      gold: json['gold'], // ✅ corrected mapping
-      timestamp: DateTime.tryParse(json['timestamp'] ?? '') ?? DateTime.now(),
+      gold: json['gold'],
+      timestamp: parsedDate,
       amountReduced: (json['amountReduced'] ?? 0).toDouble(),
     );
   }
@@ -127,7 +156,7 @@ class UserCatalog {
   final String goldType;
   final String description;
   final double amount;
-  final String  paymentStatus;
+  final String paymentStatus;
   final double grams;
   final String address;
   final String city;
@@ -135,8 +164,8 @@ class UserCatalog {
   final double paidAmount;
   final double paidGrams;
   final String allotmentStatus;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   UserCatalog({
     required this.id,
@@ -158,6 +187,18 @@ class UserCatalog {
   });
 
   factory UserCatalog.fromJson(Map<String, dynamic> json) {
+    DateTime? created;
+    DateTime? updated;
+
+    try {
+      if (json['createdAt'] != null) {
+        created = DateTime.tryParse(json['createdAt']);
+      }
+      if (json['updatedAt'] != null) {
+        updated = DateTime.tryParse(json['updatedAt']);
+      }
+    } catch (_) {}
+
     return UserCatalog(
       id: json['_id'] ?? '',
       mobileNumber: json['mobileNumber'] ?? '',
@@ -173,8 +214,8 @@ class UserCatalog {
       paidAmount: (json['Paidamount']?.toDouble() ?? 0.0),
       paidGrams: (json['Paidgrams']?.toDouble() ?? 0.0),
       allotmentStatus: json['allotmentStatus'] ?? '',
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: created,
+      updatedAt: updated,
     );
   }
 

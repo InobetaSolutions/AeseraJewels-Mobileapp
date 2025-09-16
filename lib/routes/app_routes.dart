@@ -3,6 +3,7 @@ import 'package:aesera_jewels/modules/onboard/onboard_binding.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
 import 'package:aesera_jewels/modules/payment/payment_binding.dart';
 import 'package:aesera_jewels/modules/payment/payment_screen.dart';
+import 'package:aesera_jewels/modules/welcome_screen3/jewels_for_occasion_controller.dart' show UPIPaymentController;
 import 'package:get/get.dart';
 
 // Splash
@@ -60,12 +61,13 @@ class AppRoutes {
   static const login = '/login';
   static const otp = '/otp';
   static const dashboard = '/dashboard';
-  //  static const scanToPay = '/scan_to_pay';
+ static const scanToPay = '/scan_to_pay';
   static const catalog = '/catalog';
   static const investment = '/investment';
-  //static const payment_selection = '/payment_selection';
+ static const payment_selection = '/payment_selection';
   //static const buyGold = '/buy_gold';
   static const payment = '/payment';
+  static const UPIpayment = '/upi_payment';
   static const madeGoldEasy = '/made_gold_easy';
   static const seamlessPayments = '/seamless_payments';
  static const onboard = '/onboard';
@@ -146,6 +148,27 @@ GetPage(
     ),
     
     GetPage(name: onboard, page: () => OnboardingScreen(), binding: OnboardingBinding()),
+
+    GetPage(
+      name: scanToPay,
+      page: () => ScanToPayScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ScanToPayController());
+      }),
+    ),
+    GetPage(
+      name: payment_selection,
+      page: () => PaymentSelectionScreen(),
+      binding: PaymentSelectionBinding(),
+    ),
+      GetPage(
+      name: UPIpayment, 
+      page: () => UPIPaymentScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => UPIPaymentController());
+      }),
+      ),
+       
   ];
 
   

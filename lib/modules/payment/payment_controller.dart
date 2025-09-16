@@ -133,6 +133,7 @@ import 'dart:convert';
 import 'package:aesera_jewels/models/payment_model.dart';
 import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -246,7 +247,8 @@ class Payment_Controller extends GetxController {
         var data = json.decode(response.body);
         PaymentModel payment = PaymentModel.fromJson(data);
 
-        Get.snackbar("Success", "Payment successfully created!");
+        Get.snackbar("Success", "Payment successfully created!",   backgroundColor:const Color(0xFF09243D),
+          colorText: Colors.white,);
         Get.offAll(() => DashboardScreen());
       } else {
         Get.snackbar("Error",
