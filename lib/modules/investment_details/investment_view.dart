@@ -1,4 +1,3 @@
-
 import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:flutter/material.dart';
@@ -219,7 +218,6 @@ class InvestmentDetailScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Label column (left aligned)
           SizedBox(
             width: labelWidth,
             child: Align(
@@ -227,16 +225,12 @@ class InvestmentDetailScreen extends StatelessWidget {
               child: Text(label, style: TextStyle(fontWeight: labelWeight)),
             ),
           ),
-
-          // Colon column (always same position)
           const SizedBox(
             width: 20,
             child: Center(
               child: Text(":", style: TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
-
-          // Value column
           Expanded(
             child: Text(value,
                 style: TextStyle(
@@ -248,116 +242,227 @@ class InvestmentDetailScreen extends StatelessWidget {
   }
 
   /// -------------------- Paid List --------------------
-  Widget _buildPaidList() {
-    final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
-    if (controller.paidTransactions.isEmpty) {
-      return _styledContainer(const Center(child: Text("No Data Available")));
-    }
-
-    return Column(
-      children: controller.paidTransactions.map((p) {
-        return _cardContainer([
-          _alignedRow("Ins No", "${controller.paidTransactions.indexOf(p) + 1}"),
-          _alignedRow("Date & Time", controller.formatDate(p.timestamp)),
-          _alignedRow("Amount", format.format(p.amount)),
-          _alignedRow("Grams",
-              (p.gramAllocated > 0 ? p.gramAllocated : p.gram).toStringAsFixed(3)),
-          
-          _alignedRow(
-  "Payment Status",
-  p.status,
-  valueWeight: FontWeight.w600,
-  valueColor: p.status.toLowerCase().trim() == "payment confirmed" ||
-             p.status.toLowerCase().trim() == "delivered"
-      ? Colors.green
-      : Colors.red,
-),
-
-        ]);
-      }).toList(),
-    );
+ Widget _buildPaidList() {
+  final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
+  if (controller.paidTransactions.isEmpty) {
+    return _styledContainer(const Center(child: Text("No Data Available")));
   }
+
+  return Column(
+    children: controller.paidTransactions.map((p) {
+      // Format date and time
+      final dateTimeString = p.timestamp != null
+          ? DateFormat('dd-MMM-yyyy, hh:mm a').format(p.timestamp!)
+          : "N/A";
+
+      // Determine color based on status
+      Color statusColor;
+      if (p.status.toLowerCase().contains("pending")) {
+        statusColor = Colors.red;
+      } else if (p.status.toLowerCase().contains("approved") ||
+                 p.status.toLowerCase().contains("confirm")) {
+        statusColor = Colors.green;
+      } else {
+        statusColor = Colors.black; // fallback
+      }
+
+      return _cardContainer([
+        _alignedRow("Ins No", "${controller.paidTransactions.indexOf(p) + 1}"),
+        _alignedRow("Date & Time", dateTimeString),
+        _alignedRow("Amount", format.format(p.amount)),
+        _alignedRow(
+            "Grams",
+            (p.gramAllocated > 0 ? p.gramAllocated : p.gram)
+                .toStringAsFixed(3)),
+        _alignedRow(
+          "Payment Status",
+          p.status,
+          valueWeight: FontWeight.w600,
+          valueColor: statusColor,
+        ),
+      ]);
+    }).toList(),
+  );
+}
+
+
 
   /// -------------------- Received List --------------------
-  Widget _buildReceivedList() {
-    if (controller.allotments.isEmpty) {
-      return _styledContainer(const Center(child: Text("No Data Available")));
-    }
-
-    return Column(
-      children: controller.allotments.map((r) {
-        return _cardContainer([
-          _alignedRow("Ins No", "${controller.allotments.indexOf(r) + 1}"),
-          _alignedRow("Date & Time", controller.formatDate(r.timestamp)),
-          _alignedRow("Gold", "${r.gram.toStringAsFixed(3)}"),
-        ]);
-      }).toList(),
-    );
+ Widget _buildReceivedList() {
+  if (controller.allotments.isEmpty) {
+    return _styledContainer(const Center(child: Text("No Data Available")));
   }
+
+  return Column(
+    children: controller.allotments.map((r) {
+      // Format date and time
+      final dateTimeString = r.timestamp != null
+          ? DateFormat('dd-MMM-yyyy, hh:mm a').format(r.timestamp!)
+          : "N/A";
+
+      return _cardContainer([
+        _alignedRow("Ins No", "${controller.allotments.indexOf(r) + 1}"),
+        _alignedRow("Date & Time", dateTimeString),
+        _alignedRow("Gold", "${r.gram.toStringAsFixed(3)}"),
+      ]);
+    }).toList(),
+  );
+}
+
 
   /// -------------------- Purchased List --------------------
-  Widget _buildPurchasedList() {
-    final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
+// Widget _buildPurchasedList() {
+//   final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
+//   if (controller.purchasedHistory.isEmpty) {
+//     return _styledContainer(const Center(child: Text("No Data Available")));
+//   }
 
-    if (controller.purchasedHistory.isEmpty) {
-      return _styledContainer(const Center(child: Text("No Data Available")));
-    }
+//   return Column(
+//     children: controller.purchasedHistory.map((p) {
+//       // Format date and time
+//       final dateTimeString = p.createdAt != null
+//           ? DateFormat('dd-MMM-yyyy,hh:mm a').format(p.createdAt!)
+//           : "N/A";
 
-    return Column(
-      children: controller.purchasedHistory.map((p) {
-        final dateString = DateFormat('dd-MMM-yyyy').format(p.createdAt);
-        return _cardContainer([
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Tag ID #${p.tagid}",
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
-              Text(dateString,
-                  style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 81, 81, 81))),
-            ],
-          ),
-          _alignedRow("Address", p.address),
-          _alignedRow("City", p.city),
-          _alignedRow("Post Code", p.postCode),
-          _alignedRow("Price", format.format(p.amount)),
-          _alignedRow("Weight (gms)", "${p.grams}"),
-          _alignedRow("Gold Type", p.goldType),
-          _alignedRow("Description", p.description),
-          Row(
-            children: [
-              const Text("Paid Amount ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-              const SizedBox(width: 40),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  format.format(p.paidAmount),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
-              ),
-            ],
-          ),
-           _alignedRow("Payment Status", p.paymentStatus,
-              valueWeight: FontWeight.w600,
-              valueColor: p.paymentStatus.toLowerCase() == "paid"
-                  ? Colors.green
-                  : Colors.red),
-          _alignedRow("Delivered Status", p.allotmentStatus,
-              valueWeight: FontWeight.w600,
-              valueColor: p.allotmentStatus.toLowerCase() == "delivered"
-                  ? Colors.green
-                  : Colors.red),
-        ]);
-      }).toList(),
-    );
+//       return _cardContainer([
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Text("TagID ${p.tagid}",
+//                 style: const TextStyle(
+//                     fontSize: 16, fontWeight: FontWeight.bold)),
+//             Text(dateTimeString,
+//                 style: const TextStyle(
+//                     fontSize: 14, color: Color.fromARGB(255, 81, 81, 81))),
+//           ],
+//         ),
+//         _alignedRow("Address", p.address),
+//         _alignedRow("City", p.city),
+//         _alignedRow("Post Code", p.postCode),
+//         _alignedRow("Price", format.format(p.amount)),
+//         _alignedRow("Weight (gms)", "${p.grams}"),
+//         _alignedRow("Gold Type", p.goldType),
+//         _alignedRow("Description", p.description),
+//         Row(
+//           children: [
+//             const Text("Paid Amount ",
+//                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+//             const SizedBox(width: 40),
+//             Container(
+//               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+//               decoration: BoxDecoration(
+//                 color: Colors.grey.shade200,
+//                 borderRadius: BorderRadius.circular(12),
+//               ),
+//               child: Text(
+//                 format.format(p.paidAmount),
+//                 style: const TextStyle(
+//                     fontWeight: FontWeight.bold, fontSize: 15),
+//               ),
+//             ),
+//           ],
+//         ),
+//         _alignedRow("Payment Status", p.paymentStatus,
+//             valueWeight: FontWeight.w600,
+//             valueColor: p.paymentStatus.toLowerCase() == "paid"
+//                 ? Colors.green
+//                 : Colors.red),
+//         _alignedRow("Delivered Status", p.allotmentStatus,
+//             valueWeight: FontWeight.w600,
+//             valueColor: p.allotmentStatus.toLowerCase() == "delivered"
+//                 ? Colors.green
+//                 : Colors.red),
+//       ]);
+//     }).toList(),
+//   );
+// }
+Widget _buildPurchasedList() {
+  final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
+  if (controller.purchasedHistory.isEmpty) {
+    return _styledContainer(const Center(child: Text("No Data Available")));
   }
+
+  return Column(
+    children: controller.purchasedHistory.map((p) {
+      // Format date and time
+      final dateTimeString = p.createdAt != null
+          ? DateFormat('dd-MMM-yyyy, hh:mm a').format(p.createdAt!)
+          : "N/A";
+
+      // Payment Status color
+      Color paymentColor;
+      final paymentStatus = p.paymentStatus.toLowerCase();
+      if (paymentStatus.contains("pending")) {
+        paymentColor = Colors.red;
+      } else if (paymentStatus.contains("approved")) {
+        paymentColor = Colors.blue; // approved but not delivered yet
+      } else {
+        paymentColor = Colors.black;
+      }
+
+      // Delivery Status color
+      Color deliveryColor;
+      final deliveryStatus = p.allotmentStatus.toLowerCase();
+      if (deliveryStatus.contains("not delivered")) {
+        deliveryColor = Colors.red;
+      } else if (deliveryStatus.contains("in progress")) {
+        deliveryColor = Colors.blue;
+      } else if (deliveryStatus.contains("delivered") &&
+          paymentStatus.contains("approved")) {
+        deliveryColor = Colors.green;
+      } else {
+        deliveryColor = Colors.black;
+      }
+
+      return _cardContainer([
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("TagID ${p.tagid}",
+                style: const TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(dateTimeString,
+                style: const TextStyle(
+                    fontSize: 14, color: Color.fromARGB(255, 81, 81, 81))),
+          ],
+        ),
+        _alignedRow("Address", p.address),
+        _alignedRow("City", p.city),
+        _alignedRow("Post Code", p.postCode),
+        _alignedRow("Price", format.format(p.amount)),
+        _alignedRow("Weight (gms)", "${p.grams}"),
+        _alignedRow("Gold Type", p.goldType),
+        _alignedRow("Description", p.description),
+        Row(
+          children: [
+            const Text("Paid Amount ",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+            const SizedBox(width: 40),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                format.format(p.paidAmount),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+            ),
+          ],
+        ),
+        _alignedRow("Payment Status", p.paymentStatus,
+            valueWeight: FontWeight.w600, valueColor: paymentColor),
+        _alignedRow("Delivered Status", p.allotmentStatus,
+            valueWeight: FontWeight.w600, valueColor: deliveryColor),
+      ]);
+    }).toList(),
+  );
+}
+
+
+
 
   /// -------------------- Helpers --------------------
   Widget _cardContainer(List<Widget> children) {

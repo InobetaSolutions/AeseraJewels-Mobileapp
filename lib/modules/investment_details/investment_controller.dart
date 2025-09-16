@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:aesera_jewels/models/investment_model.dart';
 import 'package:aesera_jewels/models/catalog_model.dart';
@@ -16,16 +15,13 @@ class InvestmentController extends GetxController {
   final selectedTab = TAB_PAID.obs;
   final isLoading = false.obs;
 
-  // API Lists
   final paidTransactions = <Transaction>[].obs;
   final allotments = <Allotment>[].obs;
   final purchasedHistory = <UserCatalog>[].obs;
 
-  // Totals
   final apiTotalInvestment = 0.0.obs;
   final apiTotalGrams = 0.0.obs;
 
-  // User data
   final userMobile = ''.obs;
   final userToken = ''.obs;
   final userName = ''.obs;
@@ -66,11 +62,9 @@ class InvestmentController extends GetxController {
     }
   }
 
-  /// ---- Fetch Paid Transactions ----
   Future<void> fetchTransactions() async {
     if (userMobile.value.isEmpty) return;
     isLoading.value = true;
-
     try {
       final headers = await StorageService().getAuthHeaders();
       final response = await http.post(
@@ -78,18 +72,13 @@ class InvestmentController extends GetxController {
         headers: headers,
         body: jsonEncode({"mobile": userMobile.value}),
       );
-
-      debugPrint("💬 Paid Response (${response.statusCode}) => ${response.body}");
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final investmentResponse = InvestmentResponse.fromJson(data);
-
         apiTotalInvestment.value = investmentResponse.totalAmount;
         apiTotalGrams.value = investmentResponse.totalGrams;
         paidTransactions.assignAll(investmentResponse.payments);
       }
-      print(paidTransactions);
     } catch (e) {
       Get.snackbar("Error", "Paid fetch failed: $e");
     } finally {
@@ -97,26 +86,20 @@ class InvestmentController extends GetxController {
     }
   }
 
-  /// ---- Fetch Allotments ----
   Future<void> fetchAllotments() async {
     if (userMobile.value.isEmpty) return;
     isLoading.value = true;
-
     try {
       final headers = await StorageService().getAuthHeaders();
       final response = await http.get(
         Uri.parse("http://13.204.96.244:3000/api/getByUserAllotment?mobile=${userMobile.value}"),
         headers: headers,
       );
-
-      debugPrint("💬 Allotment Response (${response.statusCode}) => ${response.body}");
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final allotmentResponse = AllotmentResponse.fromJson(data);
         allotments.assignAll(allotmentResponse.allotments);
       }
-      print(allotments);
     } catch (e) {
       Get.snackbar("Error", "Allotment fetch failed: $e");
     } finally {
@@ -124,11 +107,9 @@ class InvestmentController extends GetxController {
     }
   }
 
-  /// ---- Fetch Purchased Catalog ----
   Future<void> fetchPurchasedCatalog() async {
     if (userMobile.value.isEmpty) return;
     isLoading.value = true;
-
     try {
       final headers = await StorageService().getAuthHeaders();
       final response = await http.post(
@@ -136,14 +117,10 @@ class InvestmentController extends GetxController {
         headers: headers,
         body: jsonEncode({"mobileNumber": userMobile.value}),
       );
-
-      debugPrint("💬 Purchased Response (${response.statusCode}) => ${response.body}");
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         purchasedHistory.assignAll(UserCatalog.listFromJson(data["data"]));
       }
-      print(purchasedHistory);
     } catch (e) {
       Get.snackbar("Error", "Purchased fetch failed: $e");
     } finally {
@@ -151,16 +128,13 @@ class InvestmentController extends GetxController {
     }
   }
 
-  // Helpers
-  String formatDate(DateTime? date) {
-    if (date == null) return "-";
-    return DateFormat("dd MMM yyyy, h:mm a").format(date);
-  }
+String formatDate(DateTime? date, {String pattern = "dd-MM-yyyy"}) {
+  if (date == null) return "N/A";
+  return DateFormat(pattern).format(date);
+}
 
   String get formattedTotal =>
-      NumberFormat.currency(locale: "en_IN", symbol: "₹")
-          .format(apiTotalInvestment.value);
+      NumberFormat.currency(locale: "en_IN", symbol: "₹").format(apiTotalInvestment.value);
 
-  String get formattedTotalGrams =>
-      "${apiTotalGrams.value.toStringAsFixed(2)} g";
+  String get formattedTotalGrams => "${apiTotalGrams.value.toStringAsFixed(2)} g";
 }

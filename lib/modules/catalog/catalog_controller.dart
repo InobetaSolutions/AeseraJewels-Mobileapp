@@ -624,7 +624,7 @@ class CatalogController extends GetxController {
         Get.snackbar(
           "Success",
           "Catalog Payment Created Successfully",
-          backgroundColor: Colors.green,
+          backgroundColor:const Color(0xFF09243D),
           colorText: Colors.white,
         );
 
