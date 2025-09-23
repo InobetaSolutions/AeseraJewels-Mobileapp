@@ -503,6 +503,7 @@
 //   }
 // }
 import 'package:aesera_jewels/modules/address/address_controller.dart';
+import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
 import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:aesera_jewels/modules/address/address_screen.dart'; // 👈 added import
@@ -538,7 +539,7 @@ class InvestmentDetailScreen extends StatelessWidget {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.to(()=>DashboardScreen()),
         ),
       ),
       body: Obx(() {

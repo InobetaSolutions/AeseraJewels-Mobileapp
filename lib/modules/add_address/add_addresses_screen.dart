@@ -1,5 +1,5 @@
+
 // import 'package:aesera_jewels/modules/add_address/add_addresses_controller.dart';
-// import 'package:aesera_jewels/services/storage_service.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:get/get.dart';
@@ -7,23 +7,18 @@
 
 // class AddAddressScreen extends GetView<AddAddressController> {
 //   AddAddressScreen({super.key});
-
 //   final controller = Get.put(AddAddressController());
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final args = Get.arguments ?? {};
-//     final bool isEdit = args["isEdit"] ?? false;
-//     final String? id = args["id"];
-
 //     return Scaffold(
 //       backgroundColor: const Color(0xFFF9F4FA),
 //       appBar: AppBar(
 //         backgroundColor: Colors.transparent,
 //         elevation: 0,
-//         title: Text(
-//           isEdit ? "Edit Address" : "Add Address",
-//           style: const TextStyle(
+//         title: const Text(
+//           "Add Address",
+//           style: TextStyle(
 //             color: Colors.black,
 //             fontWeight: FontWeight.bold,
 //             fontSize: 22,
@@ -34,29 +29,6 @@
 //           icon: const Icon(Icons.arrow_back, color: Colors.black),
 //           onPressed: () => Get.back(),
 //         ),
-//         actions: [
-//           ElevatedButton(
-//             onPressed: () async {
-//               await StorageService().erase();
-//               Get.offAllNamed('/login');
-//             },
-//             style: ElevatedButton.styleFrom(
-//               backgroundColor: const Color(0xFFFFB700),
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(18),
-//               ),
-//             ),
-//             child: Text(
-//               "Logout",
-//               style: GoogleFonts.lexend(
-//                 fontSize: 16,
-//                 fontWeight: FontWeight.w700,
-//                 color: Colors.black,
-//               ),
-//             ),
-//           ),
-//           const SizedBox(width: 8),
-//         ],
 //       ),
 //       body: Obx(() {
 //         if (controller.isLoading.value) {
@@ -83,7 +55,7 @@
 //                 "Address",
 //                 controller.addressController,
 //                 "Enter your address",
-//                 inputFormatters: [LengthLimitingTextInputFormatter(35)],
+//                 inputFormatters: [LengthLimitingTextInputFormatter(100)],
 //               ),
 //               const SizedBox(height: 16),
 
@@ -114,42 +86,16 @@
 //                 width: double.infinity,
 //                 height: 48,
 //                 child: ElevatedButton(
-//                   onPressed: () {
-//                     final name = controller.nameController.text.trim();
-//                     final address = controller.addressController.text.trim();
-//                     final city = controller.cityController.text.trim();
-//                     final postalCode =
-//                         controller.postalCodeController.text.trim();
-
-//                     if (name.isEmpty ||
-//                         address.isEmpty ||
-//                         city.isEmpty ||
-//                         postalCode.isEmpty) {
-//                       Get.snackbar(
-//                         "Validation",
-//                         "All fields are required",
-//                         backgroundColor: Colors.red,
-//                         colorText: Colors.white,
-//                       );
-//                       return;
-//                     }
-
-//                     if (isEdit && id != null) {
-//                       controller.updateAddress(
-//                           id, name, address, city, postalCode);
-//                     } else {
-//                       controller.addAddress(name, address, city, postalCode);
-//                     }
-//                   },
+//                   onPressed: controller.addAddress,
 //                   style: ElevatedButton.styleFrom(
 //                     backgroundColor: const Color(0xFF09243D),
 //                     shape: RoundedRectangleBorder(
 //                       borderRadius: BorderRadius.circular(25),
 //                     ),
 //                   ),
-//                   child: Text(
-//                     isEdit ? "Update" : "Submit",
-//                     style: const TextStyle(color: Colors.white, fontSize: 18),
+//                   child: const Text(
+//                     "Submit",
+//                     style: TextStyle(color: Colors.white, fontSize: 18),
 //                   ),
 //                 ),
 //               ),
@@ -160,7 +106,6 @@
 //     );
 //   }
 
-//   /// Custom reusable input field
 //   Widget buildInputField(
 //     String label,
 //     TextEditingController controller,
@@ -235,9 +180,9 @@ class AddAddressScreen extends GetView<AddAddressController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
+        title: Text(
           "Add Address",
-          style: TextStyle(
+          style: GoogleFonts.lexend(
             color: Colors.black,
             fontWeight: FontWeight.bold,
             fontSize: 22,
@@ -269,7 +214,6 @@ class AddAddressScreen extends GetView<AddAddressController> {
                 ],
               ),
               const SizedBox(height: 16),
-
               buildInputField(
                 "Address",
                 controller.addressController,
@@ -277,7 +221,6 @@ class AddAddressScreen extends GetView<AddAddressController> {
                 inputFormatters: [LengthLimitingTextInputFormatter(100)],
               ),
               const SizedBox(height: 16),
-
               buildInputField(
                 "City",
                 controller.cityController,
@@ -288,7 +231,6 @@ class AddAddressScreen extends GetView<AddAddressController> {
                 ],
               ),
               const SizedBox(height: 16),
-
               buildInputField(
                 "Postal Code",
                 controller.postalCodeController,
@@ -300,7 +242,6 @@ class AddAddressScreen extends GetView<AddAddressController> {
                 ],
               ),
               const SizedBox(height: 24),
-
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -312,9 +253,13 @@ class AddAddressScreen extends GetView<AddAddressController> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Submit",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: GoogleFonts.lexend(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -338,7 +283,7 @@ class AddAddressScreen extends GetView<AddAddressController> {
       children: [
         Text(
           label,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.lexend(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: const Color(0xFF0D0F1C),
