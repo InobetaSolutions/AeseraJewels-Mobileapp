@@ -130,12 +130,12 @@ class AddAddressController extends GetxController {
     // Validation
     if (name.isEmpty || address.isEmpty || city.isEmpty || postalCode.isEmpty) {
       Get.snackbar("Validation", "All fields are required",
-          backgroundColor: Colors.red, colorText: Colors.white);
+          backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
       return;
     }
     if (postalCode.length != 6) {
       Get.snackbar("Validation", "Postal code must be 6 digits",
-          backgroundColor: Colors.red, colorText: Colors.white);
+         backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
       return;
     }
 
@@ -169,7 +169,7 @@ class AddAddressController extends GetxController {
 
         Get.snackbar("Success",
             responseData["message"] ?? "Address added successfully",
-            backgroundColor: Colors.green, colorText: Colors.white);
+           backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
             print(responseData);
 
         /// ✅ Go back to AddressScreen
@@ -177,11 +177,11 @@ class AddAddressController extends GetxController {
       } else {
         Get.snackbar("Error",
             response.reasonPhrase ?? "Failed to add address",
-            backgroundColor: Colors.red, colorText: Colors.white);
+           backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
       }
     } catch (e) {
       Get.snackbar("Error", e.toString(),
-          backgroundColor: Colors.red, colorText: Colors.white);
+        backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoading.value = false;
     }

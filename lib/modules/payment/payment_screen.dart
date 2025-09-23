@@ -654,39 +654,92 @@ class Payment_Screen extends GetView<Payment_Controller> {
                     return;
                   }
 
-                  // ✅ Only for Rupees: check minimum 100
-                  if (controller.isRupees.value) {
-                    final value = int.tryParse(entered) ?? 0;
-                    if (value < 100) {
-                      Get.snackbar(
-                        "Invalid Amount",
-                        "Please enter amount above 100",
-                        backgroundColor: const Color(0xFF0A2342),
-                        colorText: Colors.white,
-                      );
-                      return;
-                    }
-                  }
+                //   // ✅ Only for Rupees: check minimum 100
+                //   if (controller.isRupees.value) {
+                //     final value = int.tryParse(entered) ?? 0;
+                //     if (value < 100) {
+                //       Get.snackbar(
+                //         "Invalid Amount",
+                //         "Please enter amount above 100",
+                //         backgroundColor: const Color(0xFF0A2342),
+                //         colorText: Colors.white,
+                //       );
+                //       return;
+                //     }
+                //   }
 
-                  // ✅ Confirmation dialog
-                  Get.defaultDialog(
-                    title: "Confirmation",
-                    middleText: "Hope you proceed payment",
-                    barrierDismissible: false,
-                    textCancel: "Cancel",
-                    textConfirm: "OK",
-                    cancelTextColor: Colors.black,
-                    confirmTextColor: Colors.white,
-                    buttonColor: const Color(0xFF0A2A4D),
-                    onCancel: () {
-                      if (Get.isDialogOpen == true) Get.back();
-                    },
-                    onConfirm: () async {
-                      if (Get.isDialogOpen == true) Get.back();
-                      await controller.createPayment();
-                      Get.offAllNamed("/dashboard");
-                    },
-                  );
+                //   // ✅ Confirmation dialog
+                //   Get.defaultDialog(
+                //     title: "Confirmation",
+                //     middleText: "Hope you proceed payment",
+                //     barrierDismissible: false,
+                //     textCancel: "Cancel",
+                //     textConfirm: "OK",
+                //     cancelTextColor: Colors.black,
+                //     confirmTextColor: Colors.white,
+                //     buttonColor: const Color(0xFF0A2A4D),
+                //     onCancel: () {
+                //       if (Get.isDialogOpen == true) Get.back();
+                //     },
+                //     onConfirm: () async {
+                //       if (Get.isDialogOpen == true) Get.back();
+                //       await controller.createPayment();
+                //       Get.offAllNamed("/dashboard");
+                //     },
+                //   );
+                // },
+                // ✅ Only for Rupees: check minimum 100
+if (controller.isRupees.value) {
+  final value = int.tryParse(entered) ?? 0;
+  if (value < 100) {
+    Get.snackbar(
+      "Invalid Amount",
+      "Please enter amount above 100",
+      backgroundColor: const Color(0xFF0A2342),
+      colorText: Colors.white,
+    );
+    return;
+  }
+}
+
+// ✅ Confirmation dialog
+Get.defaultDialog(
+  backgroundColor: Colors.white, // popup background
+  title: "Confirmation",
+  middleText: "Hope you proceed payment",
+  barrierDismissible: false,
+  titleStyle: const TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),
+  middleTextStyle: const TextStyle(color: Colors.black87,fontSize: 16),
+  actions: [
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFFFB700), // amber cancel button
+      ),
+      onPressed: () {
+        if (Get.isDialogOpen == true) Get.back();
+      },
+      child: const Text(
+        "Cancel",
+        style: TextStyle(color: Colors.black,fontSize: 15),
+      ),
+    ),
+    const SizedBox(width: 10),
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF0A2A4D), // blue confirm button
+      ),
+      onPressed: () async {
+        if (Get.isDialogOpen == true) Get.back();
+        await controller.createPayment();
+        Get.offAllNamed("/dashboard");
+      },
+      child: const Text(
+        "OK",
+        style: TextStyle(color: Colors.white,fontSize:  15),
+      ),
+    ),
+  ],
+);
                 },
                 child: Container(
                   width: double.infinity,

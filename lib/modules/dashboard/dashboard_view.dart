@@ -32,8 +32,8 @@ class DashboardScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(
-              left: 12,
-              right: 16,
+              left: 10,
+              right: 14,
               top: 10.5,
               bottom: 10.5,
             ),
@@ -45,7 +45,7 @@ class DashboardScreen extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFFB700),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(20),
             ),
  ),
               child: Text(
