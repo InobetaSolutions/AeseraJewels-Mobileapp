@@ -1,8 +1,12 @@
 import 'package:aesera_jewels/models/catalog_model.dart';
+import 'package:aesera_jewels/modules/add_address/add_addresses_binding.dart';
+import 'package:aesera_jewels/modules/add_address/add_addresses_screen.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_binding.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
 import 'package:aesera_jewels/modules/payment/payment_binding.dart';
 import 'package:aesera_jewels/modules/payment/payment_screen.dart';
+import 'package:aesera_jewels/modules/address/address_binding.dart';
+import 'package:aesera_jewels/modules/address/address_screen.dart';
 import 'package:aesera_jewels/modules/welcome_screen3/jewels_for_occasion_controller.dart' show UPIPaymentController;
 import 'package:get/get.dart';
 
@@ -60,6 +64,8 @@ class AppRoutes {
   static const register = '/register';
   static const login = '/login';
   static const otp = '/otp';
+  static  const address = '/address';
+  static const add_address = '/add_address ';
   static const dashboard = '/dashboard';
  static const scanToPay = '/scan_to_pay';
   static const catalog = '/catalog';
@@ -71,6 +77,8 @@ class AppRoutes {
   static const madeGoldEasy = '/made_gold_easy';
   static const seamlessPayments = '/seamless_payments';
  static const onboard = '/onboard';
+
+ static const UpdateAddressScreen ="/update_address_screen";
 
   static final routes = [
     GetPage(name: splash, page: () =>SplashScreen(), binding: SplashBinding()),
@@ -107,6 +115,13 @@ class AppRoutes {
       page: () => DashboardScreen(),
       binding: DashboardBinding(),
     ),
+    GetPage(
+    name: address,
+      page: () => AddressScreen(),
+      binding: AddressBinding(),
+    ),
+    GetPage(name: add_address, page: ()=>AddAddressScreen(),
+    binding: AddAddressBinding()),
 
     // Catalog
     // GetPage(
@@ -168,6 +183,9 @@ GetPage(
         Get.lazyPut(() => UPIPaymentController());
       }),
       ),
+
+     
+      
        
   ];
 
