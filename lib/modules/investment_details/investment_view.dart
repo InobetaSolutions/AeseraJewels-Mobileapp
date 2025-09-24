@@ -862,8 +862,8 @@ Widget _buildUpdateAddressButton(BuildContext context) {
 
     return Column(
       children: controller.purchasedHistory.map((p) {
-        final dateTimeString = p.createdAt != null
-            ? DateFormat('dd-MMM-yyyy, hh:mm a').format(p.createdAt!)
+        final dateTimeString = p.timestamp != null
+            ? DateFormat('dd-MMM-yyyy, hh:mm a').format(p.timestamp!)
             : "N/A";
 
         Color paymentColor;
