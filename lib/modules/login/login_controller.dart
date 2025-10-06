@@ -165,10 +165,19 @@ class LoginController extends GetxController {
           colorText: Colors.white,
         );
       }
-    } catch (e) {
-      isLoading.value = false;
-      Get.snackbar("Error", "Something went wrong: $e");
-    }
+      } catch (e) {
+  isLoading.value = false;
+  Get.snackbar(
+    "Error",
+    " please check your internet connection",backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white,
+  );
+}
+
+    // } catch (e) {
+    //   isLoading.value = false;
+    //   Get.snackbar("Error", "Something went wrong: $e");
+    // }
   }
 
   /// ✅ Register navigation (replaces Login, not stack push)

@@ -180,13 +180,21 @@ class AddAddressController extends GetxController {
            backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
+      Get.snackbar( "Error",
+    " please check your internet connection",
         backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoading.value = false;
     }
   }
-
+//  } catch (e) {
+//   isLoading.value = false;
+//   Get.snackbar(
+//     "Error",
+//     "Something went wrong: $e, please check your internet connection",backgroundColor: const Color(0xFF09243D),
+//           colorText: Colors.white,
+//   );
+// }
   /// Clean up
   @override
   void onClose() {

@@ -223,28 +223,28 @@ class DashboardScreen extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                                 const SizedBox(height: 12),
-                                TextButton(
-                                  onPressed: controller.goToCatalog,
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: const Color(0xFFFFB700),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 23,
-                                      vertical: 6,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    "Shop\n Now",
-                                    style: GoogleFonts.lexend(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
+                                // TextButton(
+                                //   onPressed: controller.goToCatalog,
+                                //   style: TextButton.styleFrom(
+                                //     backgroundColor: const Color(0xFFFFB700),
+                                //     padding: const EdgeInsets.symmetric(
+                                //       horizontal: 23,
+                                //       vertical: 6,
+                                //     ),
+                                //     shape: RoundedRectangleBorder(
+                                //       borderRadius: BorderRadius.circular(15),
+                                //     ),
+                                //   ),
+                                //   child: Text(
+                                //     textAlign: TextAlign.center,
+                                //     "Shop\n Now",
+                                //     style: GoogleFonts.lexend(
+                                //       fontSize: 22,
+                                //       fontWeight: FontWeight.w800,
+                                //       color: Colors.black,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                             const SizedBox(width: 14),

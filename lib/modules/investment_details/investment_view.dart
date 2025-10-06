@@ -561,7 +561,7 @@ class InvestmentDetailScreen extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 /// 👇 Update Address Button added here
-                _buildUpdateAddressButton(context),
+               // _buildUpdateAddressButton(context),
                 const SizedBox(height: 20),
 
                 _buildTabBar(),
@@ -651,45 +651,45 @@ class InvestmentDetailScreen extends StatelessWidget {
   }
 
 /// -------------------- Update Address Button --------------------
-Widget _buildUpdateAddressButton(BuildContext context) {
-  return Container(
-    height: 48,
-    margin: const EdgeInsets.all(3.5),
-    decoration: BoxDecoration(
-      color: const Color(0xFF0A2A4D),
-      borderRadius: BorderRadius.circular(30),
-    ),
-    child: Center(
-      child: SizedBox(
-        width: 300,
-        height: 40,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.amber,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(60),
-            ),
-          ),
-          onPressed: () {
-            Get.to(() => AddressScreen())?.then((_) {
-              // refresh addresses when coming back
-              final controller = Get.find<AddressController>();
-              controller.fetchAddresses();
-            });
-          },
-          child: const Text(
-            "Update Address",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
+// Widget _buildUpdateAddressButton(BuildContext context) {
+//   return Container(
+//     height: 48,
+//     margin: const EdgeInsets.all(3.5),
+//     decoration: BoxDecoration(
+//       color: const Color(0xFF0A2A4D),
+//       borderRadius: BorderRadius.circular(30),
+//     ),
+//     child: Center(
+//       child: SizedBox(
+//         width: 300,
+//         height: 40,
+//         child: ElevatedButton(
+//           style: ElevatedButton.styleFrom(
+//             backgroundColor: Colors.amber,
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(60),
+//             ),
+//           ),
+//           onPressed: () {
+//             Get.to(() => AddressScreen())?.then((_) {
+//               // refresh addresses when coming back
+//               final controller = Get.find<AddressController>();
+//               controller.fetchAddresses();
+//             });
+//           },
+//           child: const Text(
+//             "Update Address",
+//             style: TextStyle(
+//               color: Colors.black,
+//               fontSize: 14,
+//               fontWeight: FontWeight.bold,
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//   );
+// }
 
   /// -------------------- Tab Bar --------------------
   Widget _buildTabBar() {
@@ -703,7 +703,7 @@ Widget _buildUpdateAddressButton(BuildContext context) {
         children: [
           _tabButton("Paid Amount", InvestmentController.TAB_PAID),
           _tabButton("Received Gold", InvestmentController.TAB_RECEIVED),
-          _tabButton("Purchased", InvestmentController.TAB_PURCHASED),
+         // _tabButton("Purchased", InvestmentController.TAB_PURCHASED),
         ],
       ),
     );
@@ -823,6 +823,9 @@ Widget _buildUpdateAddressButton(BuildContext context) {
           _alignedRow("Ins No", "${controller.paidTransactions.indexOf(p) + 1}"),
           _alignedRow("Date & Time", dateTimeString),
           _alignedRow("Amount", format.format(p.amount)),
+          _alignedRow("Tax Amount", format.format(p.taxAmount)),
+_alignedRow("Total Pay (with Tax)", format.format(p.totalPayAmountWithTax)),
+
           _alignedRow("Grams",
               (p.gramAllocated > 0 ? p.gramAllocated : p.gram).toStringAsFixed(3)),
           _alignedRow("Payment Status", p.status,

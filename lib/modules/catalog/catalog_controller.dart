@@ -620,8 +620,8 @@ class CatalogController extends GetxController {
             backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar("Error", " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoading(false);
     }
@@ -642,7 +642,9 @@ class CatalogController extends GetxController {
         }
       }
     } catch (e) {
-      print("❌ Tax Fetch Error: $e");
+      print(" please check your internet connection",
+         // backgroundColor: const Color(0xFF09243D), colorText: Colors.white
+         );
     }
   }
 
@@ -661,7 +663,9 @@ class CatalogController extends GetxController {
         }
       }
     } catch (e) {
-      print("❌ Delivery Charge Fetch Error: $e");
+      print( " please check your internet connection",
+          //backgroundColor: const Color(0xFF09243D), colorText: Colors.white
+          );
     }
   }
 
@@ -693,8 +697,8 @@ class CatalogController extends GetxController {
         }
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar("Error",  " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     }
 
     var selectedAddressIndex = 0.obs;
@@ -923,8 +927,8 @@ class CatalogController extends GetxController {
             backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
-        backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar("Error",  " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     }
   }
 }

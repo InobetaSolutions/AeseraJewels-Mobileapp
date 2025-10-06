@@ -243,7 +243,8 @@ class OtpController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       lastVerifySuccess = false;
-      Get.snackbar('Error', 'Something went wrong: $e');
+      Get.snackbar('Error',  " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     }
   }
 
@@ -266,7 +267,8 @@ class OtpController extends GetxController {
         Get.snackbar('Error', 'Failed to resend OTP');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Something went wrong: $e');
+      Get.snackbar('Error',  " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     }
   }
 

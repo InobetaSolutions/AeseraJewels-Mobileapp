@@ -4,6 +4,8 @@ class GoldRateModel {
   final double priceGram24k;
   final String istDate;
 
+  var expiryTime;
+
   GoldRateModel({
     required this.id,
     required this.timestamp,

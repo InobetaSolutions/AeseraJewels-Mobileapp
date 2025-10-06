@@ -1,4 +1,5 @@
 import 'package:aesera_jewels/models/catalog_model.dart';
+import 'package:aesera_jewels/models/summary_model.dart';
 import 'package:aesera_jewels/modules/add_address/add_addresses_binding.dart';
 import 'package:aesera_jewels/modules/add_address/add_addresses_screen.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_binding.dart';
@@ -7,6 +8,9 @@ import 'package:aesera_jewels/modules/payment/payment_binding.dart';
 import 'package:aesera_jewels/modules/payment/payment_screen.dart';
 import 'package:aesera_jewels/modules/address/address_binding.dart';
 import 'package:aesera_jewels/modules/address/address_screen.dart';
+import 'package:aesera_jewels/modules/summary/summary_binding.dart';
+import 'package:aesera_jewels/modules/summary/summary_controller.dart';
+import 'package:aesera_jewels/modules/summary/summary_screen.dart';
 import 'package:aesera_jewels/modules/welcome_screen3/jewels_for_occasion_controller.dart' show UPIPaymentController;
 import 'package:get/get.dart';
 
@@ -64,6 +68,7 @@ class AppRoutes {
   static const register = '/register';
   static const login = '/login';
   static const otp = '/otp';
+  static const summary = '/summary';
   static  const address = '/address';
   static const add_address = '/add_address ';
   static const dashboard = '/dashboard';
@@ -106,6 +111,19 @@ class AppRoutes {
       page: () => RegisterView(),
       binding: RegisterBinding(),
     ),
+
+   GetPage(
+      name: summary,
+      page: () {
+        // Get.arguments should contain the SummaryModel
+        final SummaryModel summary = Get.arguments as SummaryModel;
+        return SummaryScreen(summary: summary, );
+      },
+      binding: BindingsBuilder(() {
+        final SummaryModel summary = Get.arguments as SummaryModel;
+        Get.put(SummaryController(summary));
+      }),
+    ),
     GetPage(name: login, page: () => LoginView(), binding: LoginBinding()),
     GetPage(name: otp, page: () => OtpScreen(), binding: OtpBinding()),
 
@@ -147,8 +165,8 @@ GetPage(
     //   binding: BuyGoldBinding(),
     // ),
  GetPage(name:payment,
- page:()=>Payment_Screen(),
- binding: Payment_Binding() ),
+ page:()=>PaymentScreen(),
+ binding: PaymentBinding() ),
     
   GetPage(
       name: onboard,
