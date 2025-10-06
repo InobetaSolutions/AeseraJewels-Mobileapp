@@ -126,9 +126,11 @@
 //   }
 // }
 import 'dart:convert';
+import 'dart:ui';
 import 'package:aesera_jewels/models/gold_rate_model.dart';
 import 'package:aesera_jewels/routes/app_routes.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -207,7 +209,8 @@ class DashboardController extends GetxController {
         Get.snackbar('Error', 'Failed to fetch gold rate');
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('Error',  " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoadingRate(false);
     }
@@ -237,7 +240,8 @@ class DashboardController extends GetxController {
         Get.snackbar('Error', 'Failed to fetch support info');
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('Error', " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoadingSupport(false);
     }

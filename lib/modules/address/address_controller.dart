@@ -358,7 +358,7 @@ class AddressController extends GetxController {
             backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
+      Get.snackbar("Error",  "please check your internet connection",
           backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoading.value = false;
@@ -400,7 +400,7 @@ class AddressController extends GetxController {
             backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
+      Get.snackbar("Error", " please check your internet connection",
           backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     }
   }
@@ -423,8 +423,8 @@ class AddressController extends GetxController {
         }
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
-          backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar("Error",  " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     }
   }
 

@@ -15,15 +15,15 @@ class RegisterController extends GetxController {
     final mobile = mobileController.text.trim();
 
     if (name.isEmpty || mobile.isEmpty) {
-      _showSnackBar("Missing Info", "Please fill all fields.");
+      _showSnackBar("Missing Info", "Please fill all fields.", backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
       return;
     }
     if (!RegExp(r"^[a-zA-Z ]+$").hasMatch(name)) {
-      _showSnackBar("Invalid Name", "Name should contain only alphabets.");
+      _showSnackBar("Invalid Name", "Name should contain only alphabets.", backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
       return;
     }
     if (!RegExp(r"^[6-9]\d{9}$").hasMatch(mobile)) {
-      _showSnackBar("Invalid Mobile", "Enter a valid 10-digit mobile number.");
+      _showSnackBar("Invalid Mobile", "Enter a valid 10-digit mobile number.", backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
       return;
     }
 
@@ -63,24 +63,25 @@ class RegisterController extends GetxController {
             "isNewUser": true,
           });
         } else {
-          _showSnackBar("Error", "Invalid response from server.");
+          _showSnackBar("Error", "Invalid response from server.", backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
         }
       } else {
         // _showSnackBar("Error", "Failed: ${response.reasonPhrase}");
          _showSnackBar(
             "User Already Registered",
-            "This mobile number is already registered. Please login with this number."
+            "This mobile number is already registered. Please login with this number.", backgroundColor: const Color(0xFF09243D), colorText: Colors.white
           );
 
 
       }
     } catch (e) {
       isLoading.value = false;
-      _showSnackBar("Error", "Something went wrong: $e");
+      _showSnackBar("Error",  " please check your internet connection",
+          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     }
   }
 
-  void _showSnackBar(String title, String message) {
+  void _showSnackBar(String title, String message, {required Color backgroundColor, required Color colorText}) {
     Get.snackbar(title, message,
         snackPosition: SnackPosition.TOP,
         backgroundColor: const Color(0xFF09243D),
