@@ -142,6 +142,7 @@
 //   String get formattedTotalGrams => "${apiTotalGrams.value.toStringAsFixed(2)} g";
 // }
 import 'dart:convert';
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/models/investment_model.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -212,7 +213,7 @@ class InvestmentController extends GetxController {
     try {
       final headers = await StorageService().getAuthHeaders();
       final response = await http.post(
-        Uri.parse("http://13.204.96.244:3000/api/getpaymenthistory"),
+        Uri.parse("${BaseUrl.baseUrl}getpaymenthistory"),
         headers: headers,
         body: jsonEncode({"mobile": userMobile.value}),
       );
@@ -239,7 +240,7 @@ class InvestmentController extends GetxController {
       final headers = await StorageService().getAuthHeaders();
       final response = await http.get(
         Uri.parse(
-            "http://13.204.96.244:3000/api/getByUserAllotment?mobile=${userMobile.value}"),
+            "${BaseUrl.baseUrl}getByUserAllotment?mobile=${userMobile.value}"),
         headers: headers,
       );
       //if (response.statusCode == 200) {
@@ -281,7 +282,7 @@ class InvestmentController extends GetxController {
     try {
       final headers = await StorageService().getAuthHeaders();
       final response = await http.post(
-        Uri.parse("http://13.204.96.244:3000/api/getbyUserCatalog"),
+        Uri.parse("${BaseUrl.baseUrl}getbyUserCatalog"),
         headers: headers,
         body: jsonEncode({"mobileNumber": userMobile.value}),
       );

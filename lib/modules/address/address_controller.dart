@@ -244,7 +244,7 @@
 
 //     try {
 //       final headers = await StorageService().getAuthHeaders();
-//       final uri = Uri.parse("http://13.204.96.244:3000/api/deleteDeliveryAddress");
+//       final uri = Uri.parse("${BaseUrl.baseUrl}deleteDeliveryAddress");
 //       final body = json.encode({"addressId": id});
 
 //       final response = await http.post(uri, headers: headers, body: body);
@@ -308,6 +308,7 @@
 //   }
 // }
 import 'dart:convert';
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/Addresses_model.dart';
 import 'package:aesera_jewels/modules/add_address/add_addresses_screen.dart';
 import 'package:flutter/material.dart';
@@ -339,7 +340,7 @@ class AddressController extends GetxController {
     isLoading.value = true;
     try {
       final headers = await StorageService().getAuthHeaders();
-      final uri = Uri.parse("http://13.204.96.244:3000/api/getDeliveryAddress");
+      final uri = Uri.parse("${BaseUrl.baseUrl}getDeliveryAddress");
       final body = json.encode({"userid": userId});
 
       final response = await http.post(uri, headers: headers, body: body);
@@ -376,7 +377,7 @@ class AddressController extends GetxController {
 
     try {
       final headers = await StorageService().getAuthHeaders();
-      final uri = Uri.parse("http://13.204.96.244:3000/api/updateDeliveryAddress");
+      final uri = Uri.parse("${BaseUrl.baseUrl}updateDeliveryAddress");
       final body = json.encode({
         "addressId": a.id,
         "name": name,
@@ -409,7 +410,7 @@ class AddressController extends GetxController {
   Future<void> deleteAddress(String id) async {
     try {
       final headers = await StorageService().getAuthHeaders();
-      final uri = Uri.parse("http://13.204.96.244:3000/api/deleteDeliveryAddress");
+      final uri = Uri.parse("${BaseUrl.baseUrl}deleteDeliveryAddress");
       final body = json.encode({"addressId": id});
 
       final response = await http.post(uri, headers: headers, body: body);

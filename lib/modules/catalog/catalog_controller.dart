@@ -347,7 +347,7 @@
 //       final userId = await StorageService.getUserId();
 //       if (userId != null) {
 //         final headers = await StorageService().getAuthHeaders();
-//         final uri = Uri.parse("http://13.204.96.244:3000/api/getDeliveryAddress");
+//         final uri = Uri.parse("${BaseUrl.baseUrl}getDeliveryAddress");
 //         final body = json.encode({"userid": userId});
 //         final response = await http.post(uri, headers: headers, body: body);
 
@@ -521,7 +521,7 @@
 //       var headers = {'Content-Type': 'application/json'};
 //       var request = http.Request(
 //         'POST',
-//         Uri.parse('http://13.204.96.244:3000/api/catalogPayment'),
+//         Uri.parse('${BaseUrl.baseUrl}catalogPayment'),
 //       );
 //       request.body = json.encode(body);
 //       request.headers.addAll(headers);
@@ -567,6 +567,7 @@
 //   }
 // }
 import 'dart:convert';
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/Addresses_model.dart';
 import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -607,7 +608,7 @@ class CatalogController extends GetxController {
     try {
       isLoading(true);
       var response = await http.get(
-        Uri.parse("http://13.204.96.244:3000/api/get-products"),
+        Uri.parse("${BaseUrl.baseUrl}get-products"),
       );
 
       if (response.statusCode == 200) {
@@ -631,7 +632,7 @@ class CatalogController extends GetxController {
   Future<void> fetchTax() async {
     try {
       var request = http.Request(
-          'GET', Uri.parse('http://13.204.96.244:3000/api/getTax'));
+          'GET', Uri.parse('${BaseUrl.baseUrl}getTax'));
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
@@ -652,7 +653,7 @@ class CatalogController extends GetxController {
   Future<void> fetchDeliveryCharge() async {
     try {
       var request = http.Request(
-          'GET', Uri.parse('http://13.204.96.244:3000/api/getDeliveryCharge'));
+          'GET', Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'));
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
@@ -684,7 +685,7 @@ class CatalogController extends GetxController {
       if (userId != null) {
         final headers = await StorageService().getAuthHeaders();
         final uri =
-            Uri.parse("http://13.204.96.244:3000/api/getDeliveryAddress");
+            Uri.parse("${BaseUrl.baseUrl}getDeliveryAddress");
         final body = json.encode({"userid": userId});
         final response = await http.post(uri, headers: headers, body: body);
 
@@ -905,7 +906,7 @@ class CatalogController extends GetxController {
       var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
         'POST',
-        Uri.parse('http://13.204.96.244:3000/api/catalogPayment'),
+        Uri.parse('${BaseUrl.baseUrl}catalogPayment'),
       );
       request.body = json.encode(body);
       request.headers.addAll(headers);

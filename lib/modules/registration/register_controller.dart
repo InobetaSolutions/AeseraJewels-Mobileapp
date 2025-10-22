@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -30,7 +31,7 @@ class RegisterController extends GetxController {
     isLoading.value = true;
 
     try {
-      final url = Uri.parse("http://13.204.96.244:3000/api/generate-otp");
+      final url = Uri.parse("${BaseUrl.baseUrl}generate-otp");
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},

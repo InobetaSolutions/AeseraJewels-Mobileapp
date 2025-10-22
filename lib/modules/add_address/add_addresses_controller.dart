@@ -84,6 +84,7 @@
 //   }
 // }
 import 'dart:convert';
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -157,7 +158,7 @@ class AddAddressController extends GetxController {
 
       final request = http.Request(
         'POST',
-        Uri.parse('http://13.204.96.244:3000/api/addDeliveryAddress'),
+        Uri.parse('${BaseUrl.baseUrl}addDeliveryAddress'),
       );
       request.body = body;
       request.headers.addAll(headers);

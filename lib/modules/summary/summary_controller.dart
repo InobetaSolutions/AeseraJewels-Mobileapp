@@ -794,6 +794,7 @@
 
 
 import 'dart:convert';
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/gold_rate_model.dart';
 import 'package:aesera_jewels/models/summary_model.dart';
 import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
@@ -806,7 +807,7 @@ class SummaryController extends GetxController {
   // Summary Data
   Rx<SummaryModel?> summary = Rx<SummaryModel?>(null);
   final bool paidInRupees;
-  final String baseUrl = "http://13.204.96.244:3000/api/newPayment";
+  final String baseUrl = "${BaseUrl.baseUrl}newPayment";
 
   // Loading flags
   var isLoading = false.obs;
@@ -835,7 +836,7 @@ class SummaryController extends GetxController {
   Future<void> fetchCurrentGoldRate() async {
     try {
       isLoadingRate(true);
-      final url = Uri.parse('http://13.204.96.244:3000/api/getCurrentRate');
+      final url = Uri.parse('${BaseUrl.baseUrl}getCurrentRate');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -865,7 +866,7 @@ class SummaryController extends GetxController {
   Future<void> fetchTax() async {
     try {
       final headers = await StorageService().getAuthHeaders();
-      final url = Uri.parse("http://13.204.96.244:3000/api/getTax");
+      final url = Uri.parse("${BaseUrl.baseUrl}getTax");
 
       var request = http.Request('GET', url);
       request.headers.addAll(headers);
