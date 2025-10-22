@@ -91,6 +91,7 @@
 //   }
 // }
 import 'dart:convert';
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/modules/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -125,7 +126,7 @@ class LoginController extends GetxController {
     isLoading.value = true;
 
     try {
-      final url = Uri.parse('http://13.204.96.244:3000/api/user-login');
+      final url = Uri.parse('${BaseUrl.baseUrl}user-login');
       final headers = {'Content-Type': 'application/json'};
       final body = jsonEncode({"mobile": mobile});
 

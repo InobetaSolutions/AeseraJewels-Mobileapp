@@ -127,6 +127,7 @@
 // }
 import 'dart:convert';
 import 'dart:ui';
+import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/gold_rate_model.dart';
 import 'package:aesera_jewels/routes/app_routes.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -193,7 +194,7 @@ class DashboardController extends GetxController {
         return;
       }
 
-      final url = Uri.parse('http://13.204.96.244:3000/api/getCurrentRate');
+      final url = Uri.parse('${BaseUrl.baseUrl}getCurrentRate');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -223,7 +224,7 @@ class DashboardController extends GetxController {
 
       if (isOffline.value) return;
 
-      final url = Uri.parse('http://13.204.96.244:3000/api/getSupport');
+      final url = Uri.parse('${BaseUrl.baseUrl}getSupport');
       final response = await http.post(url);
 
       if (response.statusCode == 200) {
