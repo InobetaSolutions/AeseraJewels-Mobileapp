@@ -10,6 +10,8 @@ class ProductModel {
   final double? originalPrice;
   final double? grams;
 
+  var name;
+
   ProductModel({
     required this.id,
     required this.tagId,

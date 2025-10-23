@@ -1,6 +1,7 @@
 import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/modules/coin_catalog/coin_catalog_controller.dart';
+import 'package:aesera_jewels/modules/investment_details/investment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 class CoinCatalogScreen extends GetWidget<CoinCatalogController> {
   CoinCatalogScreen({super.key});
   final CoinCatalogController controller = Get.put(CoinCatalogController());
+  //final  = Get.put(InvestmentDetailController() as CoinCatalogController );
 
   @override
   Widget build(BuildContext context) {
