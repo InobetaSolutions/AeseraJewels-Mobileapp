@@ -1,4 +1,8 @@
+
 import 'package:aesera_jewels/modules/auth_controller.dart';
+import 'package:aesera_jewels/modules/catalog/catalog_controller.dart';
+import 'package:aesera_jewels/modules/catalog/catalog_view.dart';
+import 'package:aesera_jewels/modules/coin_catalog/coin_catalog_controller.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +12,8 @@ import 'dashboard_controller.dart';
 class DashboardScreen extends StatelessWidget {
   final DashboardController controller = Get.put(DashboardController());
   final authController = Get.put(AuthController());
+  final  CatalogScreen  = Get.put(CatalogController());
+final  CoinCatalogScreen  = Get.put(CoinCatalogController());
 
   DashboardScreen({super.key}) {
     authController.loadUser(); // Load saved user
@@ -38,16 +44,16 @@ class DashboardScreen extends StatelessWidget {
               bottom: 10.5,
             ),
             child: ElevatedButton(
-          onPressed: () async {
-            await StorageService().erase();
-            Get.offNamed('/login');
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFFFB700),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
- ),
+              onPressed: () async {
+                await StorageService().erase();
+                Get.offNamed('/login');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFFB700),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
               child: Text(
                 "Logout",
                 style: GoogleFonts.lexend(
@@ -106,7 +112,7 @@ class DashboardScreen extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Container(
                       width: 297,
-                      height: 160,
+                      height: 170,
                       decoration: BoxDecoration(
                         color: const Color(0xFF09243D),
                         borderRadius: BorderRadius.circular(12),
@@ -123,7 +129,7 @@ class DashboardScreen extends StatelessWidget {
                               color: const Color(0xFFFFB700),
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 5),
                           Obx(() {
                             if (controller.goldRate.value != null) {
                               return Column(
@@ -137,7 +143,7 @@ class DashboardScreen extends StatelessWidget {
                                       color: const Color(0xFFFFB700),
                                     ),
                                   ),
-                                  const SizedBox(height: 6),
+                                  const SizedBox(height: 5),
                                   Text(
                                     "Updated: ${controller.goldRate.value!.istDate}",
                                     style: GoogleFonts.lexend(
@@ -146,6 +152,7 @@ class DashboardScreen extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                   ),
+                                  SizedBox(height: 5),
                                 ],
                               );
                             } else {
@@ -160,30 +167,56 @@ class DashboardScreen extends StatelessWidget {
                             }
                           }),
                           const Spacer(),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: ElevatedButton(
-                              onPressed: controller.goToPayment,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFFFB700),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24),
+
+                          /// ✅ Wrapped Invest & Buy buttons in a Row
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                onPressed: controller.goToCoinCatalog,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFFB700),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width * 0.06,
+                                    vertical: 0,
+                                  ),
                                 ),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.06,
-                                  vertical: 0,
+                                child: Text(
+                                  "Buy",
+                                  style: GoogleFonts.lexend(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
-                              child: Text(
-                                "Pay",
-                                style: GoogleFonts.lexend(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black,
+                              ElevatedButton(
+                                onPressed: controller.goToPayment,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFFB700),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width * 0.06,
+                                    vertical: 0,
+                                  ),
+                                ),
+                                child: Text(
+                                  "Invest",
+                                  style: GoogleFonts.lexend(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
                         ],
                       ),
@@ -212,7 +245,7 @@ class DashboardScreen extends StatelessWidget {
                                 Image.asset(
                                   "assets/images/catalog1.png",
                                   width: 90,
-                                  height: 70,
+                                  height: 75,
                                   fit: BoxFit.cover,
                                 ),
                                 const SizedBox(height: 10),
@@ -223,6 +256,7 @@ class DashboardScreen extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                                 const SizedBox(height: 12),
+                                
                                 // TextButton(
                                 //   onPressed: controller.goToCatalog,
                                 //   style: TextButton.styleFrom(
@@ -235,6 +269,7 @@ class DashboardScreen extends StatelessWidget {
                                 //       borderRadius: BorderRadius.circular(15),
                                 //     ),
                                 //   ),
+                                  
                                 //   child: Text(
                                 //     textAlign: TextAlign.center,
                                 //     "Shop\n Now",
@@ -294,17 +329,15 @@ class DashboardScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   /// CONTACT SUPPORT CARD
                   Align(
                     alignment: Alignment.center,
                     child: Container(
-                      width: 310,
+                      width: 298,
                       decoration: BoxDecoration(
-                        color: const Color(
-                          0xFF09243D,
-                        ), // Same dark blue as other cards
+                        color: const Color(0xFF09243D),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.all(16),

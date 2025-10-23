@@ -2,6 +2,8 @@ import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/models/summary_model.dart';
 import 'package:aesera_jewels/modules/add_address/add_addresses_binding.dart';
 import 'package:aesera_jewels/modules/add_address/add_addresses_screen.dart';
+import 'package:aesera_jewels/modules/coin_catalog/coin_catalog_binding.dart';
+import 'package:aesera_jewels/modules/coin_catalog/coin_catalog_screen.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_binding.dart';
 import 'package:aesera_jewels/modules/onboard/onboard_view.dart';
 import 'package:aesera_jewels/modules/payment/payment_binding.dart';
@@ -77,6 +79,7 @@ class AppRoutes {
   static const investment = '/investment';
  static const payment_selection = '/payment_selection';
   //static const buyGold = '/buy_gold';
+  static const coin_catalog = '/coin_catalog';
   static const payment = '/payment';
   static const UPIpayment = '/upi_payment';
   static const madeGoldEasy = '/made_gold_easy';
@@ -111,6 +114,8 @@ class AppRoutes {
       page: () => RegisterView(),
       binding: RegisterBinding(),
     ),
+   GetPage(name: coin_catalog,
+   page:()=>CoinCatalogScreen(), binding: CoinCatalogBinding()),
 
    GetPage(
       name: summary,
@@ -177,7 +182,7 @@ GetPage(
     GetPage(
       name: investment,
       page: () => InvestmentDetailScreen(initialTabIndex: 0,),
-      binding: InvestmentBinding(),
+      binding: InvestmentDetailBinding(),
     ),
     
     GetPage(name: onboard, page: () => OnboardingScreen(), binding: OnboardingBinding()),
