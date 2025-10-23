@@ -948,74 +948,7 @@ class SummaryController extends GetxController {
     );
   }
 
-  /// Payment API call
-//   Future<void> createPayment() async {
-//     final data = summary.value;
-//     if (data == null) return;
-
-//     try {
-//       isLoading(true);
-
-//       String? senderMobile = await StorageService().getMobile();
-//       if (senderMobile == null || senderMobile.isEmpty) {
-//         Get.snackbar("Error", "User mobile number not found",
-//             backgroundColor: const Color(0xFF09243D),
-//             colorText: Colors.white);
-//         return;
-//       }
-
-//       var headers = await StorageService().getAuthHeaders();
-
-//       Map<String, dynamic> bodyMap = {
-//         "mobile": senderMobile,
-//         "others": "",
-//         "amount": data.goldValue,
-//         "gram": data.goldQuantity,
-//         "amount_allocated": data.goldValue,
-//         "gram_allocated": data.goldQuantity,
-//         "taxAmount": gstAmount.value, // exact GST
-//         "totalPayAmountWithTax": totalPayable.value, // base + GST
-//       };
-
-//       if (paidInRupees) {
-//         // ✅ Buying with Amount
-//         bodyMap["amount"] = data.goldValue;
-//         bodyMap["gram_allocated"] = data.goldQuantity;
-//       } else {
-//         // ✅ Buying with Grams
-//         bodyMap["gram"] = data.goldQuantity;
-//         bodyMap["amount_allocated"] = data.goldValue;
-//       }
-
-//       var body = json.encode(bodyMap);
-//       print("provide : $body");
-
-//       var response =
-//           await http.post(Uri.parse(baseUrl), headers: headers, body: body);
-
-//       if (response.statusCode == 200 || response.statusCode == 201) {
-//         Get.snackbar("Success", "Payment Successful!",
-//             backgroundColor: const Color(0xFF09243D),
-//             colorText: Colors.white);
-//         Get.offAll(() => DashboardScreen());
-//       } else {
-//         Get.snackbar(
-//           "Error",
-//           "Failed: ${response.statusCode}\n${response.body}",
-//           backgroundColor: const Color(0xFF09243D),
-//           colorText: Colors.white,
-//         );
-//       }
-//     } catch (e) {
-//       Get.snackbar("Error", "Please check your internet connection",
-//           backgroundColor: const Color(0xFF09243D),
-//           colorText: Colors.white);
-//     } finally {
-//       isLoading(false);
-//     }
-//   }
-// }
-/// Payment API call
+ 
 Future<void> createPayment() async {
   final data = summary.value;
   if (data == null) return;

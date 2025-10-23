@@ -1,19 +1,19 @@
-
 import 'dart:convert';
-import 'package:aesera_jewels/Api/base_url.dart';
-import 'package:aesera_jewels/models/Addresses_model.dart';
-import 'package:aesera_jewels/models/catalog_model.dart';
-import 'package:aesera_jewels/services/storage_service.dart';
+import 'package:aesera_jewels/modules/investment_details/investment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-// ✅ Import your dashboard & address screen
-import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
-import 'package:aesera_jewels/modules/address/address_screen.dart';
+import '../../Api/base_url.dart';
+import '../../models/catalog_model.dart';
+import '../../models/Addresses_model.dart';
+import '../../modules/dashboard/dashboard_view.dart';
+import '../../modules/address/address_screen.dart';
+import '../../modules/summary/summary_screen.dart';
+import '../../services/storage_service.dart';
 
-class CatalogController extends GetxController {
+class CoinCatalogController extends GetxController {
   var isLoading = true.obs;
   var productList = <ProductModel>[].obs;
 
@@ -23,8 +23,6 @@ class CatalogController extends GetxController {
   final productAmountController = TextEditingController();
 
   var selectedProduct = Rxn<ProductModel>();
-
-  // Tax and Delivery Charges
   var taxPercentage = 0.0.obs;
   var deliveryCharge = 0.0.obs;
 
@@ -40,70 +38,89 @@ class CatalogController extends GetxController {
   Future<void> fetchProducts() async {
     try {
       isLoading(true);
-      var response = await http.get(
-        Uri.parse("${BaseUrl.baseUrl}get-products"),
-      );
-
+      final response = await http.get(Uri.parse("${BaseUrl.baseUrl}get-products"));
       if (response.statusCode == 200) {
         final List decoded = jsonDecode(response.body);
-        productList.value =
-            decoded.map((json) => ProductModel.fromJson(json)).toList();
-        print("Fetched ${productList.length} products");
+        productList.value = decoded.map((e) => ProductModel.fromJson(e)).toList();
       } else {
         Get.snackbar("Error", "Failed to fetch products",
-            backgroundColor: Colors.red, colorText: Colors.white);
+            backgroundColor:const Color(0xFF09243D) , colorText: Colors.white);
       }
-    } catch (e) {
-      Get.snackbar("Error", " please check your internet connection",
+    } catch (_) {
+      Get.snackbar("Error", "Please check your internet connection",
           backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoading(false);
     }
   }
 
-  /// Fetch Tax %
   Future<void> fetchTax() async {
     try {
-      var request = http.Request(
-          'GET', Uri.parse('${BaseUrl.baseUrl}getTax'));
-      http.StreamedResponse response = await request.send();
-
+      var request = http.Request('GET', Uri.parse('${BaseUrl.baseUrl}getTax'));
+      final response = await request.send();
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(await response.stream.bytesToString());
-        if (jsonData["status"] == true) {
-          taxPercentage.value =
-              (jsonData["data"]["percentage"] ?? 0).toDouble();
-        }
+        taxPercentage.value = (jsonData["data"]["percentage"] ?? 0).toDouble();
       }
-    } catch (e) {
-      print(" please check your internet connection",
-         // backgroundColor: const Color(0xFF09243D), colorText: Colors.white
-         );
-    }
+    } catch (_) {}
   }
 
-  /// Fetch Delivery Charges
   Future<void> fetchDeliveryCharge() async {
     try {
-      var request = http.Request(
-          'GET', Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'));
-      http.StreamedResponse response = await request.send();
-
+      var request = http.Request('GET', Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'));
+      final response = await request.send();
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(await response.stream.bytesToString());
-        if (jsonData["status"] == true) {
-          deliveryCharge.value =
-              (jsonData["data"]["amount"] ?? 0).toDouble();
-        }
+        deliveryCharge.value = (jsonData["data"]["amount"] ?? 0).toDouble();
       }
-    } catch (e) {
-      print( " please check your internet connection",
-          //backgroundColor: const Color(0xFF09243D), colorText: Colors.white
-          );
-    }
+    } catch (_) {}
   }
 
-  /// Open Address BottomSheet
+  /// Payment selection dialog
+  void showPaymentMethodDialog(ProductModel item) {
+    Get.defaultDialog(
+      title: "Select Payment Type",
+      titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      radius: 12,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            "Choose your payment method for this purchase.",
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              openAddressBottomSheet(item); // New Payment flow
+            },
+            child: const Text("New Payment"),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 45),
+              backgroundColor: Colors.amber
+            ),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              Get.to(() =>InvestmentDetailScreen(initialTabIndex: 2)); // Revert Payment
+            },
+            child: const Text("Revert Payment"),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 45),
+              backgroundColor: Colors.grey[300],
+              foregroundColor: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void openAddressBottomSheet(ProductModel product) async {
     selectedProduct.value = product;
 
@@ -178,7 +195,7 @@ class CatalogController extends GetxController {
                   // 👉 Price Card
                   _buildPriceCard(price, tax, deliveryCharge.value, total),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 10),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
