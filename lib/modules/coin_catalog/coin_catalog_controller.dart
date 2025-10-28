@@ -1,4 +1,3 @@
-
 // import 'dart:convert';
 // import 'package:aesera_jewels/modules/address/address_screen.dart';
 // import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
@@ -281,14 +280,14 @@
 //     remainingAmount.value = totalInvestment.value;
 
 //     Get.bottomSheet(
-      
+
 //       StatefulBuilder(
 //         builder: (context, setState) {
 //           return Padding(
 //             padding:
 //                 EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
 //             child: Container(
-           
+
 //               padding: const EdgeInsets.all(20),
 //               decoration: const BoxDecoration(
 //                   color: Colors.white,
@@ -470,7 +469,7 @@
 //             Text(
 //               "Total Investment Amount: ₹${totalInvestment.value.toStringAsFixed(2)}",
 //               style: GoogleFonts.plusJakartaSans(
-               
+
 //                 fontWeight: FontWeight.w700,
 //                color: Colors.amber, fontSize: 15),
 //             ),
@@ -478,7 +477,7 @@
 //             Text(
 //               "Remaining Balance Amount: ₹${remainingAmount.value.toStringAsFixed(2)}",
 //               style: GoogleFonts.plusJakartaSans(
-               
+
 //                 fontWeight: FontWeight.w700,
 //                color: Colors.amber, fontSize: 15
 //               ),
@@ -489,7 +488,6 @@
 //     ],
 //   );
 // }
-
 
 //   Future<List<AddressModel>> _fetchUserAddresses() async {
 //     List<AddressModel> addresses = [];
@@ -703,19 +701,29 @@ class CoinCatalogController extends GetxController {
   Future<void> fetchProducts() async {
     try {
       isLoading(true);
-      final response =
-          await http.get(Uri.parse("${BaseUrl.baseUrl}get-products"));
+      final response = await http.get(
+        Uri.parse("${BaseUrl.baseUrl}get-products"),
+      );
       if (response.statusCode == 200) {
         final List decoded = jsonDecode(response.body);
-        productList.value =
-            decoded.map((e) => ProductModel.fromJson(e)).toList();
+        productList.value = decoded
+            .map((e) => ProductModel.fromJson(e))
+            .toList();
       } else {
-        Get.snackbar("Error", "Failed to fetch products",
-            backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+        Get.snackbar(
+          "Error",
+          "Failed to fetch products",
+          backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white,
+        );
       }
     } catch (_) {
-      Get.snackbar("Error", "Please check your internet connection",
-          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        "Please check your internet connection",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
@@ -734,8 +742,10 @@ class CoinCatalogController extends GetxController {
 
   Future<void> fetchDeliveryCharge() async {
     try {
-      var request =
-          http.Request('GET', Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'));
+      var request = http.Request(
+        'GET',
+        Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'),
+      );
       final response = await request.send();
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(await response.stream.bytesToString());
@@ -833,8 +843,9 @@ class CoinCatalogController extends GetxController {
           double total = price + tax + deliveryCharge.value;
 
           return SingleChildScrollView(
-            padding:
-                EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: const BoxDecoration(
@@ -847,12 +858,14 @@ class CoinCatalogController extends GetxController {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Order Details",
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF0D0F1C),
-                          )),
+                      Text(
+                        "Order Details",
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF0D0F1C),
+                        ),
+                      ),
                       IconButton(
                         onPressed: () => Get.back(),
                         icon: const Icon(Icons.close, color: Colors.black),
@@ -880,19 +893,21 @@ class CoinCatalogController extends GetxController {
                   if (addresses.isNotEmpty)
                     ...List.generate(addresses.length, (index) {
                       final addr = addresses[index];
-                      return Obx(() => RadioListTile<int>(
-                            value: index,
-                            groupValue: selectedAddressIndex.value,
-                            title: Text(addr.name ?? ""),
-                            onChanged: (val) {
-                              selectedAddressIndex.value = val!;
-                              final selected = addresses[val];
-                              addressController.text = selected.address ?? "";
-                              cityController.text = selected.city ?? "";
-                              postalCodeController.text =
-                                  selected.postalCode ?? "";
-                            },
-                          ));
+                      return Obx(
+                        () => RadioListTile<int>(
+                          value: index,
+                          groupValue: selectedAddressIndex.value,
+                          title: Text(addr.name ?? ""),
+                          onChanged: (val) {
+                            selectedAddressIndex.value = val!;
+                            final selected = addresses[val];
+                            addressController.text = selected.address ?? "";
+                            cityController.text = selected.city ?? "";
+                            postalCodeController.text =
+                                selected.postalCode ?? "";
+                          },
+                        ),
+                      );
                     }),
                   const SizedBox(height: 24),
                   SizedBox(
@@ -908,8 +923,7 @@ class CoinCatalogController extends GetxController {
                               addresses[selectedAddressIndex.value];
                           addressController.text = selected.address ?? "";
                           cityController.text = selected.city ?? "";
-                          postalCodeController.text =
-                              selected.postalCode ?? "";
+                          postalCodeController.text = selected.postalCode ?? "";
                           submitCatalogPayment();
                         }
                       },
@@ -921,8 +935,10 @@ class CoinCatalogController extends GetxController {
                       ),
                       child: Text(
                         addresses.isEmpty ? "Add Address" : "Submit",
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 18),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -936,466 +952,546 @@ class CoinCatalogController extends GetxController {
       isScrollControlled: true,
     );
   }
-/// -----------------------------
-/// UPDATED: revert bottom sheet
-/// -----------------------------
-void openRevertPaymentBottomSheet(ProductModel product) async {
-  selectedProduct.value = product;
 
-  revertAmountController.text = "";
-  paidAmountController.clear();
+  /// -----------------------------
+  /// UPDATED: revert bottom sheet
+  /// -----------------------------
+  void openRevertPaymentBottomSheet(ProductModel product) async {
+    selectedProduct.value = product;
 
-  deductedAmount.value = 0.0;
-  paidAmount.value = 0.0;
-  remainingAmount.value = totalInvestment.value;
+    revertAmountController.text = "";
+    paidAmountController.clear();
 
-  // Fetch saved addresses
-  List<AddressModel> addresses = await _fetchUserAddresses();
-  var selectedAddressIndex = 0.obs;
+    deductedAmount.value = 0.0;
+    paidAmount.value = 0.0;
+    remainingAmount.value = totalInvestment.value;
 
-  double price = product.price.toDouble();
-  double tax = (price * taxPercentage.value) / 100;
-  double delivery = deliveryCharge.value;
-  double totalBeforeDeduction = price + tax + delivery;
+    // Fetch saved addresses
+    List<AddressModel> addresses = await _fetchUserAddresses();
+    var selectedAddressIndex = 0.obs;
 
-  Get.bottomSheet(
-    StatefulBuilder(
-      builder: (context, setState) {
-        return Obx(() {
-          // Dynamic recalculation
-          double deduct = double.tryParse(revertAmountController.text) ?? 0.0;
-          deductedAmount.value = deduct.clamp(0.0, totalInvestment.value);
+    double price = product.price.toDouble();
+    double tax = (price * taxPercentage.value) / 100;
+    double delivery = deliveryCharge.value;
+    double totalBeforeDeduction = price + tax + delivery;
 
-          double userPaid = double.tryParse(paidAmountController.text) ?? 0.0;
-          paidAmount.value = userPaid;
+    Get.bottomSheet(
+      StatefulBuilder(
+        builder: (context, setState) {
+          return Obx(() {
+            // Dynamic recalculation
+            double deduct = double.tryParse(revertAmountController.text) ?? 0.0;
+            deductedAmount.value = deduct.clamp(0.0, totalInvestment.value);
 
-          double finalTotal =  tax + deliveryCharge.value + deductedAmount.value + paidAmount.value;
-          if (finalTotal < 0) finalTotal = 0.0;
+            double userPaid = double.tryParse(paidAmountController.text) ?? 0.0;
+            paidAmount.value = userPaid;
 
-          return SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            double finalTotal =
+                tax +
+                deliveryCharge.value +
+                deductedAmount.value +
+                paidAmount.value;
+            if (finalTotal < 0) finalTotal = 0.0;
+
+            return SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: Text(
-                      "Revert Payment",
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Center(
+                      child: Text(
+                        "Payment",
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    /// Price Summary Card
+                    Card(
+                      color: const Color(0xFF0A2A4D),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _priceRow(
+                              "Product Price",
+                              "₹${price.toStringAsFixed(2)}",
+                            ),
+                            // _priceRow("Tax (${taxPercentage.value.toStringAsFixed(0)}%)", "₹${tax.toStringAsFixed(2)}"),
+                            // _priceRow("Delivery", "₹${deliveryCharge.value.toStringAsFixed(2)}"),
+                            // const Divider(color: Colors.white54),
+                            // _priceRow("Total Investment", "₹${totalInvestment.value.toStringAsFixed(2)}"),
+                            // _priceRow("Deducted Amount", "₹${deductedAmount.value.toStringAsFixed(2)}"),
+                            // _priceRow("Paid Now", "₹${paidAmount.value.toStringAsFixed(2)}"),
+                            // const Divider(color: Colors.white54),
+                            // _priceRow("Final Total", "₹${finalTotal.toStringAsFixed(2)}", isBold: true),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: revertAmountController,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        labelText: "Total Investment",
+                        border: const OutlineInputBorder(),
+                        hintText:
+                            "₹ ${deductedAmount.value.toStringAsFixed(2)}",
+                      ),
+                      onChanged: (val) => setState(() {}),
+                    ),
+                    SizedBox(height: 12),
+
+                    /// Paid Amount Field (₹ editable)
+                    TextField(
+                      controller: paidAmountController,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        labelText: "Tax",
+                        border: const OutlineInputBorder(),
+                        hintText: "₹${tax.toStringAsFixed(2)}",
+                      ),
+                      onChanged: (val) => setState(() {}),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: paidAmountController,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        labelText: "Delivary Charge",
+                        border: const OutlineInputBorder(),
+                        hintText:
+                            "₹ ${deliveryCharge.value.toStringAsFixed(2)}",
+                      ),
+                      onChanged: (val) => setState(() {}),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    /// Deduct Amount Field (₹ editable)
+
+                    /// Paid Amount Field (₹ editable)
+                    TextField(
+                      controller: paidAmountController,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        labelText: "Pay Now",
+                        border: const OutlineInputBorder(),
+                        hintText: "₹ ${paidAmount.value.toStringAsFixed(2)}",
+                      ),
+                      onChanged: (val) => setState(() {}),
+                    ),
+
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: revertAmountController,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        labelText: "Final Total",
+                        border: const OutlineInputBorder(),
+                        hintText: "₹ ${finalTotal.toStringAsFixed(2)}",
+                      ),
+                      onChanged: (val) => setState(() {}),
+                    ),
+
+                    Text(
+                      "Select Delivery Location",
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 20,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF0D0F1C),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 8),
 
-                  /// Price Summary Card
-                  Card(
-                    color: const Color(0xFF0A2A4D),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _priceRow("Product Price", "₹${price.toStringAsFixed(2)}"),
-                          _priceRow("Tax (${taxPercentage.value.toStringAsFixed(0)}%)", "₹${tax.toStringAsFixed(2)}"),
-                          _priceRow("Delivery", "₹${deliveryCharge.value.toStringAsFixed(2)}"),
-                          const Divider(color: Colors.white54),
-                          _priceRow("Total Investment", "₹${totalInvestment.value.toStringAsFixed(2)}"),
-                          _priceRow("Deducted Amount", "₹${deductedAmount.value.toStringAsFixed(2)}"),
-                          _priceRow("Paid Now", "₹${paidAmount.value.toStringAsFixed(2)}"),
-                          const Divider(color: Colors.white54),
-                          _priceRow("Final Total", "₹${finalTotal.toStringAsFixed(2)}", isBold: true),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  /// Deduct Amount Field (₹ editable)
-                  TextField(
-                    controller: revertAmountController,
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(fontSize: 16),
-                    decoration: InputDecoration(
-                      labelText: "Total Investment",
-                      border: const OutlineInputBorder(),
-                      hintText: "₹ ${deductedAmount.value.toStringAsFixed(2)}",
-                    ),
-                    onChanged: (val) => setState(() {}),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  /// Paid Amount Field (₹ editable)
-                  TextField(
-                    controller: paidAmountController,
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(fontSize: 16),
-                    decoration: InputDecoration(
-                      labelText: "Pay Now",
-                      border: const OutlineInputBorder(),
-                      hintText: "₹ ${paidAmount.value.toStringAsFixed(2)}",
-                    ),
-                    onChanged: (val) => setState(() {}),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  Text(
-                    "Select Delivery Location",
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0D0F1C),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  if (addresses.isEmpty)
-                    const Text("Please add a delivery address."),
-                  if (addresses.isNotEmpty)
-                    ...List.generate(addresses.length, (index) {
-                      final addr = addresses[index];
-                      return Obx(() => RadioListTile<int>(
+                    if (addresses.isEmpty)
+                      const Text("Please add a delivery address."),
+                    if (addresses.isNotEmpty)
+                      ...List.generate(addresses.length, (index) {
+                        final addr = addresses[index];
+                        return Obx(
+                          () => RadioListTile<int>(
                             value: index,
                             groupValue: selectedAddressIndex.value,
                             title: Text(addr.name ?? ""),
-                            subtitle: Text("${addr.address ?? ""}, ${addr.city ?? ""}"),
+                            subtitle: Text(
+                              "${addr.address ?? ""}, ${addr.city ?? ""}",
+                            ),
                             onChanged: (val) {
                               selectedAddressIndex.value = val!;
                               final selected = addresses[val];
                               addressController.text = selected.address ?? "";
                               cityController.text = selected.city ?? "";
-                              postalCodeController.text = selected.postalCode ?? "";
+                              postalCodeController.text =
+                                  selected.postalCode ?? "";
                             },
-                          ));
-                    }),
+                          ),
+                        );
+                      }),
 
-                  const SizedBox(height: 24),
+                    const SizedBox(height: 20),
 
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (addresses.isEmpty) {
-                          Get.back();
-                          Get.to(() => AddressScreen());
-                        } else {
-                          final selected = addresses[selectedAddressIndex.value];
-                          addressController.text = selected.address ?? "";
-                          cityController.text = selected.city ?? "";
-                          postalCodeController.text = selected.postalCode ?? "";
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (addresses.isEmpty) {
+                            Get.back();
+                            Get.to(() => AddressScreen());
+                          } else {
+                            final selected =
+                                addresses[selectedAddressIndex.value];
+                            addressController.text = selected.address ?? "";
+                            cityController.text = selected.city ?? "";
+                            postalCodeController.text =
+                                selected.postalCode ?? "";
 
-                          if (paidAmount.value <= 0 && deductedAmount.value <= 0) {
-                            Get.snackbar("Validation", "Enter valid amount to deduct or pay",
-                                backgroundColor: Colors.red, colorText: Colors.white);
-                            return;
+                            if (paidAmount.value <= 0 &&
+                                deductedAmount.value <= 0) {
+                              Get.snackbar(
+                                "Validation",
+                                "Enter valid amount to deduct or pay",
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                              return;
+                            }
+
+                            _submitRevertPayment(
+                              product,
+                              deductedAmount.value,
+                              paidAmount.value,
+                              totalBeforeDeduction,
+                              finalTotal,
+                              tax,
+                              selected,
+                            );
                           }
-
-                          _submitRevertPayment(
-                            product,
-                            deductedAmount.value,
-                            paidAmount.value,
-                            totalBeforeDeduction,
-                            finalTotal,
-                            tax,
-                            selected,
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0A2A4D),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                      ),
-                      child: Text(
-                        addresses.isEmpty ? "Add Address" : "Submit",
-                        style: const TextStyle(color: Colors.white, fontSize: 18),
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0A2A4D),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        child: Text(
+                          addresses.isEmpty ? "Add Address" : "Submit",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                ],
+                    const SizedBox(height: 12),
+                  ],
+                ),
               ),
-            ),
-          );
-        });
-      },
-    ),
-    isScrollControlled: true,
-  );
-}
-
-//   /// -----------------------------
-//   /// UPDATED: revert bottom sheet
-//   /// -----------------------------
-// void openRevertPaymentBottomSheet(ProductModel product) async {
-//   selectedProduct.value = product;
-//   revertAmountController.text = "";
-//     paidAmountController.clear();
-//   //paidAmountController.text = "";
-//   deductedAmount.value = 0.0;
-//   paidAmount.value = 0.0;
-//   remainingAmount.value = totalInvestment.value;
-
-//   // Fetch saved addresses
-//   List<AddressModel> addresses = await _fetchUserAddresses();
-//   var selectedAddressIndex = 0.obs;
-
-//   double price = product.price.toDouble();
-//   double tax = (price * taxPercentage.value) / 100;
-//   double delivery = deliveryCharge.value;
-//   double totalBeforeDeduction = price + tax + delivery;
-
-//   Get.bottomSheet(
-//     StatefulBuilder(
-//       builder: (context, setState) {
-//         return Obx(() {
-//           double deduct = double.tryParse(revertAmountController.text) ?? 0.0;
-//           deductedAmount.value = deduct.clamp(0.0, totalInvestment.value);
-
-//           // Paid amount is automatically = (price - totalInvestment) + tax + delivery (if > 0)
-//           double autoPaid = (price - totalInvestment.value) + tax + delivery;
-//           double userPaid = double.tryParse(paidAmountController.text) ?? autoPaid;
-//           paidAmount.value = userPaid;
-
-//           // double finalTotal = totalBeforeDeduction - deductedAmount.value;
-//           // if (finalTotal < 0) finalTotal = 0.0;
-//       double finalTotal = price + tax + deliveryCharge.value - deductedAmount.value;
-//        if (finalTotal < 0) finalTotal = 0.0;
-
-//           return SingleChildScrollView(
-//             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-//             child: Container(
-//               padding: const EdgeInsets.all(20),
-//               decoration: const BoxDecoration(
-//                 color: Colors.white,
-//                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-//               ),
-//               child: Column(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   Center(
-//                     child: Text(
-//                       "Revert Payment",
-//                       style: GoogleFonts.plusJakartaSans(
-//                         fontSize: 20,
-//                         fontWeight: FontWeight.w700,
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(height: 20),
-
-//                   /// Price Summary Card
-//                   Card(
-//                     color: const Color(0xFF0A2A4D),
-//                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(14),
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           _priceRow("Product Price", "₹${price.toStringAsFixed(2)}"),
-//                           _priceRow("Tax (${taxPercentage.value.toStringAsFixed(0)}%)", "₹${tax.toStringAsFixed(2)}"),
-//                            _priceRow("Delivery", "₹${deliveryCharge.value.toStringAsFixed(2)}"),
-// //                          _priceRow("Delivery", "₹${delivery.toStringAsFixed(2)}"),
-//                           const Divider(color: Colors.white54),
-//                           // _priceRow("Total (before deduction)", "₹${totalBeforeDeduction.toStringAsFixed(2)}"),
-//                           // const SizedBox(height: 10),
-//                           _priceRow("Total Investment", "₹${totalInvestment.value.toStringAsFixed(2)}"),
-//                           _priceRow("Deducted Amount", "₹${deductedAmount.value.toStringAsFixed(2)}"),
-//                           _priceRow("Paid Now", "₹${paidAmount.value.toStringAsFixed(2)}"),
-//                           const Divider(color: Colors.white54),
-//                           _priceRow("Final Total", "₹${finalTotal.toStringAsFixed(2)}", isBold: true),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-
-//                   const SizedBox(height: 16),
-
-//                   /// Deduct Amount Field
-//                   TextField(
-//                     controller: revertAmountController,
-//                     keyboardType: TextInputType.number,
-//                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-//                     decoration: InputDecoration(
-//                       labelText: "Total Investment",
-//                       prefixText: "₹ ${totalInvestment.value.toStringAsFixed(2)} ",
-//                       border: const OutlineInputBorder(),
-//                     ),
-//                     onChanged: (val) => setState(() {}),
-//                   ),
-
-//                   const SizedBox(height: 12),
-
-//                   /// Paid Amount Field
-//                   TextField(
-//                     controller: paidAmountController,
-//                     keyboardType: TextInputType.number,
-//                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-//                     decoration: InputDecoration(
-//                       labelText: " Pay Now",
-//                       prefixText: "₹ ${paidAmount.value.toStringAsFixed(2)} ",
-//                       border: const OutlineInputBorder(),
-//                     ),
-//                     onChanged: (val) {
-//                           setState(() {});
-//                         },
-//                       ),
-//                    // onChanged: (val) => setState(() {}),
-//                   // ),
-
-//                   const SizedBox(height: 20),
-
-//                   Text(
-//                     "Select Delivery Location",
-//                     style: GoogleFonts.plusJakartaSans(
-//                       fontSize: 20,
-//                       fontWeight: FontWeight.w600,
-//                       color: const Color(0xFF0D0F1C),
-//                     ),
-//                   ),
-//                   const SizedBox(height: 8),
-
-//                   if (addresses.isEmpty)
-//                     const Text("Please add a delivery address."),
-//                   if (addresses.isNotEmpty)
-//                     ...List.generate(addresses.length, (index) {
-//                       final addr = addresses[index];
-//                       return Obx(() => RadioListTile<int>(
-//                             value: index,
-//                             groupValue: selectedAddressIndex.value,
-//                             title: Text(addr.name ?? ""),
-//                             subtitle: Text("${addr.address ?? ""}, ${addr.city ?? ""}"),
-//                             onChanged: (val) {
-//                               selectedAddressIndex.value = val!;
-//                               final selected = addresses[val];
-//                               addressController.text = selected.address ?? "";
-//                               cityController.text = selected.city ?? "";
-//                               postalCodeController.text = selected.postalCode ?? "";
-//                             },
-//                           ));
-//                     }),
-
-//                   const SizedBox(height: 24),
-
-//                   SizedBox(
-//                     width: double.infinity,
-//                     height: 48,
-//                     child: ElevatedButton(
-//                       onPressed: () {
-//                         if (addresses.isEmpty) {
-//                           Get.back();
-//                           Get.to(() => AddressScreen());
-//                         } else {
-//                           final selected = addresses[selectedAddressIndex.value];
-//                           addressController.text = selected.address ?? "";
-//                           cityController.text = selected.city ?? "";
-//                           postalCodeController.text = selected.postalCode ?? "";
-
-//                           if (paidAmount.value <= 0 && deductedAmount.value <= 0) {
-//                             Get.snackbar("Validation", "Enter valid amount to deduct or pay",
-//                                 backgroundColor: Colors.red, colorText: Colors.white);
-//                             return;
-//                           }
-
-//                           _submitRevertPayment(
-//                             product,
-//                             deductedAmount.value,
-//                             paidAmount.value,
-//                             totalBeforeDeduction,
-//                             finalTotal,
-//                             tax,
-//                             selected,
-//                           );
-//                         }
-//                       },
-//                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: const Color(0xFF0A2A4D),
-//                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-//                       ),
-//                       child: Text(
-//                         addresses.isEmpty ? "Add Address" : "Submit",
-//                         style:
-//                             const TextStyle(color: Colors.white, fontSize: 18),
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(height: 12),
-//                 ],
-//               ),
-//             ),
-//           );
-//         });
-//       },
-//     ),
-//     isScrollControlled: true,
-//   );
-// }
-
-/// Final Revert Payment API Call
-Future<void> _submitRevertPayment(
-  ProductModel product,
-  double deduct,
-  double paidNow,
-  double totalBeforeDeduction,
-  double finalTotal,
-  double tax,
-  AddressModel address,
-) async {
-  try {
-    final mobile = await StorageService.getMobileAsync() ?? "Unknown";
-
-    final body = {
-      "mobileNumber": mobile,
-      "tagid": product.tagId,
-      "goldType": product.goldtype,
-      "description": product.description,
-      "amount": product.price,
-      "grams": product.grams ?? 0,
-      "Paidamount": paidNow,
-      "Paidgrams": 0,
-      "deductAmount": deduct,
-      "totalBeforeDeduction": totalBeforeDeduction,
-      "finalTotal": finalTotal,
-      "tax": tax,
-      "deliveryCharge": deliveryCharge.value,
-      "address": address.address ?? "",
-      "city": address.city ?? "",
-      "postCode": address.postalCode ?? "",
-    };
-
-    final headers = {'Content-Type': 'application/json'};
-    final response = await http.post(
-      Uri.parse("${BaseUrl.baseUrl}catalogPayment"),
-      headers: headers,
-      body: jsonEncode(body),
+            );
+          });
+        },
+      ),
+      isScrollControlled: true,
     );
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final data = jsonDecode(response.body);
-      Get.back();
-      Get.offAll(() => DashboardScreen());
-      Get.snackbar("Success", data["message"] ?? "Payment successful",
-          backgroundColor: Colors.green, colorText: Colors.white);
-    } else {
-      Get.snackbar("Error", "Failed: ${response.statusCode}",
-          backgroundColor: Colors.red, colorText: Colors.white);
-    }
-  } catch (e) {
-    Get.snackbar("Error", "Please check your internet connection",
-        backgroundColor: Colors.red, colorText: Colors.white);
   }
-}
+
+  //   /// -----------------------------
+  //   /// UPDATED: revert bottom sheet
+  //   /// -----------------------------
+  // void openRevertPaymentBottomSheet(ProductModel product) async {
+  //   selectedProduct.value = product;
+  //   revertAmountController.text = "";
+  //     paidAmountController.clear();
+  //   //paidAmountController.text = "";
+  //   deductedAmount.value = 0.0;
+  //   paidAmount.value = 0.0;
+  //   remainingAmount.value = totalInvestment.value;
+
+  //   // Fetch saved addresses
+  //   List<AddressModel> addresses = await _fetchUserAddresses();
+  //   var selectedAddressIndex = 0.obs;
+
+  //   double price = product.price.toDouble();
+  //   double tax = (price * taxPercentage.value) / 100;
+  //   double delivery = deliveryCharge.value;
+  //   double totalBeforeDeduction = price + tax + delivery;
+
+  //   Get.bottomSheet(
+  //     StatefulBuilder(
+  //       builder: (context, setState) {
+  //         return Obx(() {
+  //           double deduct = double.tryParse(revertAmountController.text) ?? 0.0;
+  //           deductedAmount.value = deduct.clamp(0.0, totalInvestment.value);
+
+  //           // Paid amount is automatically = (price - totalInvestment) + tax + delivery (if > 0)
+  //           double autoPaid = (price - totalInvestment.value) + tax + delivery;
+  //           double userPaid = double.tryParse(paidAmountController.text) ?? autoPaid;
+  //           paidAmount.value = userPaid;
+
+  //           // double finalTotal = totalBeforeDeduction - deductedAmount.value;
+  //           // if (finalTotal < 0) finalTotal = 0.0;
+  //       double finalTotal = price + tax + deliveryCharge.value - deductedAmount.value;
+  //        if (finalTotal < 0) finalTotal = 0.0;
+
+  //           return SingleChildScrollView(
+  //             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+  //             child: Container(
+  //               padding: const EdgeInsets.all(20),
+  //               decoration: const BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+  //               ),
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Center(
+  //                     child: Text(
+  //                       "Revert Payment",
+  //                       style: GoogleFonts.plusJakartaSans(
+  //                         fontSize: 20,
+  //                         fontWeight: FontWeight.w700,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(height: 20),
+
+  //                   /// Price Summary Card
+  //                   Card(
+  //                     color: const Color(0xFF0A2A4D),
+  //                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //                     child: Padding(
+  //                       padding: const EdgeInsets.all(14),
+  //                       child: Column(
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           _priceRow("Product Price", "₹${price.toStringAsFixed(2)}"),
+  //                           _priceRow("Tax (${taxPercentage.value.toStringAsFixed(0)}%)", "₹${tax.toStringAsFixed(2)}"),
+  //                            _priceRow("Delivery", "₹${deliveryCharge.value.toStringAsFixed(2)}"),
+  // //                          _priceRow("Delivery", "₹${delivery.toStringAsFixed(2)}"),
+  //                           const Divider(color: Colors.white54),
+  //                           // _priceRow("Total (before deduction)", "₹${totalBeforeDeduction.toStringAsFixed(2)}"),
+  //                           // const SizedBox(height: 10),
+  //                           _priceRow("Total Investment", "₹${totalInvestment.value.toStringAsFixed(2)}"),
+  //                           _priceRow("Deducted Amount", "₹${deductedAmount.value.toStringAsFixed(2)}"),
+  //                           _priceRow("Paid Now", "₹${paidAmount.value.toStringAsFixed(2)}"),
+  //                           const Divider(color: Colors.white54),
+  //                           _priceRow("Final Total", "₹${finalTotal.toStringAsFixed(2)}", isBold: true),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+
+  //                   const SizedBox(height: 16),
+
+  //                   /// Deduct Amount Field
+  //                   TextField(
+  //                     controller: revertAmountController,
+  //                     keyboardType: TextInputType.number,
+  //                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+  //                     decoration: InputDecoration(
+  //                       labelText: "Total Investment",
+  //                       prefixText: "₹ ${totalInvestment.value.toStringAsFixed(2)} ",
+  //                       border: const OutlineInputBorder(),
+  //                     ),
+  //                     onChanged: (val) => setState(() {}),
+  //                   ),
+
+  //                   const SizedBox(height: 12),
+
+  //                   /// Paid Amount Field
+  //                   TextField(
+  //                     controller: paidAmountController,
+  //                     keyboardType: TextInputType.number,
+  //                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+  //                     decoration: InputDecoration(
+  //                       labelText: " Pay Now",
+  //                       prefixText: "₹ ${paidAmount.value.toStringAsFixed(2)} ",
+  //                       border: const OutlineInputBorder(),
+  //                     ),
+  //                     onChanged: (val) {
+  //                           setState(() {});
+  //                         },
+  //                       ),
+  //                    // onChanged: (val) => setState(() {}),
+  //                   // ),
+
+  //                   const SizedBox(height: 20),
+
+  //                   Text(
+  //                     "Select Delivery Location",
+  //                     style: GoogleFonts.plusJakartaSans(
+  //                       fontSize: 20,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: const Color(0xFF0D0F1C),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(height: 8),
+
+  //                   if (addresses.isEmpty)
+  //                     const Text("Please add a delivery address."),
+  //                   if (addresses.isNotEmpty)
+  //                     ...List.generate(addresses.length, (index) {
+  //                       final addr = addresses[index];
+  //                       return Obx(() => RadioListTile<int>(
+  //                             value: index,
+  //                             groupValue: selectedAddressIndex.value,
+  //                             title: Text(addr.name ?? ""),
+  //                             subtitle: Text("${addr.address ?? ""}, ${addr.city ?? ""}"),
+  //                             onChanged: (val) {
+  //                               selectedAddressIndex.value = val!;
+  //                               final selected = addresses[val];
+  //                               addressController.text = selected.address ?? "";
+  //                               cityController.text = selected.city ?? "";
+  //                               postalCodeController.text = selected.postalCode ?? "";
+  //                             },
+  //                           ));
+  //                     }),
+
+  //                   const SizedBox(height: 24),
+
+  //                   SizedBox(
+  //                     width: double.infinity,
+  //                     height: 48,
+  //                     child: ElevatedButton(
+  //                       onPressed: () {
+  //                         if (addresses.isEmpty) {
+  //                           Get.back();
+  //                           Get.to(() => AddressScreen());
+  //                         } else {
+  //                           final selected = addresses[selectedAddressIndex.value];
+  //                           addressController.text = selected.address ?? "";
+  //                           cityController.text = selected.city ?? "";
+  //                           postalCodeController.text = selected.postalCode ?? "";
+
+  //                           if (paidAmount.value <= 0 && deductedAmount.value <= 0) {
+  //                             Get.snackbar("Validation", "Enter valid amount to deduct or pay",
+  //                                 backgroundColor: Colors.red, colorText: Colors.white);
+  //                             return;
+  //                           }
+
+  //                           _submitRevertPayment(
+  //                             product,
+  //                             deductedAmount.value,
+  //                             paidAmount.value,
+  //                             totalBeforeDeduction,
+  //                             finalTotal,
+  //                             tax,
+  //                             selected,
+  //                           );
+  //                         }
+  //                       },
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: const Color(0xFF0A2A4D),
+  //                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+  //                       ),
+  //                       child: Text(
+  //                         addresses.isEmpty ? "Add Address" : "Submit",
+  //                         style:
+  //                             const TextStyle(color: Colors.white, fontSize: 18),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(height: 12),
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         });
+  //       },
+  //     ),
+  //     isScrollControlled: true,
+  //   );
+  // }
+
+  /// Final Revert Payment API Call
+  Future<void> _submitRevertPayment(
+    ProductModel product,
+    double deduct,
+    double paidNow,
+    double totalBeforeDeduction,
+    double finalTotal,
+    double tax,
+    AddressModel address,
+  ) async {
+    try {
+      final mobile = await StorageService.getMobileAsync() ?? "Unknown";
+
+      final body = {
+        "mobileNumber": mobile,
+        "tagid": product.tagId,
+        "goldType": product.goldtype,
+        "description": product.description,
+        "amount": product.price,
+        "grams": product.grams ?? 0,
+        "Paidamount": paidNow,
+        "Paidgrams": 0,
+        "deductAmount": deduct,
+        "totalBeforeDeduction": totalBeforeDeduction,
+        "finalTotal": finalTotal,
+        "tax": tax,
+        "deliveryCharge": deliveryCharge.value,
+        "address": address.address ?? "",
+        "city": address.city ?? "",
+        "postCode": address.postalCode ?? "",
+      };
+
+      final headers = {'Content-Type': 'application/json'};
+      final response = await http.post(
+        Uri.parse("${BaseUrl.baseUrl}catalogPayment"),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        Get.back();
+        Get.offAll(() => DashboardScreen());
+        Get.snackbar(
+          "Success",
+          data["message"] ?? "Payment successful",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          "Failed: ${response.statusCode}",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Please check your internet connection",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
 
   // void openRevertPaymentBottomSheet(ProductModel product) async {
   //   selectedProduct.value = product;
@@ -1697,8 +1793,12 @@ Future<void> _submitRevertPayment(
         }
       }
     } catch (e) {
-      Get.snackbar("Error", "Please check your internet connection",
-          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        "Please check your internet connection",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
     }
     return addresses;
   }
@@ -1712,8 +1812,12 @@ Future<void> _submitRevertPayment(
     final postal = postalCodeController.text.trim();
 
     if (address.isEmpty || city.isEmpty || postal.isEmpty) {
-      Get.snackbar("Validation", "Please select a delivery address",
-          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Validation",
+        "Please select a delivery address",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
       return;
     }
 
@@ -1745,16 +1849,28 @@ Future<void> _submitRevertPayment(
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.back();
-        Get.snackbar("Success", "Catalog Payment Created Successfully",
-            backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+        Get.snackbar(
+          "Success",
+          "Catalog Payment Created Successfully",
+          backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white,
+        );
         Get.offAll(() => DashboardScreen());
       } else {
-        Get.snackbar("Error", response.reasonPhrase ?? "Failed",
-            backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+        Get.snackbar(
+          "Error",
+          response.reasonPhrase ?? "Failed",
+          backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
-      Get.snackbar("Error", "Please check your internet connection",
-          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        "Please check your internet connection",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -1777,18 +1893,30 @@ Future<void> _submitRevertPayment(
         if (json["status"] == "true") {
           Get.back();
           Get.offAll(() => DashboardScreen());
-          Get.snackbar("Success", json["message"] ?? "Payment successful",
-              backgroundColor: Colors.green, colorText: Colors.white);
+          Get.snackbar(
+            "Success",
+            json["message"] ?? "Payment successful",
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
         }
       }
     } catch (e) {
-      Get.snackbar("Error", "Please check your internet connection",
-          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        "Please check your internet connection",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
     }
   }
 
   Widget _buildPriceCard(
-      double price, double tax, double delivery, double total) {
+    double price,
+    double tax,
+    double delivery,
+    double total,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -1802,20 +1930,28 @@ Future<void> _submitRevertPayment(
           _buildRow("Product Price", "₹ ${price.toStringAsFixed(2)}"),
           const SizedBox(height: 8),
           _buildRow(
-              "Tax (${taxPercentage.value.toStringAsFixed(0)}%)",
-              "₹ ${tax.toStringAsFixed(2)}"),
+            "Tax (${taxPercentage.value.toStringAsFixed(0)}%)",
+            "₹ ${tax.toStringAsFixed(2)}",
+          ),
           const SizedBox(height: 8),
           _buildRow("Delivery Charges", "₹ ${delivery.toStringAsFixed(2)}"),
           const Divider(color: Colors.white70),
-          _buildRow("Total Amount", "₹ ${total.toStringAsFixed(2)}",
-              isBold: true),
+          _buildRow(
+            "Total Amount",
+            "₹ ${total.toStringAsFixed(2)}",
+            isBold: true,
+          ),
         ],
       ),
     );
   }
 
   Widget _buildPriceCardAlt(
-      double price, double tax, double delivery, double total) {
+    double price,
+    double tax,
+    double delivery,
+    double total,
+  ) {
     return Card(
       color: const Color(0xFFFFF4D9),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -1840,16 +1976,22 @@ Future<void> _submitRevertPayment(
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label,
-            style: TextStyle(
-                color: Colors.amber,
-                fontSize: 16,
-                fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
-        Text(value,
-            style: TextStyle(
-                color: Colors.amber,
-                fontSize: 18,
-                fontWeight: isBold ? FontWeight.bold : FontWeight.w600)),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.amber,
+            fontSize: 16,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.amber,
+            fontSize: 18,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -1860,16 +2002,22 @@ Future<void> _submitRevertPayment(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: isBold ? FontWeight.w700 : FontWeight.w500)),
-          Text(value,
-              style: TextStyle(
-                  color: Colors.amber,
-                  fontSize: 14,
-                  fontWeight: isBold ? FontWeight.w700 : FontWeight.w500)),
+          Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              color: Colors.amber,
+              fontSize: 14,
+              fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );
