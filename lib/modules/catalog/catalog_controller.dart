@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/Addresses_model.dart';
@@ -46,16 +45,25 @@ class CatalogController extends GetxController {
 
       if (response.statusCode == 200) {
         final List decoded = jsonDecode(response.body);
-        productList.value =
-            decoded.map((json) => ProductModel.fromJson(json)).toList();
+        productList.value = decoded
+            .map((json) => ProductModel.fromJson(json))
+            .toList();
         print("Fetched ${productList.length} products");
       } else {
-        Get.snackbar("Error", "Failed to fetch products",
-            backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar(
+          "Error",
+          "Failed to fetch products",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
-      Get.snackbar("Error", " please check your internet connection",
-          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        " please check your internet connection",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
@@ -64,21 +72,21 @@ class CatalogController extends GetxController {
   /// Fetch Tax %
   Future<void> fetchTax() async {
     try {
-      var request = http.Request(
-          'GET', Uri.parse('${BaseUrl.baseUrl}getTax'));
+      var request = http.Request('GET', Uri.parse('${BaseUrl.baseUrl}getTax'));
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(await response.stream.bytesToString());
         if (jsonData["status"] == true) {
-          taxPercentage.value =
-              (jsonData["data"]["percentage"] ?? 0).toDouble();
+          taxPercentage.value = (jsonData["data"]["percentage"] ?? 0)
+              .toDouble();
         }
       }
     } catch (e) {
-      print(" please check your internet connection",
-         // backgroundColor: const Color(0xFF09243D), colorText: Colors.white
-         );
+      print(
+        " please check your internet connection",
+        // backgroundColor: const Color(0xFF09243D), colorText: Colors.white
+      );
     }
   }
 
@@ -86,20 +94,22 @@ class CatalogController extends GetxController {
   Future<void> fetchDeliveryCharge() async {
     try {
       var request = http.Request(
-          'GET', Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'));
+        'GET',
+        Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'),
+      );
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(await response.stream.bytesToString());
         if (jsonData["status"] == true) {
-          deliveryCharge.value =
-              (jsonData["data"]["amount"] ?? 0).toDouble();
+          deliveryCharge.value = (jsonData["data"]["amount"] ?? 0).toDouble();
         }
       }
     } catch (e) {
-      print( " please check your internet connection",
-          //backgroundColor: const Color(0xFF09243D), colorText: Colors.white
-          );
+      print(
+        " please check your internet connection",
+        //backgroundColor: const Color(0xFF09243D), colorText: Colors.white
+      );
     }
   }
 
@@ -117,8 +127,7 @@ class CatalogController extends GetxController {
       final userId = await StorageService.getUserId();
       if (userId != null) {
         final headers = await StorageService().getAuthHeaders();
-        final uri =
-            Uri.parse("${BaseUrl.baseUrl}getDeliveryAddress");
+        final uri = Uri.parse("${BaseUrl.baseUrl}getDeliveryAddress");
         final body = json.encode({"userid": userId});
         final response = await http.post(uri, headers: headers, body: body);
 
@@ -131,8 +140,12 @@ class CatalogController extends GetxController {
         }
       }
     } catch (e) {
-      Get.snackbar("Error",  " please check your internet connection",
-          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        " please check your internet connection",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
     }
 
     var selectedAddressIndex = 0.obs;
@@ -147,7 +160,8 @@ class CatalogController extends GetxController {
 
           return SingleChildScrollView(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: const BoxDecoration(
@@ -161,12 +175,14 @@ class CatalogController extends GetxController {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Order Details",
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF0D0F1C),
-                          )),
+                      Text(
+                        "Order Details",
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF0D0F1C),
+                        ),
+                      ),
                       IconButton(
                         onPressed: () => Get.back(),
                         icon: const Icon(Icons.close, color: Colors.black),
@@ -179,46 +195,54 @@ class CatalogController extends GetxController {
                   _buildPriceCard(price, tax, deliveryCharge.value, total),
 
                   const SizedBox(height: 16),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Text("Select Delivary Location",
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF0D0F1C),
-                          ),),),
-
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Text(
+                        "Select Delivary Location",
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF0D0F1C),
+                        ),
+                      ),
                     ),
-                      
+                  ),
+
                   // 👉 If no addresses found, just show message
                   if (addresses.isEmpty)
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Text("Please update the delivery address",
-                            style: TextStyle(
-                                fontSize: 16, color: Colors.grey[700])),
+                        child: Text(
+                          "Please update the delivery address",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                        ),
                       ),
                     ),
-                   
+
                   // 👉 Show only name with radio button
                   if (addresses.isNotEmpty)
                     ...List.generate(addresses.length, (index) {
                       final addr = addresses[index];
-                      return Obx(() => RadioListTile<int>(
-                            value: index,
-                            groupValue: selectedAddressIndex.value,
-                            title: Text(addr.name ?? ""),
-                            onChanged: (val) {
-                              selectedAddressIndex.value = val!;
-                              final selected = addresses[val];
-                              addressController.text = selected.address ?? "";
-                              cityController.text = selected.city ?? "";
-                              postalCodeController.text =
-                                  selected.postalCode ?? "";
-                            },
-                          ));
+                      return Obx(
+                        () => RadioListTile<int>(
+                          value: index,
+                          groupValue: selectedAddressIndex.value,
+                          title: Text(addr.name ?? ""),
+                          onChanged: (val) {
+                            selectedAddressIndex.value = val!;
+                            final selected = addresses[val];
+                            addressController.text = selected.address ?? "";
+                            cityController.text = selected.city ?? "";
+                            postalCodeController.text =
+                                selected.postalCode ?? "";
+                          },
+                        ),
+                      );
                     }),
 
                   const SizedBox(height: 24),
@@ -233,11 +257,11 @@ class CatalogController extends GetxController {
                           Get.to(() => AddressScreen());
                         } else {
                           // 👉 Normal flow
-                          final selected = addresses[selectedAddressIndex.value];
+                          final selected =
+                              addresses[selectedAddressIndex.value];
                           addressController.text = selected.address ?? "";
                           cityController.text = selected.city ?? "";
-                          postalCodeController.text =
-                              selected.postalCode ?? "";
+                          postalCodeController.text = selected.postalCode ?? "";
                           submitCatalogPayment();
                         }
                       },
@@ -249,8 +273,10 @@ class CatalogController extends GetxController {
                       ),
                       child: Text(
                         addresses.isEmpty ? "Add Address" : "Submit",
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 18),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -267,7 +293,11 @@ class CatalogController extends GetxController {
 
   /// Card Widget for showing Price + Tax + Delivery + Total
   Widget _buildPriceCard(
-      double price, double tax, double delivery, double total) {
+    double price,
+    double tax,
+    double delivery,
+    double total,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -280,13 +310,18 @@ class CatalogController extends GetxController {
         children: [
           _buildRow("Product Price", "₹ ${price.toStringAsFixed(2)}"),
           const SizedBox(height: 8),
-          _buildRow("Tax (${taxPercentage.value.toStringAsFixed(0)}%)",
-              "₹ ${tax.toStringAsFixed(2)}"),
+          _buildRow(
+            "Tax (${taxPercentage.value.toStringAsFixed(0)}%)",
+            "₹ ${tax.toStringAsFixed(2)}",
+          ),
           const SizedBox(height: 8),
           _buildRow("Delivery Charges", "₹ ${delivery.toStringAsFixed(2)}"),
           const Divider(color: Colors.white70),
-          _buildRow("Total Amount", "₹ ${total.toStringAsFixed(2)}",
-              isBold: true),
+          _buildRow(
+            "Total Amount",
+            "₹ ${total.toStringAsFixed(2)}",
+            isBold: true,
+          ),
         ],
       ),
     );
@@ -296,16 +331,22 @@ class CatalogController extends GetxController {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label,
-            style: TextStyle(
-                color: Colors.amber,
-                fontSize: 16,
-                fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
-        Text(value,
-            style: TextStyle(
-                color: Colors.amber,
-                fontSize: 18,
-                fontWeight: isBold ? FontWeight.bold : FontWeight.w600)),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.amber,
+            fontSize: 16,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.amber,
+            fontSize: 18,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -320,8 +361,12 @@ class CatalogController extends GetxController {
     final postal = postalCodeController.text.trim();
 
     if (address.isEmpty || city.isEmpty || postal.isEmpty) {
-      Get.snackbar("Validation", "Please select a delivery address",
-          backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Validation",
+        "Please select a delivery address",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
       return;
     }
 
@@ -353,22 +398,35 @@ class CatalogController extends GetxController {
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = jsonDecode(await response.stream.bytesToString());
-        CatalogPaymentModel payment =
-            CatalogPaymentModel.fromJson(responseData["data"]);
+        CatalogPaymentModel payment = CatalogPaymentModel.fromJson(
+          responseData["data"],
+        );
 
         Get.back();
-        Get.snackbar("Success", "Catalog Payment Created Successfully",
-            backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+        Get.snackbar(
+          "Success",
+          "Catalog Payment Created Successfully",
+          backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white,
+        );
         Get.offAll(() => DashboardScreen());
 
         print("✅ Catalog Payment ID: ${payment.id}");
       } else {
-        Get.snackbar("Error", response.reasonPhrase ?? "Failed",
-            backgroundColor:  const Color(0xFF09243D), colorText: Colors.white);
+        Get.snackbar(
+          "Error",
+          response.reasonPhrase ?? "Failed",
+          backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
-      Get.snackbar("Error",  " please check your internet connection",
-          backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        " please check your internet connection",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
     }
   }
 }

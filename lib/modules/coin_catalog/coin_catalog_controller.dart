@@ -953,9 +953,6 @@ class CoinCatalogController extends GetxController {
     );
   }
 
-  /// -----------------------------
-  /// UPDATED: revert bottom sheet
-  /// -----------------------------
   void openRevertPaymentBottomSheet(ProductModel product) async {
     selectedProduct.value = product;
 
@@ -975,23 +972,29 @@ class CoinCatalogController extends GetxController {
     double delivery = deliveryCharge.value;
     double totalBeforeDeduction = price + tax + delivery;
 
+    // ✅ Controller for editable Total Investment field
+    TextEditingController investmentController = TextEditingController(
+      text: totalInvestment.value.toStringAsFixed(2),
+    );
+
     Get.bottomSheet(
       StatefulBuilder(
         builder: (context, setState) {
           return Obx(() {
-            // Dynamic recalculation
-            double deduct = double.tryParse(revertAmountController.text) ?? 0.0;
-            deductedAmount.value = deduct.clamp(0.0, totalInvestment.value);
+            double enteredInvestment =
+                double.tryParse(investmentController.text) ?? 0.0;
 
-            double userPaid = double.tryParse(paidAmountController.text) ?? 0.0;
-            paidAmount.value = userPaid;
+            // ✅ Update totalInvestment dynamically based on user input
+            totalInvestment.value = enteredInvestment;
 
+            /// ✅ Correct Final Total Calculation
             double finalTotal =
-                tax +
-                deliveryCharge.value +
-                deductedAmount.value +
-                paidAmount.value;
+                (price + tax + delivery) - totalInvestment.value;
             if (finalTotal < 0) finalTotal = 0.0;
+
+            // ✅ Check for insufficient balance
+            bool hasInsufficientBalance =
+                enteredInvestment > remainingAmount.value;
 
             return SingleChildScrollView(
               padding: EdgeInsets.only(
@@ -1004,155 +1007,117 @@ class CoinCatalogController extends GetxController {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    /// ---------- Header ----------
                     Center(
                       child: Text(
-                        "Payment",
+                        "Payment Summary",
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 20),
 
-                    /// Price Summary Card
-                    Card(
-                      color: const Color(0xFF0A2A4D),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _priceRow(
-                              "Product Price",
-                              "₹${price.toStringAsFixed(2)}",
-                            ),
-                            // _priceRow("Tax (${taxPercentage.value.toStringAsFixed(0)}%)", "₹${tax.toStringAsFixed(2)}"),
-                            // _priceRow("Delivery", "₹${deliveryCharge.value.toStringAsFixed(2)}"),
-                            // const Divider(color: Colors.white54),
-                            // _priceRow("Total Investment", "₹${totalInvestment.value.toStringAsFixed(2)}"),
-                            // _priceRow("Deducted Amount", "₹${deductedAmount.value.toStringAsFixed(2)}"),
-                            // _priceRow("Paid Now", "₹${paidAmount.value.toStringAsFixed(2)}"),
-                            // const Divider(color: Colors.white54),
-                            // _priceRow("Final Total", "₹${finalTotal.toStringAsFixed(2)}", isBold: true),
-                          ],
+                    /// ---------- Non-editable Fields ----------
+                    _nonEditableField(
+                      "Product Price",
+                      "₹${price.toStringAsFixed(2)}",
+                    ),
+                    const SizedBox(height: 10),
+                    _nonEditableField(
+                      "Tax (${taxPercentage.value.toStringAsFixed(0)}%)",
+                      "₹${tax.toStringAsFixed(2)}",
+                    ),
+                    const SizedBox(height: 10),
+                    _nonEditableField(
+                      "Delivery Charge",
+                      "₹${deliveryCharge.value.toStringAsFixed(2)}",
+                    ),
+                    const SizedBox(height: 10),
+
+                    /// ---------- Editable Total Investment ----------
+                    _editableField(
+                      "Total Investment",
+                      investmentController,
+                      onChanged: (val) => setState(() {}),
+                    ),
+
+                    /// 🔴 Warning Message if balance is insufficient
+                    if (hasInsufficientBalance)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          "You don’t have enough balance to complete this payment.\nYour available balance is ₹${remainingAmount.value.toStringAsFixed(2)}.",
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
+
+                    const SizedBox(height: 10),
+
+                    const Divider(height: 25, color: Colors.grey),
+                    _nonEditableField(
+                      "Final Total",
+                      "₹${finalTotal.toStringAsFixed(2)}",
+                      isBold: true,
                     ),
 
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: revertAmountController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(fontSize: 16),
-                      decoration: InputDecoration(
-                        labelText: "Total Investment",
-                        border: const OutlineInputBorder(),
-                        hintText:
-                            "₹ ${deductedAmount.value.toStringAsFixed(2)}",
-                      ),
-                      onChanged: (val) => setState(() {}),
-                    ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 25),
 
-                    /// Paid Amount Field (₹ editable)
-                    TextField(
-                      controller: paidAmountController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(fontSize: 16),
-                      decoration: InputDecoration(
-                        labelText: "Tax",
-                        border: const OutlineInputBorder(),
-                        hintText: "₹${tax.toStringAsFixed(2)}",
-                      ),
-                      onChanged: (val) => setState(() {}),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: paidAmountController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(fontSize: 16),
-                      decoration: InputDecoration(
-                        labelText: "Delivary Charge",
-                        border: const OutlineInputBorder(),
-                        hintText:
-                            "₹ ${deliveryCharge.value.toStringAsFixed(2)}",
-                      ),
-                      onChanged: (val) => setState(() {}),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    /// Deduct Amount Field (₹ editable)
-
-                    /// Paid Amount Field (₹ editable)
-                    TextField(
-                      controller: paidAmountController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(fontSize: 16),
-                      decoration: InputDecoration(
-                        labelText: "Pay Now",
-                        border: const OutlineInputBorder(),
-                        hintText: "₹ ${paidAmount.value.toStringAsFixed(2)}",
-                      ),
-                      onChanged: (val) => setState(() {}),
-                    ),
-
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: revertAmountController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(fontSize: 16),
-                      decoration: InputDecoration(
-                        labelText: "Final Total",
-                        border: const OutlineInputBorder(),
-                        hintText: "₹ ${finalTotal.toStringAsFixed(2)}",
-                      ),
-                      onChanged: (val) => setState(() {}),
-                    ),
-
+                    /// ---------- Address Section ----------
                     Text(
                       "Select Delivery Location",
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF0D0F1C),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
 
                     if (addresses.isEmpty)
-                      const Text("Please add a delivery address."),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Text("Please add a delivery address."),
+                      ),
+
                     if (addresses.isNotEmpty)
                       ...List.generate(addresses.length, (index) {
                         final addr = addresses[index];
-                        return Obx(
-                          () => RadioListTile<int>(
-                            value: index,
-                            groupValue: selectedAddressIndex.value,
-                            title: Text(addr.name ?? ""),
-                            subtitle: Text(
-                              "${addr.address ?? ""}, ${addr.city ?? ""}",
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Obx(
+                            () => RadioListTile<int>(
+                              value: index,
+                              groupValue: selectedAddressIndex.value,
+                              title: Text(addr.name ?? ""),
+                              subtitle: Text(
+                                "${addr.address ?? ""}, ${addr.city ?? ""}",
+                              ),
+                              onChanged: (val) {
+                                selectedAddressIndex.value = val!;
+                                final selected = addresses[val];
+                                addressController.text = selected.address ?? "";
+                                cityController.text = selected.city ?? "";
+                                postalCodeController.text =
+                                    selected.postalCode ?? "";
+                              },
                             ),
-                            onChanged: (val) {
-                              selectedAddressIndex.value = val!;
-                              final selected = addresses[val];
-                              addressController.text = selected.address ?? "";
-                              cityController.text = selected.city ?? "";
-                              postalCodeController.text =
-                                  selected.postalCode ?? "";
-                            },
                           ),
                         );
                       }),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 25),
 
+                    /// ---------- Submit Button ----------
                     SizedBox(
                       width: double.infinity,
                       height: 48,
@@ -1168,17 +1133,6 @@ class CoinCatalogController extends GetxController {
                             cityController.text = selected.city ?? "";
                             postalCodeController.text =
                                 selected.postalCode ?? "";
-
-                            if (paidAmount.value <= 0 &&
-                                deductedAmount.value <= 0) {
-                              Get.snackbar(
-                                "Validation",
-                                "Enter valid amount to deduct or pay",
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                              return;
-                            }
 
                             _submitRevertPayment(
                               product,
@@ -1206,7 +1160,8 @@ class CoinCatalogController extends GetxController {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+
+                    const SizedBox(height: 15),
                   ],
                 ),
               ),
@@ -1215,6 +1170,78 @@ class CoinCatalogController extends GetxController {
         },
       ),
       isScrollControlled: true,
+    );
+  }
+
+  /// 🔹 Helper Widget for Non-Editable Field
+  Widget _nonEditableField(String label, String value, {bool isBold = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            color: Colors.grey[700],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF4F4F4),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Text(
+            value,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 16,
+              fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 🔹 Helper Widget for Editable Field (Total Investment)
+  Widget _editableField(
+    String label,
+    TextEditingController controller, {
+    void Function(String)? onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            color: Colors.grey[700],
+          ),
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color(0xFFF4F4F4),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+          ),
+          onChanged: onChanged,
+        ),
+      ],
     );
   }
 
