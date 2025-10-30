@@ -316,13 +316,13 @@ Widget _buildUpdateAddressButton(BuildContext context) {
           statusColor = Colors.black;
         }
 
-        return _cardContainer([
+         return _cardContainer([
           _alignedRow("Ins No", "${controller.paidTransactions.indexOf(p) + 1}"),
           _alignedRow("Date & Time", dateTimeString),
           _alignedRow("Amount", format.format(p.amount)),
           _alignedRow("Tax Amount", format.format(p.taxAmount)),
-_alignedRow("Total Pay (with Tax)", format.format(p.totalPayAmountWithTax)),
-
+          _alignedRow("Delivery Charge", format.format(p.deliveryCharge)), // ✅ added
+          _alignedRow("Total Pay with Tax", format.format(p.totalWithTax)), // ✅ added
           _alignedRow("Grams",
               (p.gramAllocated > 0 ? p.gramAllocated : p.gram).toStringAsFixed(3)),
           _alignedRow("Payment Status", p.status,
@@ -331,7 +331,6 @@ _alignedRow("Total Pay (with Tax)", format.format(p.totalPayAmountWithTax)),
       }).toList(),
     );
   }
-
   /// -------------------- Received List --------------------
   Widget _buildReceivedList() {
     if (controller.allotments.isEmpty) {

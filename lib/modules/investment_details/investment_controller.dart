@@ -63,9 +63,7 @@ class InvestmentDetailController extends GetxController {
       await fetchPurchasedCatalog();
     }
   }
-
-  /// ✅ Updated API Integration with Tax & TotalPay
-  Future<void> fetchTransactions() async {
+ Future<void> fetchTransactions() async {
     if (userMobile.value.isEmpty) return;
     isLoading.value = true;
     try {
@@ -81,8 +79,9 @@ class InvestmentDetailController extends GetxController {
         apiTotalInvestment.value = investmentResponse.totalAmount;
         apiTotalGrams.value = investmentResponse.totalGrams;
         paidTransactions.assignAll(investmentResponse.payments);
+      } else {
+        print("❌ API Error: ${response.statusCode}");
       }
-      print(response);
     } catch (e) {
       Get.snackbar("Error", "Please check your internet connection",
           backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
@@ -90,6 +89,32 @@ class InvestmentDetailController extends GetxController {
       isLoading.value = false;
     }
   }
+  // /// ✅ Updated API Integration with Tax & TotalPay
+  // Future<void> fetchTransactions() async {
+  //   if (userMobile.value.isEmpty) return;
+  //   isLoading.value = true;
+  //   try {
+  //     final headers = await StorageService().getAuthHeaders();
+  //     final response = await http.post(
+  //       Uri.parse("${BaseUrl.baseUrl}getpaymenthistory"),
+  //       headers: headers,
+  //       body: jsonEncode({"mobile": userMobile.value}),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       final investmentResponse = InvestmentResponse.fromJson(data);
+  //       apiTotalInvestment.value = investmentResponse.totalAmount;
+  //       apiTotalGrams.value = investmentResponse.totalGrams;
+  //       paidTransactions.assignAll(investmentResponse.payments);
+  //     }
+  //     print(response);
+  //   } catch (e) {
+  //     Get.snackbar("Error", "Please check your internet connection",
+  //         backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
   Future<void> fetchAllotments() async {
     if (userMobile.value.isEmpty) return;
