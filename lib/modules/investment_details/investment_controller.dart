@@ -80,7 +80,7 @@ class InvestmentDetailController extends GetxController {
         apiTotalGrams.value = investmentResponse.totalGrams;
         paidTransactions.assignAll(investmentResponse.payments);
       } else {
-        print("❌ API Error: ${response.statusCode}");
+        print("API Error: ${response.statusCode}");
       }
     } catch (e) {
       Get.snackbar("Error", "Please check your internet connection",
