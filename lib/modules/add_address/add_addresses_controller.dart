@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 import 'package:aesera_jewels/Api/base_url.dart';
+import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -90,7 +91,7 @@ class AddAddressController extends GetxController {
             print(responseData);
 
         /// ✅ Go back to AddressScreen
-        Get.offAll(() => AddressScreen());
+        Get.offAll(() => DashboardScreen());
       } else {
         Get.snackbar("Error",
             response.reasonPhrase ?? "Failed to add address",
