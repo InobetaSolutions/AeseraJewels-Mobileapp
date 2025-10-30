@@ -277,7 +277,7 @@ class CoinCatalogController extends GetxController {
                         ),
                       ),
                       child: Text(
-                        addresses.isEmpty ? "Add Address" : "Submit",
+                        addresses.isEmpty ? "Add Address" : "pay",
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -296,6 +296,235 @@ class CoinCatalogController extends GetxController {
     );
   }
 
+  // void openRevertPaymentBottomSheet(ProductModel product) async {
+  //   selectedProduct.value = product;
+
+  //   revertAmountController.text = "";
+  //   paidAmountController.clear();
+
+  //   deductedAmount.value = 0.0;
+  //   paidAmount.value = 0.0;
+  //   remainingAmount.value = totalInvestment.value;
+
+  //   // Fetch saved addresses
+  //   List<AddressModel> addresses = await _fetchUserAddresses();
+  //   var selectedAddressIndex = 0.obs;
+
+  //   double price = product.price.toDouble();
+  //   double tax = (price * taxPercentage.value) / 100;
+  //   double delivery = deliveryCharge.value;
+  //   double totalBeforeDeduction = price + tax + delivery;
+
+  //   // ✅ Editable controller pre-filled with current investment value
+  //   TextEditingController investmentController = TextEditingController(
+  //     text: totalInvestment.value.toStringAsFixed(2),
+  //   );
+
+  //   Get.bottomSheet(
+  //     StatefulBuilder(
+  //       builder: (context, setState) {
+  //         return Obx(() {
+  //           // ✅ Parse safely
+  //           double enteredInvestment =
+  //               double.tryParse(investmentController.text.trim()) ??
+  //               totalInvestment.value;
+
+  //           // ✅ Only update reactive variable when user changes text
+  //           totalInvestment.value = enteredInvestment;
+
+  //           // ✅ Calculate final total
+  //           double finalTotal =
+  //               (price + tax + delivery) - totalInvestment.value;
+  //           if (finalTotal.isNaN || finalTotal < 0) finalTotal = 0.0;
+
+  //           bool hasInsufficientBalance =
+  //               totalInvestment.value > remainingAmount.value;
+
+  //           return SingleChildScrollView(
+  //             padding: EdgeInsets.only(
+  //               bottom: MediaQuery.of(context).viewInsets.bottom,
+  //             ),
+  //             child: Container(
+  //               padding: const EdgeInsets.all(20),
+  //               decoration: const BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+  //               ),
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   /// ---------- Header ----------
+  //                   Center(
+  //                     child: Text(
+  //                       "Payment Summary",
+  //                       style: GoogleFonts.plusJakartaSans(
+  //                         fontSize: 20,
+  //                         fontWeight: FontWeight.w700,
+  //                       ),
+  //                     ),
+  //                   ),
+
+  //                   const SizedBox(height: 20),
+
+  //                   /// ---------- Non-editable Fields ----------
+  //                   _nonEditableField(
+  //                     "Product Price",
+  //                     "₹${price.toStringAsFixed(2)}",
+  //                   ),
+  //                   const SizedBox(height: 10),
+  //                   _nonEditableField(
+  //                     "Tax (${taxPercentage.value.toStringAsFixed(0)}%)",
+  //                     "₹${tax.toStringAsFixed(2)}",
+  //                   ),
+  //                   const SizedBox(height: 10),
+  //                   _nonEditableField(
+  //                     "Delivery Charge",
+  //                     "₹${deliveryCharge.value.toStringAsFixed(2)}",
+  //                   ),
+  //                   const SizedBox(height: 10),
+
+  //                   /// ---------- Editable Investment Field ----------
+  //                   _editableField(
+  //                     "Investment",
+  //                     investmentController,
+  //                     keyboardType: TextInputType.numberWithOptions(
+  //                       decimal: true,
+  //                     ),
+  //                     onChanged: (val) {
+  //                       setState(() {
+  //                         totalInvestment.value =
+  //                             double.tryParse(val.trim()) ?? 0.0;
+  //                       });
+  //                     },
+  //                   ),
+
+  //                   /// 🔴 Warning if not enough balance
+  //                   if (hasInsufficientBalance)
+  //                     Padding(
+  //                       padding: const EdgeInsets.only(top: 8),
+  //                       child: Text(
+  //                         "You don't have enough balance to complete this payment.\nYour available balance is ₹${remainingAmount.value.toStringAsFixed(2)}.",
+  //                         style: const TextStyle(
+  //                           color: Colors.red,
+  //                           fontSize: 13,
+  //                           fontWeight: FontWeight.w500,
+  //                         ),
+  //                       ),
+  //                     ),
+
+  //                   const SizedBox(height: 10),
+  //                   const Divider(height: 25, color: Colors.grey),
+
+  //                   /// ---------- Final Total ----------
+  //                   _nonEditableField(
+  //                     "Final Total",
+  //                     "₹${finalTotal.toStringAsFixed(2)}",
+  //                     isBold: true,
+  //                   ),
+
+  //                   const SizedBox(height: 25),
+
+  //                   /// ---------- Address Section ----------
+  //                   Text(
+  //                     "Select Delivery Location",
+  //                     style: GoogleFonts.plusJakartaSans(
+  //                       fontSize: 18,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: const Color(0xFF0D0F1C),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(height: 10),
+
+  //                   if (addresses.isEmpty)
+  //                     const Padding(
+  //                       padding: EdgeInsets.symmetric(vertical: 10),
+  //                       child: Text("Please add a delivery address."),
+  //                     ),
+
+  //                   if (addresses.isNotEmpty)
+  //                     ...List.generate(addresses.length, (index) {
+  //                       final addr = addresses[index];
+  //                       return Padding(
+  //                         padding: const EdgeInsets.only(bottom: 8),
+  //                         child: Obx(
+  //                           () => RadioListTile<int>(
+  //                             value: index,
+  //                             groupValue: selectedAddressIndex.value,
+  //                             title: Text(addr.name ?? ""),
+  //                             subtitle: Text(
+  //                               "${addr.address ?? ""}, ${addr.city ?? ""}",
+  //                             ),
+  //                             onChanged: (val) {
+  //                               selectedAddressIndex.value = val!;
+  //                               final selected = addresses[val];
+  //                               addressController.text = selected.address ?? "";
+  //                               cityController.text = selected.city ?? "";
+  //                               postalCodeController.text =
+  //                                   selected.postalCode ?? "";
+  //                             },
+  //                           ),
+  //                         ),
+  //                       );
+  //                     }),
+
+  //                   const SizedBox(height: 25),
+
+  //                   /// ---------- Submit Button ----------
+  //                   SizedBox(
+  //                     width: double.infinity,
+  //                     height: 48,
+  //                     child: ElevatedButton(
+  //                       onPressed: () {
+  //                         if (addresses.isEmpty) {
+  //                           Get.back();
+  //                           Get.to(() => AddressScreen());
+  //                         } else {
+  //                           final selected =
+  //                               addresses[selectedAddressIndex.value];
+  //                           addressController.text = selected.address ?? "";
+  //                           cityController.text = selected.city ?? "";
+  //                           postalCodeController.text =
+  //                               selected.postalCode ?? "";
+
+  //                           _submitRevertPayment(
+  //                             product,
+  //                             deductedAmount.value,
+  //                             paidAmount.value,
+  //                             totalBeforeDeduction,
+  //                             finalTotal,
+  //                             tax,
+  //                             selected,
+  //                           );
+  //                         }
+  //                       },
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: const Color(0xFF0A2A4D),
+  //                         shape: RoundedRectangleBorder(
+  //                           borderRadius: BorderRadius.circular(25),
+  //                         ),
+  //                       ),
+  //                       child: Text(
+  //                         addresses.isEmpty ? "Add Address" : "Submit",
+  //                         style: const TextStyle(
+  //                           color: Colors.white,
+  //                           fontSize: 18,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+
+  //                   const SizedBox(height: 15),
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         });
+  //       },
+  //     ),
+  //     isScrollControlled: true,
+  //   );
+  // }
   void openRevertPaymentBottomSheet(ProductModel product) async {
     selectedProduct.value = product;
 
@@ -315,7 +544,7 @@ class CoinCatalogController extends GetxController {
     double delivery = deliveryCharge.value;
     double totalBeforeDeduction = price + tax + delivery;
 
-    // ✅ Controller for editable Total Investment field
+    // ✅ Editable controller pre-filled with current investment value
     TextEditingController investmentController = TextEditingController(
       text: totalInvestment.value.toStringAsFixed(2),
     );
@@ -324,20 +553,21 @@ class CoinCatalogController extends GetxController {
       StatefulBuilder(
         builder: (context, setState) {
           return Obx(() {
+            // ✅ Parse safely
             double enteredInvestment =
-                double.tryParse(investmentController.text) ?? 0.0;
+                double.tryParse(investmentController.text.trim()) ??
+                totalInvestment.value;
 
-            // ✅ Update totalInvestment dynamically based on user input
+            // ✅ Only update reactive variable when user changes text
             totalInvestment.value = enteredInvestment;
 
-            /// ✅ Correct Final Total Calculation
+            // ✅ Calculate final total
             double finalTotal =
                 (price + tax + delivery) - totalInvestment.value;
-            if (finalTotal < 0) finalTotal = 0.0;
+            if (finalTotal.isNaN || finalTotal < 0) finalTotal = 0.0;
 
-            // ✅ Check for insufficient balance
             bool hasInsufficientBalance =
-                enteredInvestment > remainingAmount.value;
+                totalInvestment.value > remainingAmount.value;
 
             return SingleChildScrollView(
               padding: EdgeInsets.only(
@@ -383,14 +613,22 @@ class CoinCatalogController extends GetxController {
                     ),
                     const SizedBox(height: 10),
 
-                    /// ---------- Editable Total Investment ----------
+                    /// ---------- Editable Investment Field ----------
                     _editableField(
-                      " Investment",
+                      "Investment",
                       investmentController,
-                      onChanged: (val) => setState(() {}),
+                      keyboardType: TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      onChanged: (val) {
+                        setState(() {
+                          totalInvestment.value =
+                              double.tryParse(val.trim()) ?? 0.0;
+                        });
+                      },
                     ),
 
-                    /// 🔴 Warning Message if balance is insufficient
+                    /// 🔴 Warning if not enough balance
                     if (hasInsufficientBalance)
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
@@ -405,8 +643,9 @@ class CoinCatalogController extends GetxController {
                       ),
 
                     const SizedBox(height: 10),
-
                     const Divider(height: 25, color: Colors.grey),
+
+                    /// ---------- Final Total ----------
                     _nonEditableField(
                       "Final Total",
                       "₹${finalTotal.toStringAsFixed(2)}",
@@ -495,7 +734,7 @@ class CoinCatalogController extends GetxController {
                           ),
                         ),
                         child: Text(
-                          addresses.isEmpty ? "Add Address" : "Submit",
+                          addresses.isEmpty ? "Add Address" : "pay",
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -555,6 +794,7 @@ class CoinCatalogController extends GetxController {
     String label,
     TextEditingController controller, {
     void Function(String)? onChanged,
+    required TextInputType keyboardType,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
