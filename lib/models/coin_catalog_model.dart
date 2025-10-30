@@ -181,3 +181,92 @@ class CoinCatalogPaymentResponseModel {
 
   String toRawJson() => json.encode(toJson());
 }
+
+
+                                             // CatalogPaymentModel
+
+class CatalogPaymentModel {
+  String? mobileNumber;
+  String? tagid;
+  String? goldType;
+  String? description;
+  dynamic amount;
+  dynamic paidAmount;
+  dynamic investAmount;
+  dynamic grams;
+  String? address;
+  String? city;
+  String? postCode;
+  dynamic taxAmount;
+  dynamic deliveryCharge;
+  String? paymentStatus;
+  String? allotmentStatus;
+  String? id;
+  String? createdAt;
+  String? updatedAt;
+  int? v;
+
+  CatalogPaymentModel({
+    this.mobileNumber,
+    this.tagid,
+    this.goldType,
+    this.description,
+    this.amount,
+    this.paidAmount,
+    this.investAmount,
+    this.grams,
+    this.address,
+    this.city,
+    this.postCode,
+    this.taxAmount,
+    this.deliveryCharge,
+    this.paymentStatus,
+    this.allotmentStatus,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
+
+  factory CatalogPaymentModel.fromJson(Map<String, dynamic> json) {
+    return CatalogPaymentModel(
+      mobileNumber: json['mobileNumber'],
+      tagid: json['tagid'],
+      goldType: json['goldType'],
+      description: json['description'],
+      amount: json['amount'],
+      paidAmount: json['Paidamount'],
+      investAmount: json['investAmount'],
+      grams: json['grams'],
+      address: json['address'],
+      city: json['city'],
+      postCode: json['postCode'],
+      taxAmount: json['taxAmount'],
+      deliveryCharge: json['deliveryCharge'],
+      paymentStatus: json['paymentStatus'],
+      allotmentStatus: json['allotmentStatus'],
+      id: json['_id'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      v: json['__v'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'mobileNumber': mobileNumber,
+      'tagid': tagid,
+      'goldType': goldType,
+      'description': description,
+      'amount': amount,
+      'Paidamount': paidAmount,
+      'investAmount': investAmount,
+      'grams': grams,
+      'address': address,
+      'city': city,
+      'postCode': postCode,
+      'taxAmount': taxAmount,
+      'deliveryCharge': deliveryCharge,
+    };
+  }
+}
