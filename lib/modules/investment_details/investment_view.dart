@@ -322,7 +322,7 @@ Widget _buildUpdateAddressButton(BuildContext context) {
           _alignedRow("Amount", format.format(p.amount)),
           _alignedRow("Tax Amount", format.format(p.taxAmount)),
           _alignedRow("Delivery Charge", format.format(p.deliveryCharge)), // ✅ added
-          _alignedRow("Total Pay with Tax", format.format(p.totalWithTax)), // ✅ added
+          _alignedRow("Total  with Tax", format.format(p.totalWithTax)), // ✅ added
           _alignedRow("Grams",
               (p.gramAllocated > 0 ? p.gramAllocated : p.gram).toStringAsFixed(3)),
           _alignedRow("Payment Status", p.status,
