@@ -1,5 +1,6 @@
 
 import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 /// ---- Investment Response ----
 class InvestmentResponse {
@@ -35,8 +36,9 @@ class Transaction {
   final double amountAllocated;
   final double gramAllocated;
   final double gold;
-  final double taxAmount; // ✅ New Field
-  final double totalPayAmountWithTax; // ✅ New Field
+  final double taxAmount;
+  final double deliveryCharge; // ✅ New field
+  final double totalWithTax; // ✅ New field (correct key)
   final String? tag;
   final String? address;
   final String? admin;
@@ -52,7 +54,8 @@ class Transaction {
     required this.gramAllocated,
     required this.gold,
     required this.taxAmount,
-    required this.totalPayAmountWithTax,
+    required this.deliveryCharge,
+    required this.totalWithTax,
     this.tag,
     this.address,
     this.admin,
@@ -84,15 +87,108 @@ class Transaction {
       amountAllocated: (json['amount_allocated'] ?? 0).toDouble(),
       gramAllocated: (json['gram_allocated'] ?? 0).toDouble(),
       gold: (json['gold'] ?? 0).toDouble(),
-      taxAmount: (json['taxAmount'] ?? 0).toDouble(), // ✅ Parse taxAmount
-      totalPayAmountWithTax:
-          (json['totalPayAmountWithTax'] ?? 0).toDouble(), // ✅ Parse totalPayAmountWithTax
+      taxAmount: (json['taxAmount'] ?? 0).toDouble(),
+      deliveryCharge: (json['deliveryCharge'] ?? 0).toDouble(), // ✅ added
+      totalWithTax: (json['totalWithTax'] ?? 0).toDouble(), // ✅ added
       tag: json['tag'],
       address: json['address'],
       admin: json['admin'],
     );
   }
 }
+
+// /// ---- Investment Response ----
+// class InvestmentResponse {
+//   final double totalAmount;
+//   final double totalGrams;
+//   final List<Transaction> payments;
+
+//   InvestmentResponse({
+//     required this.totalAmount,
+//     required this.totalGrams,
+//     required this.payments,
+//   });
+
+//   factory InvestmentResponse.fromJson(Map<String, dynamic> json) {
+//     return InvestmentResponse(
+//       totalAmount: (json['totalAmount'] ?? 0).toDouble(),
+//       totalGrams: (json['totalGrams'] ?? 0).toDouble(),
+//       payments: (json['payments'] as List<dynamic>? ?? [])
+//           .map((e) => Transaction.fromJson(e))
+//           .toList(),
+//     );
+//   }
+// }
+
+// /// ---- Transaction Model (Paid Tab) ----
+// class Transaction {
+//   final String id;
+//   final String mobile;
+//   final String status;
+//   final double amount;
+//   final DateTime? timestamp;
+//   final double gram;
+//   final double amountAllocated;
+//   final double gramAllocated;
+//   final double gold;
+//   final double taxAmount; // ✅ New Field
+//   final double totalPayWithTax; // ✅ New Field
+//   final String? tag;
+//   final String? address;
+//   final String? admin;
+
+//   Transaction({
+//     required this.id,
+//     required this.mobile,
+//     required this.status,
+//     required this.amount,
+//     required this.timestamp,
+//     required this.gram,
+//     required this.amountAllocated,
+//     required this.gramAllocated,
+//     required this.gold,
+//     required this.taxAmount,
+//     required this.totalPayWithTax,
+//     this.tag,
+//     this.address,
+//     this.admin,
+//   });
+
+//   factory Transaction.fromJson(Map<String, dynamic> json) {
+//     DateTime? parsedDate;
+//     final raw = json['timestamp']?.toString().trim();
+
+//     if (raw != null && raw.isNotEmpty) {
+//       try {
+//         if (raw.contains("/")) {
+//           parsedDate = DateFormat("d/M/yyyy, h:mm:ss a").parseLoose(raw);
+//         } else {
+//           parsedDate = DateTime.tryParse(raw);
+//         }
+//       } catch (_) {
+//         parsedDate = null;
+//       }
+//     }
+
+//     return Transaction(
+//       id: json['_id'] ?? '',
+//       mobile: json['mobile'] ?? '',
+//       status: json['status'] ?? '',
+//       amount: (json['amount'] ?? 0).toDouble(),
+//       timestamp: parsedDate,
+//       gram: (json['gram'] ?? 0).toDouble(),
+//       amountAllocated: (json['amount_allocated'] ?? 0).toDouble(),
+//       gramAllocated: (json['gram_allocated'] ?? 0).toDouble(),
+//       gold: (json['gold'] ?? 0).toDouble(),
+//       taxAmount: (json['taxAmount'] ?? 0).toDouble(), // ✅ Parse taxAmount
+//       totalPayWithTax:
+//           (json['totalPayAmountWithTax'] ?? 0).toDouble(), // ✅ Parse totalPayAmountWithTax
+//       tag: json['tag'],
+//       address: json['address'],
+//       admin: json['admin'],
+//     );
+//   }
+// }
 
 /// ---- Allotment Model (Received Tab) ----
 class Allotment {
