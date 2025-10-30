@@ -405,6 +405,7 @@ Widget _buildUpdateAddressButton(BuildContext context) {
           _alignedRow("Post Code", p.postCode),
           _alignedRow("Price", format.format(p.amount)),
           _alignedRow("Weight (gms)", "${p.grams}"),
+          _alignedRow("Invest Amount", format.format(p.investAmount)),
           _alignedRow("Gold Type", p.goldType),
           _alignedRow("Description", p.description),
           Row(
