@@ -271,7 +271,7 @@ class Transaction {
   final double gramAllocated;
   final double gold;
   final double taxAmount;
-  final double deliveryCharge;
+ // final double deliveryCharge;
   final double totalWithTax;
   final String? tag;
   final String? address;
@@ -288,7 +288,7 @@ class Transaction {
     required this.gramAllocated,
     required this.gold,
     required this.taxAmount,
-    required this.deliveryCharge,
+  //  required this.deliveryCharge,
     required this.totalWithTax,
     this.tag,
     this.address,
@@ -321,7 +321,7 @@ class Transaction {
       gramAllocated: (json['gram_allocated'] ?? 0).toDouble(),
       gold: (json['gold'] ?? 0).toDouble(),
       taxAmount: (json['taxAmount'] ?? 0).toDouble(),
-      deliveryCharge: (json['deliveryCharge'] ?? 0).toDouble(),
+    //  deliveryCharge: (json['deliveryCharge'] ?? 0).toDouble(),
       totalWithTax: (json['totalWithTax'] ?? 0).toDouble(),
       tag: json['tag'],
       address: json['address'],

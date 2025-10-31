@@ -419,7 +419,7 @@ class SummaryController extends GetxController {
         "mobile": senderMobile,
         "others": "",
         "taxAmount": gstAmount.value,
-        "deliveryCharge": deliveryCharge.value,
+       // "deliveryCharge": deliveryCharge.value,
         "totalWithTax": totalPayable.value,
         "amount": 0,
         "gram": 0,

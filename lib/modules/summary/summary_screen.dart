@@ -781,7 +781,7 @@ class SummaryScreen extends StatelessWidget {
                           "₹${controller.gstAmount.value.toStringAsFixed(2)}",
                         )),
                     const SizedBox(height: 8),
-                    Obx(() => _buildRow("Delivery Charge", "₹${controller.deliveryCharge.value.toStringAsFixed(2)}")),
+                   // Obx(() => _buildRow("Delivery Charge", "₹${controller.deliveryCharge.value.toStringAsFixed(2)}")),
                     const Divider(color: Colors.white54),
                     Obx(() => _buildRow("Total Amount", "₹${controller.totalPayable.value.toStringAsFixed(2)}",
                         isBold: true)),
