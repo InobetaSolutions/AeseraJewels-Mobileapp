@@ -292,7 +292,7 @@ class SummaryController extends GetxController {
     } catch (e) {
       Get.snackbar("Error", "Please check your internet connection",
           backgroundColor: const Color(0xFF09243D),
-          colorText: Colors.white);
+          colorText: Colors.white); 
     } finally {
       isLoadingRate(false);
     }

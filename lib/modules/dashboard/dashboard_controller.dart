@@ -158,6 +158,8 @@ class DashboardController extends GetxController {
   var supportEmail = ''.obs;
   var isLoadingSupport = true.obs;
 
+  var currentGoldRate;
+
   @override
   void onInit() {
     super.onInit();
@@ -275,8 +277,10 @@ class DashboardController extends GetxController {
   /// Navigation
   void goToPayment() => Get.toNamed(AppRoutes.payment);
   void goToCatalog() => Get.toNamed(AppRoutes.catalog);
+  void goToGoldCoin() => Get.toNamed(AppRoutes.goldcoin);
   void goToInvestment() => Get.toNamed(AppRoutes.investment);
   void goToCoinCatalog() => Get.toNamed(AppRoutes.coin_catalog);
+  void goToGoldCoinpayment()=>Get.toNamed(AppRoutes.goldcoinpayment);
 
   /// Logout
   void logout() async {
