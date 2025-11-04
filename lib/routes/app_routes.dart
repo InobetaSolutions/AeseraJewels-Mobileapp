@@ -1,5 +1,11 @@
 import 'package:aesera_jewels/models/catalog_model.dart';
+import 'package:aesera_jewels/models/goldcoin_payment_model.dart';
 import 'package:aesera_jewels/models/summary_model.dart';
+import 'package:aesera_jewels/modules/Gold_Coin/goldcoin_binding.dart';
+import 'package:aesera_jewels/modules/Gold_Coin/goldcoin_screen.dart';
+import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_binding.dart';
+import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_controller.dart';
+import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_screen.dart';
 import 'package:aesera_jewels/modules/add_address/add_addresses_binding.dart';
 import 'package:aesera_jewels/modules/add_address/add_addresses_screen.dart';
 import 'package:aesera_jewels/modules/coin_catalog/coin_catalog_binding.dart';
@@ -71,11 +77,14 @@ class AppRoutes {
   static const login = '/login';
   static const otp = '/otp';
   static const summary = '/summary';
+  static const goldcoin = '/goldcoin';
   static  const address = '/address';
   static const add_address = '/add_address ';
   static const dashboard = '/dashboard';
  static const scanToPay = '/scan_to_pay';
   static const catalog = '/catalog';
+  static const goldcoinpayment = '/goldcoinpayment';
+
   static const investment = '/investment';
  static const payment_selection = '/payment_selection';
   //static const buyGold = '/buy_gold';
@@ -114,6 +123,7 @@ class AppRoutes {
       page: () => RegisterView(),
       binding: RegisterBinding(),
     ),
+    GetPage(name: goldcoin, page:()=> GoldCoinView(), binding: GoldCoinBinding()),
    GetPage(name: coin_catalog,
    page:()=>CoinCatalogScreen(), binding: CoinCatalogBinding()),
 
@@ -145,7 +155,8 @@ class AppRoutes {
     ),
     GetPage(name: add_address, page: ()=>AddAddressScreen(),
     binding: AddAddressBinding()),
-
+ 
+ 
     // Catalog
     // GetPage(
     //   name: catalog,
