@@ -155,7 +155,8 @@ class AppRoutes {
     ),
     GetPage(name: add_address, page: ()=>AddAddressScreen(),
     binding: AddAddressBinding()),
-  GetPage(name: goldcoinpayment, page: ()=>GoldCoinPaymentScreen(selectedCoins: [],),
+  GetPage(name: goldcoinpayment, 
+  page: ()=>GoldCoinPaymentScreen(selectedCoins: []),
     binding: GoldCoinPaymentBinding()),
  
  
@@ -229,3 +230,5 @@ GetPage(
 
   
 }
+
+
