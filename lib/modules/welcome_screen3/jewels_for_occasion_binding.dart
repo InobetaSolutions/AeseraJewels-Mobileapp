@@ -14,11 +14,10 @@
 //   }
 // }
 import 'package:get/get.dart';
-import 'package:aesera_jewels/modules/scan_to_pay/scan_to_pay_controller.dart';
 
 class UPIBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => ScanToPayController());
+    //Get.lazyPut(() => ScanToPayController());
   }
 } 
