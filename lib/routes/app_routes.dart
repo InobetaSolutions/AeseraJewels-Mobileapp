@@ -60,14 +60,6 @@ import 'package:aesera_jewels/modules/buy_gold/buy_gold_view.dart';
 import 'package:aesera_jewels/modules/investment_details/investment_binding.dart';
 import 'package:aesera_jewels/modules/investment_details/investment_view.dart';
 
-// Payments
-import 'package:aesera_jewels/modules/payment_selection/payment_selection_controller.dart';
-import 'package:aesera_jewels/modules/payment_selection/payment_selection_view.dart';
-import 'package:aesera_jewels/modules/payment_selection/payment_selection_binding.dart';
-
-// Scan to Pay
-import 'package:aesera_jewels/modules/scan_to_pay/scan_to_pay_controller.dart';
-import 'package:aesera_jewels/modules/scan_to_pay/scan_to_pay_view.dart';
 
 class AppRoutes {
   // Route names
@@ -203,18 +195,8 @@ GetPage(
     
     GetPage(name: onboard, page: () => OnboardingScreen(), binding: OnboardingBinding()),
 
-    GetPage(
-      name: scanToPay,
-      page: () => ScanToPayScreen(),
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => ScanToPayController());
-      }),
-    ),
-    GetPage(
-      name: payment_selection,
-      page: () => PaymentSelectionScreen(),
-      binding: PaymentSelectionBinding(),
-    ),
+   
+    
       GetPage(
       name: UPIpayment, 
       page: () => UPIPaymentScreen(),
