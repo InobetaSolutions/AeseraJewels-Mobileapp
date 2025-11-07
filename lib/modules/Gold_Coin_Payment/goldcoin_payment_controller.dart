@@ -1465,6 +1465,7 @@ import 'dart:convert';
 import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/Addresses_model.dart';
 import 'package:aesera_jewels/models/catalog_model.dart';
+import 'package:aesera_jewels/models/golcoin_payment_model.dart';
 import 'package:aesera_jewels/modules/address/address_screen.dart';
 import 'package:aesera_jewels/modules/coin_catalog/coin_catalog_controller.dart';
 import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';

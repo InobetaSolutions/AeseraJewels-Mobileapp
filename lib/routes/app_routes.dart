@@ -116,8 +116,8 @@ class AppRoutes {
       binding: RegisterBinding(),
     ),
     GetPage(name: goldcoin, page:()=> GoldCoinView(), binding: GoldCoinBinding()),
-   GetPage(name: coin_catalog,
-   page:()=>CoinCatalogScreen(), binding: CoinCatalogBinding()),
+  //  GetPage(name: coin_catalog,
+  //  page:()=>CoinCatalogScreen(), binding: CoinCatalogBinding()),
 
    GetPage(
       name: summary,

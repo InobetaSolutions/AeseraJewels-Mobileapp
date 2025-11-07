@@ -1,4 +1,6 @@
 
+import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_controller.dart';
+import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_screen.dart';
 import 'package:aesera_jewels/modules/auth_controller.dart';
 import 'package:aesera_jewels/modules/catalog/catalog_controller.dart';
 import 'package:aesera_jewels/modules/catalog/catalog_view.dart';
@@ -13,7 +15,8 @@ class DashboardScreen extends StatelessWidget {
   final DashboardController controller = Get.put(DashboardController());
   final authController = Get.put(AuthController());
   final  CatalogScreen  = Get.put(CatalogController());
-final  CoinCatalogScreen  = Get.put(CoinCatalogController());
+  final GoldCoinPaymentScreen = Get.put(GoldCoinPaymentController());
+//final  CoinCatalogScreen  = Get.put(CoinCatalogController());
 
   DashboardScreen({super.key}) {
     authController.loadUser(); // Load saved user
@@ -173,7 +176,7 @@ final  CoinCatalogScreen  = Get.put(CoinCatalogController());
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               ElevatedButton(
-                                onPressed: controller.goToCoinCatalog,
+                                onPressed: controller.goToGoldCoin,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFFFB700),
                                   shape: RoundedRectangleBorder(
@@ -186,9 +189,9 @@ final  CoinCatalogScreen  = Get.put(CoinCatalogController());
                                   ),
                                 ),
                                 child: Text(
-                                  "Buy",
+                                  "Shop Coins",
                                   style: GoogleFonts.lexend(
-                                    fontSize: 22,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                   ),
@@ -210,7 +213,7 @@ final  CoinCatalogScreen  = Get.put(CoinCatalogController());
                                 child: Text(
                                   "Invest",
                                   style: GoogleFonts.lexend(
-                                    fontSize: 22,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                   ),
@@ -257,29 +260,29 @@ final  CoinCatalogScreen  = Get.put(CoinCatalogController());
                                 ),
                                 const SizedBox(height: 12),
                                 
-                                TextButton(
-                                  onPressed: controller.goToGoldCoin,
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: const Color(0xFFFFB700),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 23,
-                                      vertical: 6,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
+                                // TextButton(
+                                //   onPressed: controller.goToGoldCoin,
+                                //   style: TextButton.styleFrom(
+                                //     backgroundColor: const Color(0xFFFFB700),
+                                //     padding: const EdgeInsets.symmetric(
+                                //       horizontal: 23,
+                                //       vertical: 6,
+                                //     ),
+                                //     shape: RoundedRectangleBorder(
+                                //       borderRadius: BorderRadius.circular(15),
+                                //     ),
+                                //   ),
                                   
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    "Shop\n Coins",
-                                    style: GoogleFonts.lexend(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
+                                //   child: Text(
+                                //     textAlign: TextAlign.center,
+                                //     "Shop\n Coins",
+                                //     style: GoogleFonts.lexend(
+                                //       fontSize: 22,
+                                //       fontWeight: FontWeight.w800,
+                                //       color: Colors.black,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                             const SizedBox(width: 10),
