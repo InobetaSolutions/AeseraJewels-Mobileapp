@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:ui';
 import 'package:aesera_jewels/Api/base_url.dart';
@@ -46,22 +45,16 @@ class DashboardController extends GetxController {
     isOffline(result == ConnectivityResult.none);
   }
 
-  /// ✅ Updated: Load user data from both local storages
+  /// ✅ UPDATED: Load user data using same logic as InvestmentDetailController
   Future<void> _loadUserData() async {
     try {
-      // Get from GetStorage first
-      final localName = StorageService().getName();
-
-      if (localName != null && localName.isNotEmpty) {
-        userName.value = localName;
-        print(userName);
-      } else {
-        // fallback to SharedPreferences (async)
-        final prefsName = await StorageService.getUserName();
-        userName.value = prefsName ?? 'User';
-      }
+      // Use synchronous StorageService().getName() like InvestmentDetailController
+      final name = StorageService().getName();
+      userName.value = name ?? 'User';
+      print('Dashboard User Name: $name');
     } catch (e) {
       userName.value = 'User';
+      print('Error loading user name: $e');
     }
   }
 
