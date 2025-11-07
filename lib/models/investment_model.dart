@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 /// ---- Investment Response ----
@@ -231,5 +232,188 @@ class UserCatalog {
 
   static List<UserCatalog> listFromJson(List<dynamic> jsonList) {
     return jsonList.map((json) => UserCatalog.fromJson(json)).toList();
+  }
+}
+
+
+/// ---- Coin Payment Response ----
+class CoinPaymentResponse {
+  final bool status;
+  final List<CoinPayment> data;
+  final CoinPaymentSummary summary;
+
+  CoinPaymentResponse({
+    required this.status,
+    required this.data,
+    required this.summary,
+  });
+
+  factory CoinPaymentResponse.fromJson(Map<String, dynamic> json) {
+    return CoinPaymentResponse(
+      status: json['status'] ?? false,
+      data: (json['data'] as List<dynamic>? ?? [])
+          .map((e) => CoinPayment.fromJson(e))
+          .toList(),
+      summary: CoinPaymentSummary.fromJson(json['summary'] ?? {}),
+    );
+  }
+}
+
+/// ---- Coin Payment Model ----
+class CoinPayment {
+  final String id;
+  final String mobileNumber;
+  final List<CoinItem> items;
+  final double totalAmount;
+  final double taxAmount;
+  final double deliveryCharge;
+  final double amountPayable;
+  final double investAmount;
+  final String address;
+  final String city;
+  final String postCode;
+  final String status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final DateTime? approvedAt;
+
+  CoinPayment({
+    required this.id,
+    required this.mobileNumber,
+    required this.items,
+    required this.totalAmount,
+    required this.taxAmount,
+    required this.deliveryCharge,
+    required this.amountPayable,
+    required this.investAmount,
+    required this.address,
+    required this.city,
+    required this.postCode,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.approvedAt,
+  });
+
+  factory CoinPayment.fromJson(Map<String, dynamic> json) {
+    DateTime? parseDate(String? dateString) {
+      if (dateString == null) return null;
+      try {
+        return DateTime.tryParse(dateString);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    return CoinPayment(
+      id: json['_id'] ?? '',
+      mobileNumber: json['mobileNumber'] ?? '',
+      items: (json['items'] as List<dynamic>? ?? [])
+          .map((e) => CoinItem.fromJson(e))
+          .toList(),
+      totalAmount: (json['totalAmount'] ?? 0).toDouble(),
+      taxAmount: (json['taxAmount'] ?? 0).toDouble(),
+      deliveryCharge: (json['deliveryCharge'] ?? 0).toDouble(),
+      amountPayable: (json['amountPayable'] ?? 0).toDouble(),
+      investAmount: (json['investAmount'] ?? 0).toDouble(),
+      address: json['address'] ?? '',
+      city: json['city'] ?? '',
+      postCode: json['postCode'] ?? '',
+      status: json['status'] ?? '',
+      createdAt: parseDate(json['createdAt']),
+      updatedAt: parseDate(json['updatedAt']),
+      approvedAt: parseDate(json['approvedAt']),
+    );
+  }
+
+  String get formattedCreatedAt {
+    if (createdAt == null) return "N/A";
+    return DateFormat('dd-MMM-yyyy, hh:mm a').format(createdAt!);
+  }
+
+  String get formattedUpdatedAt {
+    if (updatedAt == null) return "N/A";
+    return DateFormat('dd-MMM-yyyy, hh:mm a').format(updatedAt!);
+  }
+
+  String get formattedStatus {
+    switch (status.toLowerCase()) {
+      case 'payment confirmed':
+        return 'Confirmed';
+      case 'approval pending':
+        return 'Pending';
+      default:
+        return status;
+    }
+  }
+
+  Color get statusColor {
+    switch (status.toLowerCase()) {
+      case 'payment confirmed':
+        return Colors.green;
+      case 'approval pending':
+        return Colors.orange;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  String get itemsDescription {
+    return items.map((item) => '${item.coinGrams}g × ${item.quantity}').join(', ');
+  }
+
+  double get totalGrams {
+    return items.fold(0.0, (sum, item) => sum + (item.coinGrams * item.quantity));
+  }
+}
+
+/// ---- Coin Item Model ----
+class CoinItem {
+  final double coinGrams;
+  final int quantity;
+  final double amount;
+
+  CoinItem({
+    required this.coinGrams,
+    required this.quantity,
+    required this.amount,
+  });
+
+  factory CoinItem.fromJson(Map<String, dynamic> json) {
+    return CoinItem(
+      coinGrams: (json['coinGrams'] ?? 0).toDouble(),
+      quantity: (json['quantity'] ?? 0).toInt(),
+      amount: (json['amount'] ?? 0).toDouble(),
+    );
+  }
+}
+
+/// ---- Coin Payment Summary ----
+class CoinPaymentSummary {
+  final int count;
+  final double totalAmount;
+  final double totalTax;
+  final double totalDelivery;
+  final double totalPayable;
+  final double totalInvest;
+
+  CoinPaymentSummary({
+    required this.count,
+    required this.totalAmount,
+    required this.totalTax,
+    required this.totalDelivery,
+    required this.totalPayable,
+    required this.totalInvest,
+  });
+
+  factory CoinPaymentSummary.fromJson(Map<String, dynamic> json) {
+    return CoinPaymentSummary(
+      count: (json['count'] ?? 0).toInt(),
+      totalAmount: (json['totalAmount'] ?? 0).toDouble(),
+      totalTax: (json['totalTax'] ?? 0).toDouble(),
+      totalDelivery: (json['totalDelivery'] ?? 0).toDouble(),
+      totalPayable: (json['totalPayable'] ?? 0).toDouble(),
+      totalInvest: (json['totalInvest'] ?? 0).toDouble(),
+    );
   }
 }
