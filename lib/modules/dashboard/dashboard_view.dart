@@ -180,18 +180,18 @@ class DashboardScreen extends StatelessWidget {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFFFB700),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                   padding: EdgeInsets.symmetric(
                                     horizontal:
-                                        MediaQuery.of(context).size.width * 0.06,
+                                        MediaQuery.of(context).size.width * 0.05,
                                     vertical: 0,
                                   ),
                                 ),
                                 child: Text(
                                   "Shop Coins",
                                   style: GoogleFonts.lexend(
-                                    fontSize: 15,
+                                    fontSize: 19,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                   ),
@@ -202,18 +202,18 @@ class DashboardScreen extends StatelessWidget {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFFFB700),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                   padding: EdgeInsets.symmetric(
                                     horizontal:
-                                        MediaQuery.of(context).size.width * 0.06,
+                                        MediaQuery.of(context).size.width * 0.05,
                                     vertical: 0,
                                   ),
                                 ),
                                 child: Text(
                                   "Invest",
                                   style: GoogleFonts.lexend(
-                                    fontSize: 15,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                   ),
