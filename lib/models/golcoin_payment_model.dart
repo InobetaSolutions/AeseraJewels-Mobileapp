@@ -1,4 +1,25 @@
-// models/gold_coin_payment_model.dart
+class CatalogPaymentResponse {
+  final bool status;
+  final String message;
+  final GoldCoinPaymentModel? data;
+
+  CatalogPaymentResponse({
+    required this.status,
+    required this.message,
+    this.data,
+  });
+
+  factory CatalogPaymentResponse.fromJson(Map<String, dynamic> json) {
+    return CatalogPaymentResponse(
+      status: json['status'] ?? false,
+      message: json['message'] ?? '',
+      data: json['data'] != null
+          ? GoldCoinPaymentModel.fromJson(json['data'])
+          : null,
+    );
+  }
+}
+
 class GoldCoinPaymentModel {
   final String? mobileNumber;
   final List<CoinItem> items;
@@ -11,6 +32,9 @@ class GoldCoinPaymentModel {
   final String? city;
   final String? postCode;
   final String? status;
+  final String? id;
+  final String? createdAt;
+  final String? updatedAt;
 
   GoldCoinPaymentModel({
     this.mobileNumber,
@@ -24,6 +48,9 @@ class GoldCoinPaymentModel {
     this.city,
     this.postCode,
     this.status,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory GoldCoinPaymentModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +68,9 @@ class GoldCoinPaymentModel {
       city: json['city'],
       postCode: json['postCode'],
       status: json['status'],
+      id: json['_id'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 
@@ -85,27 +115,5 @@ class CoinItem {
       'quantity': quantity,
       'amount': amount,
     };
-  }
-}
-
-class CatalogPaymentResponse {
-  final bool status;
-  final String message;
-  final GoldCoinPaymentModel? data;
-
-  CatalogPaymentResponse({
-    required this.status,
-    required this.message,
-    this.data,
-  });
-
-  factory CatalogPaymentResponse.fromJson(Map<String, dynamic> json) {
-    return CatalogPaymentResponse(
-      status: json['status'] ?? false,
-      message: json['message'] ?? '',
-      data: json['data'] != null
-          ? GoldCoinPaymentModel.fromJson(json['data'])
-          : null,
-    );
   }
 }
