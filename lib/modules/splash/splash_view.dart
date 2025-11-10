@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Image.asset(
-                'assets/images/splash logo.png',
+                'assets/images/Splash logo.png',
                 width: 145,
                 height: 145,
                 fit: BoxFit.contain,
