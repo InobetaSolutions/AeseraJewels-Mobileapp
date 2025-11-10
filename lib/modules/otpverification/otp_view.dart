@@ -19,7 +19,7 @@ class OtpScreen extends GetWidget<OtpController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 10),
-              Image.asset('assets/images/onboarding_logo.png', height: 100),
+              Image.asset('assets/images/onboarding screen.png', height: 100),
               const SizedBox(height: 40),
 
               Text(

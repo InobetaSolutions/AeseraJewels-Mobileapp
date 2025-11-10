@@ -20,7 +20,7 @@ class LoginView extends GetWidget<LoginController> {
             children: [
               const SizedBox(height: 64),
               Image.asset(
-                'assets/images/onboarding_logo.png',
+                'assets/images/onboarding screen.png',
                 height: 100,
                 width: 100,
               ),
