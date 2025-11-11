@@ -192,7 +192,7 @@ class CatalogPaymentModel {
   String? description;
   dynamic amount;
   dynamic paidAmount;
-  dynamic investAmount;
+  dynamic WalletAmount;
   dynamic grams;
   String? address;
   String? city;
@@ -213,7 +213,7 @@ class CatalogPaymentModel {
     this.description,
     this.amount,
     this.paidAmount,
-    this.investAmount,
+    this.WalletAmount,
     this.grams,
     this.address,
     this.city,
@@ -236,7 +236,7 @@ class CatalogPaymentModel {
       description: json['description'],
       amount: json['amount'],
       paidAmount: json['Paidamount'],
-      investAmount: json['investAmount'],
+      WalletAmount: json['WalletAmount'],
       grams: json['grams'],
       address: json['address'],
       city: json['city'],
@@ -260,7 +260,7 @@ class CatalogPaymentModel {
       'description': description,
       'amount': amount,
       'Paidamount': paidAmount,
-      'investAmount': investAmount,
+      'WalletAmount': WalletAmount,
       'grams': grams,
       'address': address,
       'city': city,

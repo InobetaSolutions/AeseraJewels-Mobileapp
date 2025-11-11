@@ -27,7 +27,7 @@ class GoldCoinPaymentModel {
   final double taxAmount;
   final double deliveryCharge;
   final double amountPayable;
-  final double investAmount;
+  final double WalletAmount;
   final String? address;
   final String? city;
   final String? postCode;
@@ -43,7 +43,7 @@ class GoldCoinPaymentModel {
     required this.taxAmount,
     required this.deliveryCharge,
     required this.amountPayable,
-    required this.investAmount,
+    required this.WalletAmount,
     this.address,
     this.city,
     this.postCode,
@@ -63,7 +63,7 @@ class GoldCoinPaymentModel {
       taxAmount: (json['taxAmount'] ?? 0).toDouble(),
       deliveryCharge: (json['deliveryCharge'] ?? 0).toDouble(),
       amountPayable: (json['amountPayable'] ?? 0).toDouble(),
-      investAmount: (json['investAmount'] ?? 0).toDouble(),
+      WalletAmount: (json['WalletAmount'] ?? 0).toDouble(),
       address: json['address'],
       city: json['city'],
       postCode: json['postCode'],
@@ -82,7 +82,7 @@ class GoldCoinPaymentModel {
       'taxAmount': taxAmount,
       'deliveryCharge': deliveryCharge,
       'amountPayable': amountPayable,
-      'investAmount': investAmount,
+      'WalletAmount': WalletAmount,
       'address': address,
       'city': city,
       'postCode': postCode,

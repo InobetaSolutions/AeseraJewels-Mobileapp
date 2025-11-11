@@ -20,11 +20,13 @@ class LoginView extends GetWidget<LoginController> {
             children: [
               const SizedBox(height: 64),
               Image.asset(
-                'assets/images/onboarding screen.png',
-                height: 100,
-                width: 100,
+                'assets/images/registration screen logo.png',
+                height: 150,
+                width: 150,
+                fit:BoxFit.fill,
+
               ),
-              const SizedBox(height: 68),
+              const SizedBox(height: 60),
 
               /// Login card
               Container(

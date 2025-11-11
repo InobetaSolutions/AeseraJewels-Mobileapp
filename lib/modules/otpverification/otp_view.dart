@@ -19,8 +19,8 @@ class OtpScreen extends GetWidget<OtpController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 10),
-              Image.asset('assets/images/onboarding screen.png', height: 100),
-              const SizedBox(height: 40),
+              Image.asset('assets/images/registration screen logo.png', height: 150,width: 150,fit:BoxFit.fill),
+              const SizedBox(height: 50),
 
               Text(
                 'Enter the code we just sent you',
