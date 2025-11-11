@@ -1586,7 +1586,7 @@ class GoldCoinPaymentController extends GetxController {
         }
       }
     } catch (e) {
-      print("Error fetching total investment: $e");
+      print("Error fetching total Wallet: $e");
     }
   }
 
@@ -1658,7 +1658,7 @@ class GoldCoinPaymentController extends GetxController {
               padding: EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
-                  "Deduct from the Invested Amount",
+                  "Deduct from the Wallet Amount",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
@@ -1870,7 +1870,7 @@ class GoldCoinPaymentController extends GetxController {
 
                     /// ---------- Editable Investment Field ----------
                     _editableField(
-                      "Investment Amount to Use",
+                      "Wallet Amount to Use",
                       investmentController,
                       keyboardType: TextInputType.numberWithOptions(
                         decimal: true,

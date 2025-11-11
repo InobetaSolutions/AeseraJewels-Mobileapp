@@ -503,7 +503,7 @@ class InvestmentDetailScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Investment Details',
+          'Wallet Details',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -599,7 +599,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Total Investment Amount",
+          const Text("Total Wallet Amount",
               style: TextStyle(color: Colors.amber, fontSize: 16)),
           const SizedBox(height: 4),
           Obx(() => Text(controller.formattedTotal,
@@ -874,7 +874,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       _alignedRow("Tax Amount", format.format(coinPayment.taxAmount)),
       _alignedRow("Delivery Charge", format.format(coinPayment.deliveryCharge)),
       _alignedRow("Amount Payable", format.format(coinPayment.amountPayable)),
-      _alignedRow("Invest Amount", format.format(coinPayment.investAmount)),
+      _alignedRow("Wallet Amount", format.format(coinPayment.investAmount)),
       _alignedRow("Address", coinPayment.address),
       _alignedRow("City", coinPayment.city),
       _alignedRow("Post Code", coinPayment.postCode),
@@ -925,7 +925,7 @@ class InvestmentDetailScreen extends StatelessWidget {
       _alignedRow("Post Code", p.postCode),
       _alignedRow("Price", format.format(p.amount)),
       _alignedRow("Weight (gms)", "${p.grams}"),
-      _alignedRow("Invest Amount", format.format(p.investAmount)),
+      _alignedRow("Wallet Amount", format.format(p.investAmount)),
       _alignedRow("Gold Type", p.goldType),
       _alignedRow("Description", p.description),
       Row(

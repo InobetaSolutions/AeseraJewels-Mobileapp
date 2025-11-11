@@ -16,24 +16,24 @@ class SplashScreen extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            'assets/images/color patten 1.png',
+            'assets/images/splash screen logo.jpg',
             fit: BoxFit.cover,
           ),
-          Center(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Image.asset(
-                'assets/images/Splash logo.png',
-                width: 145,
-                height: 145,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
+          // Center(
+          //   child: Container(
+          //     padding: const EdgeInsets.all(16),
+          //     decoration: BoxDecoration(
+          //       color: Colors.black.withOpacity(0.3),
+          //       borderRadius: BorderRadius.circular(12),
+          //     ),
+          //     child: Image.asset(
+          //       'assets/images/Splash logo.png',
+          //       width: 145,
+          //       height: 145,
+          //       fit: BoxFit.contain,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
