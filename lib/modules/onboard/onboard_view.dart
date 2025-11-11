@@ -312,7 +312,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                     image: "assets/images/logo_onboard1.png",
                     title: "Your trusted Gold Savings App.",
                     subtitle: "A product of",
-                    company: "Aesera Jewellers Pvt Ltd!",
+                    company: "Aesera Jewels Pvt Ltd!",
                     skipAction: controller.skipOnboarding,
                   ),
                   _buildPage(
