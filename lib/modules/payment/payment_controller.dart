@@ -1,5 +1,4 @@
 
-
 import 'package:aesera_jewels/models/summary_model.dart';
 import 'package:aesera_jewels/modules/summary/summary_screen.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -65,6 +64,7 @@ class PaymentController extends GetxController {
   /// Update entered amount manually
   void updateEnteredAmount(int value) {
     enteredAmount.value = value;
+    selectedValue.value = ""; // Clear selected option when manually entering
   }
 
   /// Select quick button value

@@ -770,7 +770,7 @@ class InvestmentDetailScreen extends StatelessWidget {
   Widget _buildPaidList() {
     final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
     if (controller.paidTransactions.isEmpty) {
-      return _styledContainer(const Center(child: Text("No Data Available")));
+      return _styledContainer(const Center(child: Text("No Data Available",style: TextStyle(color:Colors.white),)));
     }
 
     return Column(
