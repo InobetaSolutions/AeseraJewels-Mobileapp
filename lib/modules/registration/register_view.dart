@@ -23,7 +23,7 @@ class RegisterView extends GetWidget<RegisterController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 50),
-              Image.asset('assets/images/registration screen logo.png',
+              Image.asset('assets/images/onboard_logo.png',
                   height: 150, width: 150, fit: BoxFit.fill),
               const SizedBox(height: 21),
 
