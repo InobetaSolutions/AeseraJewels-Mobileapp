@@ -1,5 +1,5 @@
 
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,18 +12,23 @@ class PaymentScreen extends GetView<PaymentController> {
 
   @override
   Widget build(BuildContext context) {
-    final textController = TextEditingController(
-      text: controller.enteredAmount.value > 0
-          ? controller.enteredAmount.value.toString()
-          : controller.selectedValue.value,
-    );
+    final textController = TextEditingController();
 
     final mobileController = TextEditingController();
 
-    textController.addListener(() {
-      final txt = textController.text.trim();
-      final intVal = int.tryParse(txt) ?? 0;
-      controller.updateEnteredAmount(intVal);
+    // Listen to controller changes to update text field
+    ever(controller.enteredAmount, (value) {
+      if (value > 0) {
+        textController.text = value.toString();
+        textController.selection = TextSelection.collapsed(offset: value.toString().length);
+      } else {
+        textController.text = "";
+      }
+    });
+
+    // Listen to mode changes to clear text field
+    ever(controller.isRupees, (value) {
+      textController.text = "";
     });
 
     return Scaffold(
@@ -132,6 +137,10 @@ class PaymentScreen extends GetView<PaymentController> {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(10),
                   ],
+                  onChanged: (value) {
+                    final intVal = int.tryParse(value) ?? 0;
+                    controller.updateEnteredAmount(intVal);
+                  },
                   style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w600,
@@ -185,9 +194,6 @@ class PaymentScreen extends GetView<PaymentController> {
                   return GestureDetector(
                     onTap: () {
                       controller.selectValue(option);
-                      textController.text = option;
-                      textController.selection =
-                          TextSelection.collapsed(offset: option.length);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
