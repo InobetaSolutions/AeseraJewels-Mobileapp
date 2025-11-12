@@ -1,4 +1,3 @@
-
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -65,6 +64,5 @@ android {
     }
 }
 
-flutter {
-    source = "../.."
-}
+// ✅ Kotlin DSL fix for Flutter source path
+extra.set("flutter.source", "../..")
