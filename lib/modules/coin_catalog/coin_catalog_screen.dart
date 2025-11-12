@@ -2,7 +2,6 @@
 // import 'package:aesera_jewels/models/catalog_model.dart';
 // import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_controller.dart';
 // import 'package:aesera_jewels/modules/coin_catalog/coin_catalog_controller.dart';
-// import 'package:aesera_jewels/modules/Wallet_details/Wallettroller.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:google_fonts/google_fonts.dart';

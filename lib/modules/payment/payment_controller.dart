@@ -18,8 +18,8 @@ class PaymentController extends GetxController {
   final rupeesOptions = ["100", "500", "1000", "2000"];
   final gramsOptions = ["1", "2", "5", "10"];
 
-  /// Example gold rate (can be fetched dynamically later)
-  double goldRate = 6000; // ₹ per gram
+  /// ✅ Current gold rate per gram (realistic value)
+  double goldRate = 11781.49; // ₹ per gram
 
   /// Toggle between Rupees and Grams
   void toggleMode(bool rupees) {
@@ -39,14 +39,18 @@ class PaymentController extends GetxController {
     selectedValue.value = option;
   }
 
-  /// Conversion between Rupees <-> Grams
+  /// ✅ Correct Conversion Logic
   String getConversion() {
+    if (enteredAmount.value <= 0) return "";
+
     if (isRupees.value) {
+      // Convert Rupees → Grams
       final grams = enteredAmount.value / goldRate;
-      return grams > 0 ? "${grams.toStringAsFixed(3)} gm" : "";
+      return "${grams.toStringAsFixed(3)} gm";
     } else {
+      // Convert Grams → Rupees
       final rupees = enteredAmount.value * goldRate;
-      return rupees > 0 ? "₹${rupees.toStringAsFixed(2)}" : "";
+      return "₹${rupees.toStringAsFixed(2)}";
     }
   }
 
@@ -95,3 +99,4 @@ class PaymentController extends GetxController {
     Get.to(() => SummaryScreen(summary: summary));
   }
 }
+

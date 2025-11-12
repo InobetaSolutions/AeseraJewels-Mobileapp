@@ -1,3 +1,151 @@
+// import 'dart:convert';
+// import 'dart:ui';
+// import 'package:aesera_jewels/Api/base_url.dart';
+// import 'package:aesera_jewels/models/gold_rate_model.dart';
+// import 'package:aesera_jewels/routes/app_routes.dart';
+// import 'package:aesera_jewels/services/storage_service.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:connectivity_plus/connectivity_plus.dart';
+
+// class DashboardController extends GetxController {
+//   var goldRate = Rxn<GoldRateModel>();
+//   var isLoadingRate = true.obs;
+//   var userName = ''.obs;
+//   var isOffline = false.obs;
+
+//   // ✅ Support info
+//   var supportMobile = ''.obs;
+//   var supportEmail = ''.obs;
+//   var isLoadingSupport = true.obs;
+
+//   var currentGoldRate;
+
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     _initConnectivity();
+//     fetchCurrentGoldRate();
+//     _loadUserData();
+//     fetchSupportData(); // fetch support info on init
+//   }
+
+//   /// Connectivity
+//   Future<void> _initConnectivity() async {
+//     final connectivityResults = await Connectivity().checkConnectivity();
+//     _updateConnectionStatus(connectivityResults as ConnectivityResult);
+
+//     Connectivity().onConnectivityChanged.listen((result) {
+//       _updateConnectionStatus(result as ConnectivityResult);
+//     });
+//   }
+
+//   void _updateConnectionStatus(ConnectivityResult result) {
+//     isOffline(result == ConnectivityResult.none);
+//   }
+
+//   /// ✅ UPDATED: Load user data using same logic as InvestmentDetailController
+//   Future<void> _loadUserData() async {
+//     try {
+//       // Use synchronous StorageService().getName() like InvestmentDetailController
+//       final name = StorageService().getName();
+//       userName.value = name ?? 'User';
+//       print('Dashboard User Name: $name');
+//     } catch (e) {
+//       userName.value = 'User';
+//       print('Error loading user name: $e');
+//     }
+//   }
+
+//   /// Fetch Gold Rate
+//   Future<void> fetchCurrentGoldRate() async {
+//     try {
+//       isLoadingRate(true);
+
+//       if (isOffline.value) {
+//         final savedRate = await StorageService.getGoldRate();
+//         if (savedRate != null) {
+//           goldRate.value = GoldRateModel(
+//             id: "cached",
+//             timestamp: DateTime.now().millisecondsSinceEpoch,
+//             priceGram24k: double.parse(savedRate),
+//             istDate: DateTime.now().toString(),
+//           );
+//         }
+//         return;
+//       }
+
+//       final url = Uri.parse('${BaseUrl.baseUrl}getCurrentRate');
+//       final response = await http.get(url);
+
+//       if (response.statusCode == 200) {
+//         final data = jsonDecode(response.body);
+//         goldRate.value = GoldRateModel.fromJson(data);
+
+//         if (goldRate.value != null) {
+//           await StorageService.saveGoldRate(
+//             goldRate.value!.priceGram24k.toString(),
+//           );
+//         }
+//       } else {
+//         Get.snackbar('Error', 'Failed to fetch gold rate');
+//       }
+//     } catch (e) {
+//       Get.snackbar('Error', " please check your internet connection",
+//           backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+//     } finally {
+//       isLoadingRate(false);
+//     }
+//   }
+
+//   /// ✅ Fetch Support Info API (using getSupport)
+//   Future<void> fetchSupportData() async {
+//     try {
+//       isLoadingSupport(true);
+
+//       if (isOffline.value) return;
+
+//       final url = Uri.parse('${BaseUrl.baseUrl}getSupport');
+//       final response = await http.post(url);
+
+//       if (response.statusCode == 200) {
+//         final data = jsonDecode(response.body);
+
+//         if (data['data'] != null) {
+//           supportMobile.value = data['data']['mobile'] ?? '';
+//           supportEmail.value = data['data']['email'] ?? '';
+//         }
+//         print('Support Data: $data'); // Debug print
+//         print('Support Mobile: ${supportMobile.value}');
+//         print('Support Email: ${supportEmail.value}');
+//       } else {
+//         Get.snackbar('Error', 'Failed to fetch support info');
+//       }
+//     } catch (e) {
+//       Get.snackbar('Error', " please check your internet connection",
+//           backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
+//     } finally {
+//       isLoadingSupport(false);
+//     }
+//   }
+
+//   /// Navigation
+//   void goToPayment() => Get.toNamed(AppRoutes.payment);
+//   void goToCatalog() => Get.toNamed(AppRoutes.catalog);
+//   void goToGoldCoin() => Get.toNamed(AppRoutes.goldcoin);
+//   void goToInvestment() => Get.toNamed(AppRoutes.investment);
+//   void goToCoinCatalog() => Get.toNamed(AppRoutes.coin_catalog);
+//   void goToGoldCoinpayment()=>Get.toNamed(AppRoutes.goldcoinpayment);
+
+//   /// Logout
+//   void logout() async {
+//     final storageService = StorageService();
+//     await storageService.erase();
+//     userName.value = "";
+//     Get.offAllNamed("/");
+//   }
+// }
 import 'dart:convert';
 import 'dart:ui';
 import 'package:aesera_jewels/Api/base_url.dart';
@@ -22,6 +170,8 @@ class DashboardController extends GetxController {
 
   var currentGoldRate;
 
+  final Connectivity _connectivity = Connectivity();
+
   @override
   void onInit() {
     super.onInit();
@@ -31,24 +181,28 @@ class DashboardController extends GetxController {
     fetchSupportData(); // fetch support info on init
   }
 
-  /// Connectivity
+  /// ✅ FIXED Connectivity logic for connectivity_plus v6.x
   Future<void> _initConnectivity() async {
-    final connectivityResults = await Connectivity().checkConnectivity();
-    _updateConnectionStatus(connectivityResults as ConnectivityResult);
+    try {
+      final List<ConnectivityResult> results = await _connectivity.checkConnectivity();
+      _updateConnectionStatus(results);
 
-    Connectivity().onConnectivityChanged.listen((result) {
-      _updateConnectionStatus(result as ConnectivityResult);
-    });
+      _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> results) {
+        _updateConnectionStatus(results);
+      });
+    } catch (e) {
+      print("Connectivity init error: $e");
+    }
   }
 
-  void _updateConnectionStatus(ConnectivityResult result) {
-    isOffline(result == ConnectivityResult.none);
+  void _updateConnectionStatus(List<ConnectivityResult> results) {
+    isOffline.value = !results.contains(ConnectivityResult.mobile) &&
+        !results.contains(ConnectivityResult.wifi);
   }
 
-  /// ✅ UPDATED: Load user data using same logic as InvestmentDetailController
+  /// ✅ Load user data
   Future<void> _loadUserData() async {
     try {
-      // Use synchronous StorageService().getName() like InvestmentDetailController
       final name = StorageService().getName();
       userName.value = name ?? 'User';
       print('Dashboard User Name: $name');
@@ -58,7 +212,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  /// Fetch Gold Rate
+  /// ✅ Fetch Gold Rate
   Future<void> fetchCurrentGoldRate() async {
     try {
       isLoadingRate(true);
@@ -92,7 +246,7 @@ class DashboardController extends GetxController {
         Get.snackbar('Error', 'Failed to fetch gold rate');
       }
     } catch (e) {
-      Get.snackbar('Error', " please check your internet connection",
+      Get.snackbar('Error', "Please check your internet connection",
           backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoadingRate(false);
@@ -116,29 +270,30 @@ class DashboardController extends GetxController {
           supportMobile.value = data['data']['mobile'] ?? '';
           supportEmail.value = data['data']['email'] ?? '';
         }
-        print('Support Data: $data'); // Debug print
+
+        print('Support Data: $data');
         print('Support Mobile: ${supportMobile.value}');
         print('Support Email: ${supportEmail.value}');
       } else {
         Get.snackbar('Error', 'Failed to fetch support info');
       }
     } catch (e) {
-      Get.snackbar('Error', " please check your internet connection",
+      Get.snackbar('Error', "Please check your internet connection",
           backgroundColor: const Color(0xFF09243D), colorText: Colors.white);
     } finally {
       isLoadingSupport(false);
     }
   }
 
-  /// Navigation
+  /// ✅ Navigation
   void goToPayment() => Get.toNamed(AppRoutes.payment);
   void goToCatalog() => Get.toNamed(AppRoutes.catalog);
   void goToGoldCoin() => Get.toNamed(AppRoutes.goldcoin);
   void goToInvestment() => Get.toNamed(AppRoutes.investment);
   void goToCoinCatalog() => Get.toNamed(AppRoutes.coin_catalog);
-  void goToGoldCoinpayment()=>Get.toNamed(AppRoutes.goldcoinpayment);
+  void goToGoldCoinpayment() => Get.toNamed(AppRoutes.goldcoinpayment);
 
-  /// Logout
+  /// ✅ Logout
   void logout() async {
     final storageService = StorageService();
     await storageService.erase();
