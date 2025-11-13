@@ -1,5 +1,3 @@
-
-
 import 'package:aesera_jewels/modules/Gold_Coin/goldcoin_controller.dart';
 import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_screen.dart';
 import 'package:aesera_jewels/services/storage_service.dart';
@@ -176,8 +174,9 @@ class GoldCoinView extends GetView<GoldCoinController> {
     return Obx(() {
       final quantity = controller.coinCount[index] ?? 0;
       final isActive = (isDecrease && quantity > 0) || (!isDecrease);
-      // If quantity > 0, both buttons should be amber, otherwise blue
-      final color = quantity > 0 ? const Color(0xFFFFB700) : const Color(0xFF09243D);
+      final buttonType = isDecrease ? '-' : '+';
+      final isTapped = controller.isButtonTapped(index, buttonType);
+      final color = isTapped ? const Color(0xFFFFB700) : const Color(0xFF09243D);
        
       return InkWell(
         onTap: isActive ? onTap : null,
