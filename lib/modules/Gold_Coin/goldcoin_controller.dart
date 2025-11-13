@@ -1,3 +1,101 @@
+// import 'dart:convert';
+// import 'package:aesera_jewels/Api/base_url.dart';
+// import 'package:aesera_jewels/models/gold_rate_model.dart';
+// import 'package:aesera_jewels/services/storage_service.dart';
+// import 'package:get/get.dart';
+// import 'package:http/http.dart' as http;
+
+// class GoldCoinController extends GetxController {
+//   var goldRate = Rxn<GoldRateModel>();
+//   var isLoadingRate = false.obs;
+
+//   final List<double> weights = [1, 2, 4, 10];
+//   var coinCount = <int, int>{}.obs;
+
+//   // Add this to track which buttons have been tapped
+//   var tappedButtons = <String, bool>{}.obs;
+
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     fetchCurrentGoldRate();
+//     for (int i = 0; i < weights.length; i++) {
+//       coinCount[i] = 0;
+//     }
+//   }
+
+//   Future<void> fetchCurrentGoldRate() async {
+//     try {
+//       isLoadingRate(true);
+//       var request = http.Request(
+//           'GET', Uri.parse('${BaseUrl.baseUrl}getCurrentRate'));
+//       http.StreamedResponse response = await request.send();
+
+//       if (response.statusCode == 200) {
+//         final data = jsonDecode(await response.stream.bytesToString());
+//         goldRate.value = GoldRateModel.fromJson(data);
+
+//         if (goldRate.value != null) {
+//           await StorageService.saveGoldRate(
+//             goldRate.value!.priceGram24k.toString(),
+//           );
+//         }
+//       } else {
+//         Get.snackbar("Error", "Failed to load gold rate");
+//       }
+//     } catch (e) {
+//       Get.snackbar("Error", "Please check your internet connection");
+//     } finally {
+//       isLoadingRate(false);
+//     }
+//   }
+
+//   /// ✅ Calculate coin price based on live rate per gram
+//   double getCoinPrice(double weight) {
+//     if (goldRate.value == null) return 0.0;
+//     final ratePerGram = goldRate.value!.priceGram24k;
+//     return ratePerGram * weight;
+//   }
+
+//   void increaseCount(int index) {
+//     coinCount[index] = (coinCount[index] ?? 0) + 1;
+//     // Mark only + button as tapped for this coin
+//     tappedButtons['${index}_+'] = true;
+//   }
+
+//   void decreaseCount(int index) {
+//     final current = coinCount[index] ?? 0;
+//     if (current > 0) {
+//       coinCount[index] = current - 1;
+//       // Mark only - button as tapped for this coin
+//       tappedButtons['${index}_-'] = true;
+//     }
+//   }
+
+//   // Check if specific button should be amber
+//   bool isButtonTapped(int index, String buttonType) {
+//     return tappedButtons['${index}_$buttonType'] == true;
+//   }
+
+//   double getTotalWeightForCoin(int index) {
+//     final count = coinCount[index] ?? 0;
+//     return weights[index] * count;
+//   }
+
+//   /// ✅ Get only selected coins (non-zero quantities)
+//   List<Map<String, dynamic>> getSelectedCoins() {
+//     List<Map<String, dynamic>> selected = [];
+//     coinCount.forEach((index, qty) {
+//       if (qty > 0) {
+//         selected.add({
+//           "weight": weights[index],
+//           "pieces": qty,
+//         });
+//       }
+//     });
+//     return selected;
+//   }
+// }
 import 'dart:convert';
 import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/gold_rate_model.dart';
@@ -11,9 +109,9 @@ class GoldCoinController extends GetxController {
 
   final List<double> weights = [1, 2, 4, 10];
   var coinCount = <int, int>{}.obs;
-  
-  // Add this to track which buttons have been tapped
-  var tappedButtons = <String, bool>{}.obs;
+
+  // Track active state for both buttons per coin
+  var activeButtons = <String, bool>{}.obs;
 
   @override
   void onInit() {
@@ -21,6 +119,9 @@ class GoldCoinController extends GetxController {
     fetchCurrentGoldRate();
     for (int i = 0; i < weights.length; i++) {
       coinCount[i] = 0;
+      // Initialize both buttons as inactive (blue)
+      activeButtons['${i}_+'] = false;
+      activeButtons['${i}_-'] = false;
     }
   }
 
@@ -29,7 +130,9 @@ class GoldCoinController extends GetxController {
     try {
       isLoadingRate(true);
       var request = http.Request(
-          'GET', Uri.parse('${BaseUrl.baseUrl}getCurrentRate'));
+        'GET',
+        Uri.parse('${BaseUrl.baseUrl}getCurrentRate'),
+      );
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
@@ -60,22 +163,24 @@ class GoldCoinController extends GetxController {
 
   void increaseCount(int index) {
     coinCount[index] = (coinCount[index] ?? 0) + 1;
-    // Mark only + button as tapped for this coin
-    tappedButtons['${index}_+'] = true;
+    // Set + as active (yellow) and - as inactive (blue)
+    activeButtons['${index}_+'] = true;
+    activeButtons['${index}_-'] = false;
   }
 
   void decreaseCount(int index) {
     final current = coinCount[index] ?? 0;
     if (current > 0) {
       coinCount[index] = current - 1;
-      // Mark only - button as tapped for this coin
-      tappedButtons['${index}_-'] = true;
+      // Set - as active (yellow) and + as inactive (blue)
+      activeButtons['${index}_-'] = true;
+      activeButtons['${index}_+'] = false;
     }
   }
 
-  // Check if specific button should be amber
+  // Check if specific button should be yellow (active)
   bool isButtonTapped(int index, String buttonType) {
-    return tappedButtons['${index}_$buttonType'] == true;
+    return activeButtons['${index}_$buttonType'] == true;
   }
 
   double getTotalWeightForCoin(int index) {
@@ -88,10 +193,7 @@ class GoldCoinController extends GetxController {
     List<Map<String, dynamic>> selected = [];
     coinCount.forEach((index, qty) {
       if (qty > 0) {
-        selected.add({
-          "weight": weights[index],
-          "pieces": qty,
-        });
+        selected.add({"weight": weights[index], "pieces": qty});
       }
     });
     return selected;

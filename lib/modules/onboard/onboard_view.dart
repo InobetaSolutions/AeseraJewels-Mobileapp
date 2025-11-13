@@ -1,5 +1,3 @@
-
-
 import 'package:aesera_jewels/modules/onboard/onboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +23,8 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                 children: [
                   _buildPage(
                     image: "assets/images/logo_onboard 2.png",
-                    title: "Gold has been a great investment\nfor centuries.GoldPoint makes it",
+                    title:
+                        "Gold has been a great investment\nfor centuries.GoldPoint makes it",
                     subtitle: "",
                     company: "easy to invest in Gold!",
                     skipAction: controller.skipOnboarding,
@@ -140,65 +139,67 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
 
             /// ------------------ Text Section ------------------
             Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 0),
-  child: Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      
-      SizedBox(
-        height: 100, 
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.lexend(
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-                color: Colors.black,
-                // height: 1.4,
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.lexend(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black,
+                            // height: 1.4,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          subtitle,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.lexend(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  /// Company Label (always same position)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF09243D),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      company,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.lexend(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+                ],
               ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.lexend(
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-      ),
-
-      const SizedBox(height: 20),
-
-      /// Company Label (always same position)
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Text(
-          company,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.lexend(
-            fontSize: 20,
-            fontWeight: FontWeight.w300, 
-            color: Colors.white,
-          ),
-        ),
-      ),
-
-      const SizedBox(height: 40),
-    ],
-  ),
-)
           ],
         );
       },
