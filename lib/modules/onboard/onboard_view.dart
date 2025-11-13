@@ -478,8 +478,11 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                     child: const CircleAvatar(
                       radius: 32,
                       backgroundColor: Color(0xFF09243D),
-                      child:
-                          Icon(Icons.arrow_forward, color: Colors.white, size: 32),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                        size: 32,
+                      ),
                     ),
                   ),
                 ],
@@ -510,7 +513,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
                   width: double.infinity,
-                  height: 400,
+                  height: 450,
                   child: Image.asset(image, fit: BoxFit.fill),
                 ),
                 Positioned(
@@ -523,8 +526,10 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       elevation: 0,
                     ),
                     child: const Text(
@@ -592,7 +597,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
           textAlign: TextAlign.center,
           style: GoogleFonts.lexend(
             fontSize: 20,
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w300, 
             color: Colors.white,
           ),
         ),
@@ -607,6 +612,118 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
       },
     );
   }
+
+  // /// ------------------ Page Layout ------------------
+  // Widget _buildPage({
+  //   required String image,
+  //   required String title,
+  //   required String subtitle,
+  //   required String company,
+  //   required VoidCallback skipAction,
+  // }) {
+  //   return LayoutBuilder(
+  //     builder: (context, constraints) {
+  //       return Column(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           /// ------------------ Image & Skip Button ------------------
+  //           Stack(
+  //             children: [
+  //               Container(
+  //                 padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
+  //                 width: double.infinity,
+  //                 height: 400,
+  //                 child: Image.asset(image, fit: BoxFit.fill),
+  //               ),
+  //               Positioned(
+  //                 top: 20,
+  //                 right: 16,
+  //                 child: ElevatedButton(
+  //                   onPressed: skipAction,
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: const Color(0xFF09243D),
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(10),
+  //                     ),
+  //                     padding: const EdgeInsets.symmetric(
+  //                       horizontal: 12,
+  //                       vertical: 6,
+  //                     ),
+  //                     elevation: 0,
+  //                   ),
+  //                   child: const Text(
+  //                     'Skip',
+  //                     style: TextStyle(
+  //                       fontSize: 16,
+  //                       fontFamily: 'Manrope',
+  //                       color: Colors.white,
+  //                       fontWeight: FontWeight.w700,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+
+  //           /// ------------------ Text Section ------------------
+  //           Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 5),
+  //             child: Column(
+  //               children: [
+  //                 const SizedBox(height: 20),
+  //                 Text(
+  //                   title,
+  //                   textAlign: TextAlign.center,
+  //                   style: GoogleFonts.lexend(
+  //                     fontSize: 22,
+  //                     fontWeight: FontWeight.w300,
+  //                     color: Colors.black,
+  //                     height: 1.4,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 10),
+  //                 Text(
+  //                   subtitle,
+  //                   textAlign: TextAlign.center,
+  //                   style: GoogleFonts.lexend(
+  //                     fontSize: 22,
+  //                     fontWeight: FontWeight.w300,
+  //                     color: Colors.black,
+  //                     height: 1.4,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 20),
+
+  //                 /// Company Label (kept same place for all)
+  //                 Container(
+  //                   padding: const EdgeInsets.symmetric(
+  //                     horizontal: 10,
+  //                     vertical: 10,
+  //                   ),
+  //                   decoration: BoxDecoration(
+  //                     color: const Color(0xFF09243D),
+  //                     borderRadius: BorderRadius.circular(6),
+  //                   ),
+  //                   child: Text(
+  //                     company,
+  //                     textAlign: TextAlign.center,
+  //                     style: GoogleFonts.lexend(
+  //                       fontSize: 22,
+  //                       fontWeight: FontWeight.w300,
+  //                       color: Colors.white,
+  //                       height: 1.4,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 40),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   /// ------------------ Dot Indicator ------------------
   Widget _dot({bool isActive = false}) {
