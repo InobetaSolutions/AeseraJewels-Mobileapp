@@ -47,7 +47,7 @@ class GoldCoinView extends GetView<GoldCoinController> {
                 Get.offNamed('/login');
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF09243D),
+                backgroundColor: const Color(0xFFFFB700),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -58,7 +58,7 @@ class GoldCoinView extends GetView<GoldCoinController> {
                 style: GoogleFonts.lexend(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
             ),
