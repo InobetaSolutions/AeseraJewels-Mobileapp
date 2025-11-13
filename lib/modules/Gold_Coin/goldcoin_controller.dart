@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/gold_rate_model.dart';
@@ -12,6 +11,9 @@ class GoldCoinController extends GetxController {
 
   final List<double> weights = [1, 2, 4, 10];
   var coinCount = <int, int>{}.obs;
+  
+  // Add this to track which buttons have been tapped
+  var tappedButtons = <String, bool>{}.obs;
 
   @override
   void onInit() {
@@ -58,11 +60,22 @@ class GoldCoinController extends GetxController {
 
   void increaseCount(int index) {
     coinCount[index] = (coinCount[index] ?? 0) + 1;
+    // Mark only + button as tapped for this coin
+    tappedButtons['${index}_+'] = true;
   }
 
   void decreaseCount(int index) {
     final current = coinCount[index] ?? 0;
-    if (current > 0) coinCount[index] = current - 1;
+    if (current > 0) {
+      coinCount[index] = current - 1;
+      // Mark only - button as tapped for this coin
+      tappedButtons['${index}_-'] = true;
+    }
+  }
+
+  // Check if specific button should be amber
+  bool isButtonTapped(int index, String buttonType) {
+    return tappedButtons['${index}_$buttonType'] == true;
   }
 
   double getTotalWeightForCoin(int index) {
