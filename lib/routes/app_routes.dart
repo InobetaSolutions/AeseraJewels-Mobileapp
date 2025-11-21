@@ -19,20 +19,12 @@ import 'package:aesera_jewels/modules/address/address_screen.dart';
 import 'package:aesera_jewels/modules/summary/summary_binding.dart';
 import 'package:aesera_jewels/modules/summary/summary_controller.dart';
 import 'package:aesera_jewels/modules/summary/summary_screen.dart';
-import 'package:aesera_jewels/modules/welcome_screen3/jewels_for_occasion_controller.dart' show UPIPaymentController;
 import 'package:get/get.dart';
 
 // Splash
 import 'package:aesera_jewels/modules/splash/splash_binding.dart';
 import 'package:aesera_jewels/modules/splash/splash_view.dart';
 
-// Welcome Screens
-import 'package:aesera_jewels/modules/welcome_screen1.dart/seamless_payments_binding.dart';
-import 'package:aesera_jewels/modules/welcome_screen1.dart/seamless_payments_view.dart';
-import 'package:aesera_jewels/modules/welcome_screen2/made_gold_easy_binding.dart';
-import 'package:aesera_jewels/modules/welcome_screen2/made_gold_easy_view.dart';
-import 'package:aesera_jewels/modules/welcome_screen3/jewels_for_occasion_binding.dart';
-import 'package:aesera_jewels/modules/welcome_screen3/jewels_of_occasion_view.dart';
 
 // Auth
 import 'package:aesera_jewels/modules/registration/register_binding.dart';
@@ -92,33 +84,14 @@ class AppRoutes {
   static final routes = [
     GetPage(name: splash, page: () =>SplashScreen(), binding: SplashBinding()),
 
-    // Welcome Screens
-    // GetPage(
-    //   name: jewelsForOccasion,
-    //   page: () => JewelsForOccasionScreen(),
-    //   binding: JewelsForOccasionBinding(),
-    // ),
-    // GetPage(
-    //   name: seamlessPayments,
-    //   page: () => SeamlessPaymentView(),
-    //   binding: SeamlessPaymentBinding(),
-    // ),
-    // GetPage(
-    //   name: madeGoldEasy,
-    //   page: () => MadeGoldEasyScreen(),
-    //   binding: MadeGoldEasyBinding(),
-    // ),
-
-    // Auth
+    
     GetPage(
       name: register,
       page: () => RegisterView(),
       binding: RegisterBinding(),
     ),
     GetPage(name: goldcoin, page:()=> GoldCoinView(), binding: GoldCoinBinding()),
-  //  GetPage(name: coin_catalog,
-  //  page:()=>CoinCatalogScreen(), binding: CoinCatalogBinding()),
-
+ 
    GetPage(
       name: summary,
       page: () {
@@ -150,18 +123,6 @@ class AppRoutes {
   GetPage(name: goldcoinpayment, 
   page: ()=>GoldCoinPaymentScreen(selectedCoins: []),
     binding: GoldCoinPaymentBinding()),
- 
- 
-    // Catalog
- 
-    // Catalog
-    // GetPage(
-    //   name: catalog,
-    //   page: () => CatalogScreen(item: ProductModel(id: '', name: '', imageUrl: '', price: 0, description: '',), ),
-    //   binding: BindingsBuilder(() {
-    //     Get.lazyPut(() => CatalogController());
-    //   }),
-    // ),
 GetPage(
   name: catalog,
   page: () => CatalogScreen(),
@@ -169,14 +130,6 @@ GetPage(
     Get.lazyPut(() => CatalogController());
   }),
 ),
-
-
-    // Buy Gold
-    // GetPage(
-    //   name: buyGold,
-    //   page: () => BuyGoldScreen(),
-    //   binding: BuyGoldBinding(),
-    // ),
  GetPage(name:payment,
  page:()=>PaymentScreen(),
  binding: PaymentBinding() ),
@@ -186,28 +139,13 @@ GetPage(
       page: () => OnboardingScreen(),
        binding: OnboardingBinding(),
     ),
-    //GetPage(name: payment_selection, page: () => PaymentSelectionScreen( ), binding: PaymentSelectionBinding()),
     GetPage(
       name: investment,
       page: () => InvestmentDetailScreen(initialTabIndex: 0,),
       binding: InvestmentDetailBinding(),
     ),
     
-    GetPage(name: onboard, page: () => OnboardingScreen(), binding: OnboardingBinding()),
-
-   
-    
-      GetPage(
-      name: UPIpayment, 
-      page: () => UPIPaymentScreen(),
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => UPIPaymentController());
-      }),
-      ),
-
-     
-      
-       
+    GetPage(name: onboard, page: () => OnboardingScreen(), binding: OnboardingBinding()),     
   ];
 
   
