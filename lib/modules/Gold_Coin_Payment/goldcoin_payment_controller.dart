@@ -618,7 +618,8 @@ class GoldCoinPaymentController extends GetxController {
 
       if (address.isEmpty || city.isEmpty || postalCode.isEmpty) {
         Get.snackbar("Error", "Please select a delivery address", 
-          backgroundColor: Colors.red, colorText: Colors.white);
+           backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white);
         isLoading(false);
         return;
       }
@@ -676,17 +677,19 @@ class GoldCoinPaymentController extends GetxController {
         Get.back();
         Get.offAll(() => DashboardScreen());
         Get.snackbar("Success", response.message ?? "Payment successful",
-          backgroundColor: Colors.green, colorText: Colors.white);
-        
+          backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white);
         // Refresh investment amount after successful payment
         await fetchTotalInvestment();
       } else {
         Get.snackbar("Error", response?.message ?? "Payment failed",
-          backgroundColor: Colors.red, colorText: Colors.white);
+           backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white);
       }
     } catch (e) {
       Get.snackbar("Error", "Please check your connection: $e",
-        backgroundColor: Colors.red, colorText: Colors.white);
+         backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white);
     } finally {
       isLoading(false);
     }
