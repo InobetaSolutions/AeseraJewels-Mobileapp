@@ -24,22 +24,22 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                   _buildPage(
                     image: "assets/images/logo_onboard 2.png",
                     title:
-                        "Gold has been a great investment\nfor centuries.GoldPoint makes it",
-                    subtitle: "",
+                        "Gold has been a great investment\n for centuries.",
+                    subtitle: "GoldPoint makes it",
                     company: "easy to invest in Gold!",
                     skipAction: controller.skipOnboarding,
                   ),
                   _buildPage(
                     image: "assets/images/logo_onboard1.png",
-                    title: "Your trusted Gold Savings App.\n A product of",
-                    subtitle: " ",
+                    title: "Your trusted Gold Savings App.",
+                    subtitle: "\n A product of ",
                     company: "Aesera Jewels Pvt Ltd!",
                     skipAction: controller.skipOnboarding,
                   ),
                   _buildPage(
                     image: "assets/images/logo_onboard3.png",
-                    title: "A simple, secure, and\n convenient way to invest..",
-                    subtitle: "",
+                    title: "A simple, secure, and",
+                    subtitle: "\n convenient way to invest.",
                     company: "Start investing now!",
                     skipAction: controller.skipOnboarding,
                   ),
@@ -103,8 +103,8 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
               children: [
                 Container(
                   padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
-                  width: double.infinity,
-                  height: 450,
+                  width: 380,
+                  height: 380,
                   child: Image.asset(image, fit: BoxFit.fill),
                 ),
                 Positioned(
@@ -115,7 +115,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF09243D),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(2),
                       ),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -159,7 +159,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                             // height: 1.4,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 15),
                         Text(
                           subtitle,
                           textAlign: TextAlign.center,
@@ -173,7 +173,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
 
                   /// Company Label (always same position)
                   Container(
