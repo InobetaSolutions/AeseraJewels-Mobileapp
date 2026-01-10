@@ -1,11 +1,32 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-/// ---- Investment Response ----
+// /// ---- Investment Response ----
+// class InvestmentResponse {
+//   final double totalAmount;
+//   final double totalGrams;
+//   final List<Transaction> payments;
+
+//   InvestmentResponse({
+//     required this.totalAmount,
+//     required this.totalGrams,
+//     required this.payments,
+//   });
+
+//   factory InvestmentResponse.fromJson(Map<String, dynamic> json) {
+//     return InvestmentResponse(
+//       totalAmount: (json['totalAmount'] ?? 0).toDouble(),
+//       totalGrams: (json['totalGrams'] ?? 0).toDouble(),
+//       payments: (json['payments'] as List<dynamic>? ?? [])
+//           .map((e) => Transaction.fromJson(e))
+//           .toList(),
+//     );
+//   }
+// }
+
 class InvestmentResponse {
-  final double totalAmount;
-  final double totalGrams;
+  final String totalAmount;
+  final String totalGrams;
   final List<Transaction> payments;
 
   InvestmentResponse({
@@ -16,10 +37,10 @@ class InvestmentResponse {
 
   factory InvestmentResponse.fromJson(Map<String, dynamic> json) {
     return InvestmentResponse(
-      totalAmount: (json['totalAmount'] ?? 0).toDouble(),
-      totalGrams: (json['totalGrams'] ?? 0).toDouble(),
-      payments: (json['payments'] as List<dynamic>? ?? [])
-          .map((e) => Transaction.fromJson(e))
+      totalAmount: json['totalAmount'] ?? "0.00",
+      totalGrams: json['totalGrams'] ?? "0.00",
+      payments: (json['payments'] as List? ?? [])
+          .map((item) => Transaction.fromJson(item))
           .toList(),
     );
   }
@@ -37,7 +58,7 @@ class Transaction {
   final double gramAllocated;
   final double gold;
   final double taxAmount;
- // final double deliveryCharge;
+  // final double deliveryCharge;
   final double totalWithTax;
   final String? tag;
   final String? address;
@@ -54,7 +75,7 @@ class Transaction {
     required this.gramAllocated,
     required this.gold,
     required this.taxAmount,
-  //  required this.deliveryCharge,
+    //  required this.deliveryCharge,
     required this.totalWithTax,
     this.tag,
     this.address,
@@ -87,7 +108,7 @@ class Transaction {
       gramAllocated: (json['gram_allocated'] ?? 0).toDouble(),
       gold: (json['gold'] ?? 0).toDouble(),
       taxAmount: (json['taxAmount'] ?? 0).toDouble(),
-    //  deliveryCharge: (json['deliveryCharge'] ?? 0).toDouble(),
+      //  deliveryCharge: (json['deliveryCharge'] ?? 0).toDouble(),
       totalWithTax: (json['totalWithTax'] ?? 0).toDouble(),
       tag: json['tag'],
       address: json['address'],
@@ -235,7 +256,6 @@ class UserCatalog {
   }
 }
 
-
 /// ---- Coin Payment Response ----
 class CoinPaymentResponse {
   final bool status;
@@ -359,11 +379,16 @@ class CoinPayment {
   }
 
   String get itemsDescription {
-    return items.map((item) => '${item.coinGrams}g × ${item.quantity}').join(', ');
+    return items
+        .map((item) => '${item.coinGrams}g × ${item.quantity}')
+        .join(', ');
   }
 
   double get totalGrams {
-    return items.fold(0.0, (sum, item) => sum + (item.coinGrams * item.quantity));
+    return items.fold(
+      0.0,
+      (sum, item) => sum + (item.coinGrams * item.quantity),
+    );
   }
 }
 
@@ -414,6 +439,100 @@ class CoinPaymentSummary {
       totalDelivery: (json['totalDelivery'] ?? 0).toDouble(),
       totalPayable: (json['totalPayable'] ?? 0).toDouble(),
       totalInvest: (json['totalInvest'] ?? 0).toDouble(),
+    );
+  }
+}
+
+class SellPaymentHistory {
+  final String id;
+  final String mobileNumber;
+  final double amount;
+  final double? gram;
+  final double paymentGatewayCharges;
+  final double taxAmount;
+  final double deliveryCharges;
+  final String paymentStatus;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String timestamp;
+
+  SellPaymentHistory({
+    required this.id,
+    required this.mobileNumber,
+    required this.amount,
+    this.gram,
+    required this.paymentGatewayCharges,
+    required this.taxAmount,
+    required this.deliveryCharges,
+    required this.paymentStatus,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.timestamp,
+  });
+
+  factory SellPaymentHistory.fromJson(Map<String, dynamic> json) {
+    return SellPaymentHistory(
+      id: json['_id'] ?? '',
+      mobileNumber: json['mobileNumber'] ?? '',
+      amount: json['amount'] != null ? json['amount'].toDouble() : 0.0,
+      gram: json['gram'] != null ? json['gram'].toDouble() : null,
+      paymentGatewayCharges: json['paymentGatewayCharges'] != null
+          ? json['paymentGatewayCharges'].toDouble()
+          : 0.0,
+      taxAmount: json['taxAmount'] != null ? json['taxAmount'].toDouble() : 0.0,
+      deliveryCharges: json['deliveryCharges'] != null
+          ? json['deliveryCharges'].toDouble()
+          : 0.0,
+      paymentStatus: json['paymentStatus'] ?? '',
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      timestamp: json['timestamp'] ?? '',
+    );
+  }
+
+  String get formattedAmount {
+    final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
+    return format.format(amount);
+  }
+
+  String get formattedTotalAmount {
+    final total = amount + taxAmount + deliveryCharges + paymentGatewayCharges;
+    final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
+    return format.format(total);
+  }
+
+  Color get statusColor {
+    final status = paymentStatus.toLowerCase();
+    if (status.contains('approved') || status.contains('confirm')) {
+      return Colors.green;
+    } else if (status.contains('pending') || status.contains('processing')) {
+      return Colors.orange;
+    } else if (status.contains('failed') || status.contains('rejected')) {
+      return Colors.red;
+    }
+    return Colors.grey;
+  }
+}
+
+class SellPaymentResponse {
+  final bool success;
+  final String message;
+  final List<SellPaymentHistory> data;
+
+  SellPaymentResponse({
+    required this.success,
+    required this.message,
+    required this.data,
+  });
+
+  factory SellPaymentResponse.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> dataList = json['data'] ?? [];
+    return SellPaymentResponse(
+      success: json['success'] ?? false,
+      message: json['message'] ?? '',
+      data: dataList
+          .map<SellPaymentHistory>((item) => SellPaymentHistory.fromJson(item))
+          .toList(),
     );
   }
 }

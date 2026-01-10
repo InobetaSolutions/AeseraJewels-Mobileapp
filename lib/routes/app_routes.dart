@@ -16,6 +16,9 @@ import 'package:aesera_jewels/modules/payment/payment_binding.dart';
 import 'package:aesera_jewels/modules/payment/payment_screen.dart';
 import 'package:aesera_jewels/modules/address/address_binding.dart';
 import 'package:aesera_jewels/modules/address/address_screen.dart';
+import 'package:aesera_jewels/modules/sell_summary/sellsummary_binding.dart';
+import 'package:aesera_jewels/modules/sells_coin/sell_binding.dart';
+import 'package:aesera_jewels/modules/sells_coin/sellcoin_screen.dart';
 import 'package:aesera_jewels/modules/summary/summary_binding.dart';
 import 'package:aesera_jewels/modules/summary/summary_controller.dart';
 import 'package:aesera_jewels/modules/summary/summary_screen.dart';
@@ -24,7 +27,6 @@ import 'package:get/get.dart';
 // Splash
 import 'package:aesera_jewels/modules/splash/splash_binding.dart';
 import 'package:aesera_jewels/modules/splash/splash_view.dart';
-
 
 // Auth
 import 'package:aesera_jewels/modules/registration/register_binding.dart';
@@ -52,7 +54,6 @@ import 'package:aesera_jewels/modules/buy_gold/buy_gold_view.dart';
 import 'package:aesera_jewels/modules/investment_details/investment_binding.dart';
 import 'package:aesera_jewels/modules/investment_details/investment_view.dart';
 
-
 class AppRoutes {
   // Route names
   static const splash = '/splash';
@@ -62,42 +63,59 @@ class AppRoutes {
   static const otp = '/otp';
   static const summary = '/summary';
   static const goldcoin = '/goldcoin';
-  static  const address = '/address';
+  static const address = '/address';
   static const add_address = '/add_address ';
   static const dashboard = '/dashboard';
- static const scanToPay = '/scan_to_pay';
+  static const scanToPay = '/scan_to_pay';
   static const catalog = '/catalog';
   static const goldcoinpayment = '/goldcoinpayment';
 
   static const investment = '/investment';
- static const payment_selection = '/payment_selection';
+  static const payment_selection = '/payment_selection';
   //static const buyGold = '/buy_gold';
   static const coin_catalog = '/coin_catalog';
   static const payment = '/payment';
   static const UPIpayment = '/upi_payment';
   static const madeGoldEasy = '/made_gold_easy';
   static const seamlessPayments = '/seamless_payments';
- static const onboard = '/onboard';
+  static const onboard = '/onboard';
 
- static const UpdateAddressScreen ="/update_address_screen";
+  static const UpdateAddressScreen = "/update_address_screen";
+
+  static const sellcoin = '/SellcoinScreen';
+
+  static const sellsummary = '/SellsummaryScreen';
 
   static final routes = [
-    GetPage(name: splash, page: () =>SplashScreen(), binding: SplashBinding()),
+    GetPage(name: splash, page: () => SplashScreen(), binding: SplashBinding()),
 
-    
     GetPage(
       name: register,
       page: () => RegisterView(),
       binding: RegisterBinding(),
     ),
-    GetPage(name: goldcoin, page:()=> GoldCoinView(), binding: GoldCoinBinding()),
- 
-   GetPage(
+    GetPage(
+      name: goldcoin,
+      page: () => GoldCoinView(),
+      binding: GoldCoinBinding(),
+    ),
+
+    GetPage(
+      name: sellcoin,
+      page: () => SellcoinScreen(),
+      binding: SellBinding(),
+    ),
+    GetPage(
+      name: sellsummary,
+      page: () => SellcoinScreen(),
+      binding: SellsummaryBinding(),
+    ),
+    GetPage(
       name: summary,
       page: () {
         // Get.arguments should contain the SummaryModel
         final SummaryModel summary = Get.arguments as SummaryModel;
-        return SummaryScreen(summary: summary, );
+        return SummaryScreen(summary: summary);
       },
       binding: BindingsBuilder(() {
         final SummaryModel summary = Get.arguments as SummaryModel;
@@ -114,41 +132,51 @@ class AppRoutes {
       binding: DashboardBinding(),
     ),
     GetPage(
-    name: address,
+      name: address,
       page: () => AddressScreen(),
       binding: AddressBinding(),
     ),
-    GetPage(name: add_address, page: ()=>AddAddressScreen(),
-    binding: AddAddressBinding()),
-  GetPage(name: goldcoinpayment, 
-  page: ()=>GoldCoinPaymentScreen(selectedCoins: []),
-    binding: GoldCoinPaymentBinding()),
-GetPage(
-  name: catalog,
-  page: () => CatalogScreen(),
-  binding: BindingsBuilder(() {
-    Get.lazyPut(() => CatalogController());
-  }),
-),
- GetPage(name:payment,
- page:()=>PaymentScreen(),
- binding: PaymentBinding() ),
-    
-  GetPage(
-      name: onboard,
-      page: () => OnboardingScreen(),
-       binding: OnboardingBinding(),
+    GetPage(
+      name: add_address,
+      page: () => AddAddressScreen(),
+      binding: AddAddressBinding(),
     ),
     GetPage(
+      name: goldcoinpayment,
+      page: () => GoldCoinPaymentScreen(selectedCoins: []),
+      binding: GoldCoinPaymentBinding(),
+    ),
+    GetPage(
+      name: catalog,
+      page: () => CatalogScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => CatalogController());
+      }),
+    ),
+    GetPage(
+      name: payment,
+      page: () => PaymentScreen(),
+      binding: PaymentBinding(),
+    ),
+
+    GetPage(
+      name: onboard,
+      page: () => OnboardingScreen(),
+      binding: OnboardingBinding(),
+    ),
+
+    GetPage(
       name: investment,
-      page: () => InvestmentDetailScreen(initialTabIndex: 0,),
+      page: () => InvestmentDetailScreen(initialTabIndex: 0),
       binding: InvestmentDetailBinding(),
     ),
-    
-    GetPage(name: onboard, page: () => OnboardingScreen(), binding: OnboardingBinding()),     
-  ];
 
-  
+    GetPage(
+      name: onboard,
+      page: () => OnboardingScreen(),
+      binding: OnboardingBinding(),
+    ),
+  ];
 }
 
 
