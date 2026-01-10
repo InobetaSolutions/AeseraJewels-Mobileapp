@@ -1,4 +1,3 @@
-
 import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_controller.dart';
 import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_screen.dart';
 import 'package:aesera_jewels/modules/auth_controller.dart';
@@ -173,7 +172,7 @@ class DashboardScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             ElevatedButton(
-                              onPressed: controller.goToGoldCoin,
+                              onPressed: controller.goTosellCoin,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFFFB700),
                                 shape: RoundedRectangleBorder(
@@ -186,7 +185,7 @@ class DashboardScreen extends StatelessWidget {
                                 ),
                               ),
                               child: Text(
-                                "Shop Coins",
+                                "Sell",
                                 style: GoogleFonts.lexend(
                                   fontSize: 19,
                                   fontWeight: FontWeight.w700,
@@ -225,7 +224,6 @@ class DashboardScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                /// CATALOG CARD
                 Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -236,40 +234,72 @@ class DashboardScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 12, right: 12),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
+                          /// 🔹 CARD CONTENT
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(
-                                "assets/images/catalog1.png",
-                                width: 90,
-                                height: 75,
-                                fit: BoxFit.cover,
+                              Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/catalog1.png",
+                                    width: 90,
+                                    height: 75,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Image.asset(
+                                    "assets/images/catelog2.png",
+                                    width: 90,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 10),
-                              Image.asset(
-                                "assets/images/catelog2.png",
-                                width: 90,
-                                height: 60,
-                                fit: BoxFit.cover,
+                              const SizedBox(width: 10),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Image.asset(
+                                  "assets/images/catalog_gold_img.png",
+                                  width: 150,
+                                  height: 140,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                              const SizedBox(height: 12),
                             ],
                           ),
-                          const SizedBox(width: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 40,
-                              bottom: 0,
-                            ),
-                            child: Image.asset(
-                              "assets/images/catalog_gold_img.png",
-                              width: 150,
-                              height: 240,
-                              fit: BoxFit.cover,
-                            ),
+
+                          /// 🔹 SHOP COINS BUTTON (INSIDE CARD)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: controller.goToGoldCoin,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFFB700),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                        0.08,
+                                    vertical: 10,
+                                  ),
+                                ),
+                                child: Text(
+                                  "Shop Coins",
+                                  style: GoogleFonts.lexend(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -277,6 +307,54 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
 
+                // /// CATALOG CARD
+                // Align(
+                //   alignment: Alignment.center,
+                //   child: Container(
+                //     width: 298,
+                //     height: 241,
+                //     decoration: BoxDecoration(
+                //       color: const Color(0xFF09243D),
+                //       borderRadius: BorderRadius.circular(12),
+                //     ),
+                //     child: Padding(
+                //       padding: const EdgeInsets.only(left: 12, right: 12),
+                //       child: Row(
+                //         crossAxisAlignment: CrossAxisAlignment.stretch,
+                //         children: [
+                //           Column(
+                //             children: [
+                //               Image.asset(
+                //                 "assets/images/catalog1.png",
+                //                 width: 90,
+                //                 height: 75,
+                //                 fit: BoxFit.cover,
+                //               ),
+                //               const SizedBox(height: 10),
+                //               Image.asset(
+                //                 "assets/images/catelog2.png",
+                //                 width: 90,
+                //                 height: 60,
+                //                 fit: BoxFit.cover,
+                //               ),
+                //               const SizedBox(height: 12),
+                //             ],
+                //           ),
+                //           const SizedBox(width: 10),
+                //           Padding(
+                //             padding: const EdgeInsets.only(top: 40, bottom: 0),
+                //             child: Image.asset(
+                //               "assets/images/catalog_gold_img.png",
+                //               width: 150,
+                //               height: 240,
+                //               fit: BoxFit.cover,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 23),
 
                 /// PORTFOLIO BUTTON
@@ -319,9 +397,7 @@ class DashboardScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     child: Obx(() {
                       if (controller.isLoadingSupport.value) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const Center(child: CircularProgressIndicator());
                       }
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
