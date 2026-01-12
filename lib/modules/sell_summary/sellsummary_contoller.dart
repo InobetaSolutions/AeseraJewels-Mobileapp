@@ -100,6 +100,7 @@ class SellsummaryContoller extends GetxController {
 
       /// ✅ Get logged-in user's mobile number
       String? mobile = await StorageService.getMobileAsync();
+      String? token = await StorageService.getTokenAsync();
 
       if (mobile == null || mobile.isEmpty) {
         print("❌ Mobile number not found in storage");
@@ -108,8 +109,7 @@ class SellsummaryContoller extends GetxController {
 
       var headers = {
         'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiI3NDgzNzIwMzM1IiwibmFtZSI6ImthbXBhbGxpIG0iLCJpYXQiOjE3Njc5NTI3ODcsImV4cCI6MTc2ODEyNTU4N30.kq5Bw3wB-5Gparo9T2Bhcg3zy0XI5xoHSEvRpxAsFZI',
+        'Authorization': token != null ? 'Bearer $token' : '',
       };
 
       var request = http.Request(
