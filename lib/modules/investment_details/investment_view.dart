@@ -1146,7 +1146,7 @@ class InvestmentDetailScreen extends StatelessWidget {
           _alignedRow("Date & Time", dateTimeString),
           _alignedRow("Amount", sell.formattedAmount),
           if (sell.gram != null)
-            _alignedRow("Grams", "${sell.gram!.toStringAsFixed(2)} g"),
+            _alignedRow("Grams", "${sell.gram!.toStringAsFixed(4)} g"),
           _alignedRow("Tax Amount", format.format(sell.taxAmount)),
           _alignedRow("Delivery Charges", format.format(sell.deliveryCharges)),
           _alignedRow(
