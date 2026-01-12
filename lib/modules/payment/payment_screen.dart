@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -20,7 +19,9 @@ class PaymentScreen extends GetView<PaymentController> {
     ever(controller.enteredAmount, (value) {
       if (value > 0) {
         textController.text = value.toString();
-        textController.selection = TextSelection.collapsed(offset: value.toString().length);
+        textController.selection = TextSelection.collapsed(
+          offset: value.toString().length,
+        );
       } else {
         textController.text = "";
       }
@@ -38,7 +39,10 @@ class PaymentScreen extends GetView<PaymentController> {
         elevation: 0,
         centerTitle: true,
         title: const Text("Payment", style: TextStyle(color: Colors.black)),
-        leading: BackButton(color: Colors.black, onPressed: () => Get.back()),
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: Obx(
         () => Padding(
@@ -185,41 +189,46 @@ class PaymentScreen extends GetView<PaymentController> {
               const SizedBox(height: 12),
               Wrap(
                 spacing: 12,
-                children: (controller.isRupees.value
-                        ? controller.rupeesOptions
-                        : controller.gramsOptions)
-                    .map((option) {
-                  final isSelected =
-                      controller.enteredAmount.value.toString() == option;
-                  return GestureDetector(
-                    onTap: () {
-                      controller.selectValue(option);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.amber : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        controller.isRupees.value
-                            ? "₹$option"
-                            : "$option gm",
-                        style: TextStyle(
-                          fontWeight: isSelected
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                children:
+                    (controller.isRupees.value
+                            ? controller.rupeesOptions
+                            : controller.gramsOptions)
+                        .map((option) {
+                          final isSelected =
+                              controller.enteredAmount.value.toString() ==
+                              option;
+                          return GestureDetector(
+                            onTap: () {
+                              controller.selectValue(option);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Colors.amber
+                                    : Colors.grey[200],
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                controller.isRupees.value
+                                    ? "₹$option"
+                                    : "$option gm",
+                                style: TextStyle(
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          );
+                        })
+                        .toList(),
               ),
-              const SizedBox(height: 20,),
-                    
+              const SizedBox(height: 20),
+
               /// ✅ Phone number container with copy option
               Align(
                 alignment: Alignment.center,
@@ -244,11 +253,15 @@ class PaymentScreen extends GetView<PaymentController> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.copy,
-                            color: Colors.white, size: 22),
+                        icon: const Icon(
+                          Icons.copy,
+                          color: Colors.white,
+                          size: 22,
+                        ),
                         onPressed: () {
                           Clipboard.setData(
-                              const ClipboardData(text: "9952168352"));
+                            const ClipboardData(text: "9952168352"),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text("Phone number copied!"),
@@ -305,13 +318,13 @@ class PaymentScreen extends GetView<PaymentController> {
                   child: const Text(
                     "Next",
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
-              
             ],
           ),
         ),
@@ -320,7 +333,11 @@ class PaymentScreen extends GetView<PaymentController> {
   }
 
   Widget _buildToggleBar(
-      bool isFirstSelected, String first, String second, Function(bool) onTap) {
+    bool isFirstSelected,
+    String first,
+    String second,
+    Function(bool) onTap,
+  ) {
     return Container(
       height: 50,
       decoration: BoxDecoration(

@@ -1,4 +1,3 @@
-
 import 'package:aesera_jewels/modules/Gold_Coin_Payment/goldcoin_payment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,8 +11,10 @@ class GoldCoinPaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Initialize controller
-    final GoldCoinPaymentController controller = Get.put(GoldCoinPaymentController());
-    
+    final GoldCoinPaymentController controller = Get.put(
+      GoldCoinPaymentController(),
+    );
+
     // Set selected coins when screen builds
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.setSelectedCoins(selectedCoins);
@@ -27,11 +28,15 @@ class GoldCoinPaymentScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           'Gold Coin Payment',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: Obx(() {
@@ -79,7 +84,10 @@ class GoldCoinPaymentScreen extends StatelessWidget {
 
               // Table Header
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFB700),
                   borderRadius: BorderRadius.circular(8),
@@ -98,7 +106,10 @@ class GoldCoinPaymentScreen extends StatelessWidget {
               // Coin Items
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF0A2A4D),
                   borderRadius: BorderRadius.circular(10),
@@ -121,12 +132,19 @@ class GoldCoinPaymentScreen extends StatelessWidget {
                             children: [
                               _cellText("${weight.toStringAsFixed(1)} gm"),
                               _cellText("$pieces"),
-                              _cellText("₹${amount.toStringAsFixed(2)}", highlight: true),
+                              _cellText(
+                                "₹${amount.toStringAsFixed(2)}",
+                                highlight: true,
+                              ),
                             ],
                           ),
                         ),
                         if (i != selectedCoins.length - 1)
-                          const Divider(color: Color(0xFF1E3A5C), thickness: 0.8, height: 8),
+                          const Divider(
+                            color: Color(0xFF1E3A5C),
+                            thickness: 0.8,
+                            height: 8,
+                          ),
                       ],
                     );
                   }),
@@ -135,57 +153,77 @@ class GoldCoinPaymentScreen extends StatelessWidget {
               const SizedBox(height: 5),
 
               // Price Summary
-              Obx(() => Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0A2A4D),
-                  borderRadius: BorderRadius.circular(16),
+              Obx(
+                () => Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0A2A4D),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _row(
+                        "Total Amount",
+                        "₹${controller.subtotalAmount.value.toStringAsFixed(2)}",
+                      ),
+                      _row(
+                        "Tax (${controller.taxPercent.value.toStringAsFixed(0)}%)",
+                        "₹${controller.taxAmount.value.toStringAsFixed(2)}",
+                      ),
+                      _row(
+                        "Delivery",
+                        "₹${controller.deliveryCharge.value.toStringAsFixed(2)}",
+                      ),
+                      const Divider(color: Colors.white54),
+                      _row(
+                        "Total Payable",
+                        "₹${controller.totalPayable.value.toStringAsFixed(2)}",
+                        isBold: true,
+                      ),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _row("Total Amount", "₹${controller.subtotalAmount.value.toStringAsFixed(2)}"),
-                    _row("Tax (${controller.taxPercent.value.toStringAsFixed(0)}%)", 
-                         "₹${controller.taxAmount.value.toStringAsFixed(2)}"),
-                    _row("Delivery", "₹${controller.deliveryCharge.value.toStringAsFixed(2)}"),
-                    const Divider(color: Colors.white54),
-                    _row("Total Payable", "₹${controller.totalPayable.value.toStringAsFixed(2)}", isBold: true),
-                  ],
-                ),
-              )),
+              ),
 
               const Spacer(),
 
               // Proceed to Pay Button
-              Obx(() => GestureDetector(
-                onTap: controller.isLoading.value ? null : () {
-                  // Make sure to call the payment method from your button like this:
-                  controller.showPaymentMethodDialog();
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 55,
-                  decoration: BoxDecoration(
-                    color: controller.isLoading.value ? Colors.grey : const Color(0xFF09243D),
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: controller.isLoading.value
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          "Proceed to Pay",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+              Obx(
+                () => GestureDetector(
+                  onTap: controller.isLoading.value
+                      ? null
+                      : () {
+                          // Make sure to call the payment method from your button like this:
+                          controller.showPaymentMethodDialog();
+                        },
+                  child: Container(
+                    width: double.infinity,
+                    height: 55,
+                    decoration: BoxDecoration(
+                      color: controller.isLoading.value
+                          ? Colors.grey
+                          : const Color(0xFF09243D),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
                         ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: controller.isLoading.value
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text(
+                            "Proceed to Pay",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                  ),
                 ),
-              )),
+              ),
             ],
           ),
         );

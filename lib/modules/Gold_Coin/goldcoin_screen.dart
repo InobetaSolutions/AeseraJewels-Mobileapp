@@ -146,14 +146,27 @@ class GoldCoinView extends GetView<GoldCoinController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _qtyButton("-", () => controller.decreaseCount(index), index, true),
+                      _qtyButton(
+                        "-",
+                        () => controller.decreaseCount(index),
+                        index,
+                        true,
+                      ),
                       const SizedBox(width: 16),
-                      Text("$quantity pcs",
-                          style: GoogleFonts.lexend(
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF09243D))),
+                      Text(
+                        "$quantity pcs",
+                        style: GoogleFonts.lexend(
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF09243D),
+                        ),
+                      ),
                       const SizedBox(width: 16),
-                      _qtyButton("+", () => controller.increaseCount(index), index, false),
+                      _qtyButton(
+                        "+",
+                        () => controller.increaseCount(index),
+                        index,
+                        false,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -170,14 +183,21 @@ class GoldCoinView extends GetView<GoldCoinController> {
     );
   }
 
-  Widget _qtyButton(String text, VoidCallback onTap, int index, bool isDecrease) {
+  Widget _qtyButton(
+    String text,
+    VoidCallback onTap,
+    int index,
+    bool isDecrease,
+  ) {
     return Obx(() {
       final quantity = controller.coinCount[index] ?? 0;
       final isActive = (isDecrease && quantity > 0) || (!isDecrease);
       final buttonType = isDecrease ? '-' : '+';
       final isTapped = controller.isButtonTapped(index, buttonType);
-      final color = isTapped ? const Color(0xFFFFB700) : const Color(0xFF09243D);
-       
+      final color = isTapped
+          ? const Color(0xFFFFB700)
+          : const Color(0xFF09243D);
+
       return InkWell(
         onTap: isActive ? onTap : null,
         borderRadius: BorderRadius.circular(8),
@@ -186,8 +206,8 @@ class GoldCoinView extends GetView<GoldCoinController> {
           width: 30,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: color, 
-            borderRadius: BorderRadius.circular(8)
+            color: color,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             text,
@@ -207,10 +227,13 @@ class GoldCoinView extends GetView<GoldCoinController> {
       onPressed: () {
         final selectedCoins = controller.getSelectedCoins();
         if (selectedCoins.isEmpty) {
-          Get.snackbar("No Selection", "Please select at least one coin.",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: const Color(0xFF09243D),
-              colorText: Colors.white);
+          Get.snackbar(
+            "No Selection",
+            "Please select at least one coin.",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: const Color(0xFF09243D),
+            colorText: Colors.white,
+          );
           return;
         }
 
@@ -221,9 +244,14 @@ class GoldCoinView extends GetView<GoldCoinController> {
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 80),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      child: Text("Continue",
-          style: GoogleFonts.lexend(
-              fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white)),
+      child: Text(
+        "Continue",
+        style: GoogleFonts.lexend(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
