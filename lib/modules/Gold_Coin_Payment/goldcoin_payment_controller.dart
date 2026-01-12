@@ -1,9 +1,9 @@
-
 import 'dart:convert';
 import 'package:aesera_jewels/Api/base_url.dart';
 import 'package:aesera_jewels/models/Addresses_model.dart';
 import 'package:aesera_jewels/models/catalog_model.dart';
 import 'package:aesera_jewels/models/golcoin_payment_model.dart';
+import 'package:aesera_jewels/models/sellmodel.dart';
 import 'package:aesera_jewels/modules/address/address_screen.dart';
 import 'package:aesera_jewels/modules/coin_catalog/coin_catalog_controller.dart';
 import 'package:aesera_jewels/modules/dashboard/dashboard_view.dart';
@@ -20,10 +20,12 @@ class GoldCoinPaymentController extends GetxController {
   var isLoading = false.obs;
   var addressesList = <AddressModel>[].obs;
 
+  Rx<SellModel> sellData = SellModel().obs;
+
   final addressController = TextEditingController();
   final cityController = TextEditingController();
   final postalCodeController = TextEditingController();
-  
+
   var selectedCoins = <Map<String, dynamic>>[].obs;
   var totalInvestment = 0.0.obs;
 
@@ -54,7 +56,7 @@ class GoldCoinPaymentController extends GetxController {
       final grams = weight * pieces;
       subtotal += grams * goldRate.value;
     }
-    
+
     subtotalAmount.value = subtotal;
     taxAmount.value = (subtotal * taxPercent.value) / 100;
     totalPayable.value = subtotal + taxAmount.value + deliveryCharge.value;
@@ -95,7 +97,9 @@ class GoldCoinPaymentController extends GetxController {
 
   Future<void> _fetchDelivery() async {
     try {
-      final res = await http.get(Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'));
+      final res = await http.get(
+        Uri.parse('${BaseUrl.baseUrl}getDeliveryCharge'),
+      );
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
         if (data["status"] == true) {
@@ -105,6 +109,51 @@ class GoldCoinPaymentController extends GetxController {
       }
     } catch (e) {
       print("Error fetching delivery charge: $e");
+    }
+  }
+
+  Future<void> fetchSellData() async {
+    try {
+      isLoading(true);
+
+      /// ✅ Get logged-in user's mobile number
+      String? mobile = await StorageService.getMobileAsync();
+      String? token = await StorageService.getTokenAsync();
+
+      if (mobile == null || mobile.isEmpty) {
+        print("❌ Mobile number not found in storage");
+        return;
+      }
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': token != null ? 'Bearer $token' : '',
+      };
+
+      var request = http.Request(
+        'POST',
+        Uri.parse("${BaseUrl.baseUrl}getpaymenthistory"),
+      );
+
+      /// ✅ Send logged-in user's mobile
+      request.body = json.encode({"mobile": mobile});
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      var responseData = await response.stream.bytesToString();
+
+      if (response.statusCode == 200) {
+        var jsonData = json.decode(responseData);
+        print("Sell Data: $jsonData");
+        sellData.value = SellModel.fromJson(jsonData);
+      } else {
+        print("API Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("API Error: $e");
+    } finally {
+      isLoading(false);
     }
   }
 
@@ -140,7 +189,9 @@ class GoldCoinPaymentController extends GetxController {
           final jsonData = jsonDecode(response.body);
           if (jsonData["status"] == "true") {
             final List data = jsonData["data"];
-            addressesList.value = data.map((e) => AddressModel.fromJson(e)).toList();
+            addressesList.value = data
+                .map((e) => AddressModel.fromJson(e))
+                .toList();
           } else {
             addressesList.value = [];
           }
@@ -240,21 +291,23 @@ class GoldCoinPaymentController extends GetxController {
                         ),
                       ),
                       IconButton(
-                        onPressed: () => Get.back(),
+                        onPressed: () => Navigator.of(context).pop(),
                         icon: const Icon(Icons.close, color: Colors.black),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Price Card for New Payment (No Investment Amount)
-                  Obx(() => _buildPriceCard(
-                    subtotalAmount.value,
-                    taxAmount.value,
-                    deliveryCharge.value,
-                    totalPayable.value,
-                  )),
-                  
+                  Obx(
+                    () => _buildPriceCard(
+                      subtotalAmount.value,
+                      taxAmount.value,
+                      deliveryCharge.value,
+                      totalPayable.value,
+                    ),
+                  ),
+
                   const SizedBox(height: 16),
                   Center(
                     child: Padding(
@@ -269,7 +322,7 @@ class GoldCoinPaymentController extends GetxController {
                       ),
                     ),
                   ),
-                  
+
                   if (addressesList.isEmpty)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 20),
@@ -279,7 +332,7 @@ class GoldCoinPaymentController extends GetxController {
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
-                  
+
                   if (addressesList.isNotEmpty)
                     ...List.generate(addressesList.length, (index) {
                       final addr = addressesList[index];
@@ -288,18 +341,21 @@ class GoldCoinPaymentController extends GetxController {
                           value: index,
                           groupValue: selectedAddressIndex.value,
                           title: Text(addr.name ?? ""),
-                          subtitle: Text("${addr.address ?? ""}, ${addr.city ?? ""}"),
+                          subtitle: Text(
+                            "${addr.address ?? ""}, ${addr.city ?? ""}",
+                          ),
                           onChanged: (val) {
                             selectedAddressIndex.value = val!;
                             final selected = addressesList[val];
                             addressController.text = selected.address ?? "";
                             cityController.text = selected.city ?? "";
-                            postalCodeController.text = selected.postalCode ?? "";
+                            postalCodeController.text =
+                                selected.postalCode ?? "";
                           },
                         ),
                       );
                     }),
-                  
+
                   const SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
@@ -310,11 +366,14 @@ class GoldCoinPaymentController extends GetxController {
                           Get.back();
                           Get.to(() => AddressScreen());
                         } else {
-                          final selected = addressesList[selectedAddressIndex.value];
+                          final selected =
+                              addressesList[selectedAddressIndex.value];
                           addressController.text = selected.address ?? "";
                           cityController.text = selected.city ?? "";
                           postalCodeController.text = selected.postalCode ?? "";
-                          submitCatalogPayment(0.0); // Investment Amount = 0 for new payment
+                          submitCatalogPayment(
+                            0.0,
+                          ); // Investment Amount = 0 for new payment
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -346,21 +405,29 @@ class GoldCoinPaymentController extends GetxController {
   void openRevertPaymentBottomSheet() async {
     await fetchUserAddresses();
     await fetchTotalInvestment();
-    
+    await fetchSellData(); // 🔥 ensure wallet is loaded
+
     var selectedAddressIndex = 0.obs;
+
+    // 🔥 Use Sell wallet amount
     var investmentController = TextEditingController(
-      text: totalInvestment.value.toStringAsFixed(2),
+      text: (double.tryParse(sellData.value.totalAmount ?? "0") ?? 0)
+          .toStringAsFixed(2),
     );
 
     Get.bottomSheet(
       StatefulBuilder(
         builder: (context, setState) {
           return Obx(() {
-            double investmentUsed = double.tryParse(investmentController.text) ?? 0.0;
+            double investmentUsed =
+                double.tryParse(investmentController.text) ?? 0.0;
+
             double finalTotal = totalPayable.value - investmentUsed;
             if (finalTotal < 0) finalTotal = 0.0;
 
-            bool hasInsufficientBalance = investmentUsed > totalInvestment.value;
+            bool hasInsufficientBalance =
+                investmentUsed >
+                (double.tryParse(sellData.value.totalAmount ?? "0") ?? 0);
 
             return SingleChildScrollView(
               padding: EdgeInsets.only(
@@ -410,7 +477,7 @@ class GoldCoinPaymentController extends GetxController {
                     _editableField(
                       "Wallet Amount to Use",
                       investmentController,
-                      keyboardType: TextInputType.numberWithOptions(
+                      keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
                       onChanged: (val) {
@@ -423,7 +490,7 @@ class GoldCoinPaymentController extends GetxController {
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: Text(
-                          "You don't have enough balance. Available: ₹${totalInvestment.value.toStringAsFixed(2)}",
+                          "You don't have enough balance. Available: ₹${(double.tryParse(sellData.value.totalAmount ?? "0") ?? 0).toStringAsFixed(2)}",
                           style: const TextStyle(
                             color: Colors.red,
                             fontSize: 13,
@@ -478,7 +545,8 @@ class GoldCoinPaymentController extends GetxController {
                                 final selected = addressesList[val];
                                 addressController.text = selected.address ?? "";
                                 cityController.text = selected.city ?? "";
-                                postalCodeController.text = selected.postalCode ?? "";
+                                postalCodeController.text =
+                                    selected.postalCode ?? "";
                               },
                             ),
                           ),
@@ -492,22 +560,33 @@ class GoldCoinPaymentController extends GetxController {
                       width: double.infinity,
                       height: 48,
                       child: ElevatedButton(
-                        onPressed: hasInsufficientBalance ? null : () {
-                          if (addressesList.isEmpty) {
-                            Get.back();
-                            Get.to(() => AddressScreen());
-                          } else {
-                            final selected = addressesList[selectedAddressIndex.value];
-                            addressController.text = selected.address ?? "";
-                            cityController.text = selected.city ?? "";
-                            postalCodeController.text = selected.postalCode ?? "";
-                            
-                            double investmentUsed = double.tryParse(investmentController.text) ?? 0.0;
-                            submitCatalogPayment(investmentUsed);
-                          }
-                        },
+                        onPressed: hasInsufficientBalance
+                            ? null
+                            : () {
+                                if (addressesList.isEmpty) {
+                                  Get.back();
+                                  Get.to(() => AddressScreen());
+                                } else {
+                                  final selected =
+                                      addressesList[selectedAddressIndex.value];
+                                  addressController.text =
+                                      selected.address ?? "";
+                                  cityController.text = selected.city ?? "";
+                                  postalCodeController.text =
+                                      selected.postalCode ?? "";
+
+                                  double investmentUsed =
+                                      double.tryParse(
+                                        investmentController.text,
+                                      ) ??
+                                      0.0;
+                                  submitCatalogPayment(investmentUsed);
+                                }
+                              },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: hasInsufficientBalance ? Colors.grey : const Color(0xFF0A2A4D),
+                          backgroundColor: hasInsufficientBalance
+                              ? Colors.grey
+                              : const Color(0xFF0A2A4D),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
@@ -533,6 +612,211 @@ class GoldCoinPaymentController extends GetxController {
       isScrollControlled: true,
     );
   }
+
+  // void openRevertPaymentBottomSheet() async {
+  //   await fetchUserAddresses();
+  //   await fetchTotalInvestment();
+
+  //   var selectedAddressIndex = 0.obs;
+  //   var investmentController = TextEditingController(
+  //     text: totalInvestment.value.toStringAsFixed(2),
+  //   );
+
+  //   Get.bottomSheet(
+  //     StatefulBuilder(
+  //       builder: (context, setState) {
+  //         return Obx(() {
+  //           double investmentUsed =
+  //               double.tryParse(investmentController.text) ?? 0.0;
+  //           double finalTotal = totalPayable.value - investmentUsed;
+  //           if (finalTotal < 0) finalTotal = 0.0;
+
+  //           bool hasInsufficientBalance =
+  //               investmentUsed > totalInvestment.value;
+
+  //           return SingleChildScrollView(
+  //             padding: EdgeInsets.only(
+  //               bottom: MediaQuery.of(context).viewInsets.bottom,
+  //             ),
+  //             child: Container(
+  //               padding: const EdgeInsets.all(20),
+  //               decoration: const BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+  //               ),
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   /// ---------- Header ----------
+  //                   Center(
+  //                     child: Text(
+  //                       "Payment Summary",
+  //                       style: GoogleFonts.plusJakartaSans(
+  //                         fontSize: 20,
+  //                         fontWeight: FontWeight.w700,
+  //                       ),
+  //                     ),
+  //                   ),
+
+  //                   const SizedBox(height: 20),
+
+  //                   /// ---------- Non-editable Fields ----------
+  //                   _nonEditableField(
+  //                     "Product Price",
+  //                     "₹${subtotalAmount.value.toStringAsFixed(2)}",
+  //                   ),
+  //                   const SizedBox(height: 10),
+  //                   _nonEditableField(
+  //                     "Tax (${taxPercent.value.toStringAsFixed(0)}%)",
+  //                     "₹${taxAmount.value.toStringAsFixed(2)}",
+  //                   ),
+  //                   const SizedBox(height: 10),
+  //                   _nonEditableField(
+  //                     "Delivery Charge",
+  //                     "₹${deliveryCharge.value.toStringAsFixed(2)}",
+  //                   ),
+  //                   const SizedBox(height: 10),
+
+  //                   /// ---------- Editable Investment Field ----------
+  //                   _editableField(
+  //                     "Wallet Amount to Use",
+  //                     investmentController,
+  //                     keyboardType: TextInputType.numberWithOptions(
+  //                       decimal: true,
+  //                     ),
+  //                     onChanged: (val) {
+  //                       setState(() {});
+  //                     },
+  //                   ),
+
+  //                   /// 🔴 Warning if not enough balance
+  //                   if (hasInsufficientBalance)
+  //                     Padding(
+  //                       padding: const EdgeInsets.only(top: 8),
+  //                       child: Text(
+  //                         "You don't have enough balance. Available: ₹${totalInvestment.value.toStringAsFixed(2)}",
+  //                         style: const TextStyle(
+  //                           color: Colors.red,
+  //                           fontSize: 13,
+  //                         ),
+  //                       ),
+  //                     ),
+
+  //                   const SizedBox(height: 10),
+  //                   const Divider(height: 25, color: Colors.grey),
+
+  //                   /// ---------- Final Total ----------
+  //                   _nonEditableField(
+  //                     "Final Total Payable",
+  //                     "₹${finalTotal.toStringAsFixed(2)}",
+  //                     isBold: true,
+  //                   ),
+
+  //                   const SizedBox(height: 25),
+
+  //                   /// ---------- Address Section ----------
+  //                   Text(
+  //                     "Select Delivery Location",
+  //                     style: GoogleFonts.plusJakartaSans(
+  //                       fontSize: 18,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: const Color(0xFF0D0F1C),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(height: 10),
+
+  //                   if (addressesList.isEmpty)
+  //                     const Padding(
+  //                       padding: EdgeInsets.symmetric(vertical: 10),
+  //                       child: Text("Please add a delivery address."),
+  //                     ),
+
+  //                   if (addressesList.isNotEmpty)
+  //                     ...List.generate(addressesList.length, (index) {
+  //                       final addr = addressesList[index];
+  //                       return Padding(
+  //                         padding: const EdgeInsets.only(bottom: 8),
+  //                         child: Obx(
+  //                           () => RadioListTile<int>(
+  //                             value: index,
+  //                             groupValue: selectedAddressIndex.value,
+  //                             title: Text(addr.name ?? ""),
+  //                             subtitle: Text(
+  //                               "${addr.address ?? ""}, ${addr.city ?? ""}",
+  //                             ),
+  //                             onChanged: (val) {
+  //                               selectedAddressIndex.value = val!;
+  //                               final selected = addressesList[val];
+  //                               addressController.text = selected.address ?? "";
+  //                               cityController.text = selected.city ?? "";
+  //                               postalCodeController.text =
+  //                                   selected.postalCode ?? "";
+  //                             },
+  //                           ),
+  //                         ),
+  //                       );
+  //                     }),
+
+  //                   const SizedBox(height: 25),
+
+  //                   /// ---------- Submit Button ----------
+  //                   SizedBox(
+  //                     width: double.infinity,
+  //                     height: 48,
+  //                     child: ElevatedButton(
+  //                       onPressed: hasInsufficientBalance
+  //                           ? null
+  //                           : () {
+  //                               if (addressesList.isEmpty) {
+  //                                 Get.back();
+  //                                 Get.to(() => AddressScreen());
+  //                               } else {
+  //                                 final selected =
+  //                                     addressesList[selectedAddressIndex.value];
+  //                                 addressController.text =
+  //                                     selected.address ?? "";
+  //                                 cityController.text = selected.city ?? "";
+  //                                 postalCodeController.text =
+  //                                     selected.postalCode ?? "";
+
+  //                                 double investmentUsed =
+  //                                     double.tryParse(
+  //                                       investmentController.text,
+  //                                     ) ??
+  //                                     0.0;
+  //                                 submitCatalogPayment(investmentUsed);
+  //                               }
+  //                             },
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: hasInsufficientBalance
+  //                             ? Colors.grey
+  //                             : const Color(0xFF0A2A4D),
+  //                         shape: RoundedRectangleBorder(
+  //                           borderRadius: BorderRadius.circular(25),
+  //                         ),
+  //                       ),
+  //                       child: Text(
+  //                         addressesList.isEmpty ? "Add Address" : "Pay",
+  //                         style: const TextStyle(
+  //                           color: Colors.white,
+  //                           fontSize: 18,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+
+  //                   const SizedBox(height: 15),
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         });
+  //       },
+  //     ),
+  //     isScrollControlled: true,
+  //   );
+  // }
 
   /// 🔹 Helper Widget for Non-Editable Field
   Widget _nonEditableField(String label, String value, {bool isBold = false}) {
@@ -617,9 +901,12 @@ class GoldCoinPaymentController extends GetxController {
       final postalCode = postalCodeController.text.trim();
 
       if (address.isEmpty || city.isEmpty || postalCode.isEmpty) {
-        Get.snackbar("Error", "Please select a delivery address", 
-           backgroundColor: const Color(0xFF09243D),
-          colorText: Colors.white);
+        Get.snackbar(
+          "Error",
+          "Please select a delivery address",
+          backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white,
+        );
         isLoading(false);
         return;
       }
@@ -630,7 +917,7 @@ class GoldCoinPaymentController extends GetxController {
         final pieces = coin["pieces"] ?? 0;
         final grams = weight * pieces;
         final amount = grams * goldRate.value;
-        
+
         return {
           "coinGrams": weight,
           "quantity": pieces,
@@ -642,9 +929,12 @@ class GoldCoinPaymentController extends GetxController {
       int calculatedTotalAmount = subtotalAmount.value.round();
       int calculatedTaxAmount = taxAmount.value.round();
       int calculatedDeliveryCharge = deliveryCharge.value.round();
-      
+
       // Calculate amountPayable as integer sum to ensure exact match
-      int calculatedAmountPayable = calculatedTotalAmount + calculatedTaxAmount + calculatedDeliveryCharge;
+      int calculatedAmountPayable =
+          calculatedTotalAmount +
+          calculatedTaxAmount +
+          calculatedDeliveryCharge;
 
       // Prepare request body matching API requirements exactly
       final body = {
@@ -653,52 +943,77 @@ class GoldCoinPaymentController extends GetxController {
         "totalAmount": calculatedTotalAmount,
         "taxAmount": calculatedTaxAmount,
         "deliveryCharge": calculatedDeliveryCharge,
-        "amountPayable": calculatedAmountPayable, // This equals totalAmount + taxAmount + deliveryCharge
-        "investAmount": investmentAmount.round(), // Include investAmount as required by API
+        "amountPayable":
+            calculatedAmountPayable, // This equals totalAmount + taxAmount + deliveryCharge
+        "investAmount": investmentAmount
+            .round(), // Include investAmount as required by API
         "address": address,
         "city": city,
         "postCode": postalCode,
       };
 
+      print("Final Body: $body");
+
       // Final verification - ensure the sum matches exactly
-      final verificationSum = calculatedTotalAmount + calculatedTaxAmount + calculatedDeliveryCharge;
+      final verificationSum =
+          calculatedTotalAmount +
+          calculatedTaxAmount +
+          calculatedDeliveryCharge;
       if (calculatedAmountPayable != verificationSum) {
         // Force correction if there's any mismatch
         body["amountPayable"] = verificationSum;
-        print("Corrected amountPayable from $calculatedAmountPayable to $verificationSum");
+        print(
+          "Corrected amountPayable from $calculatedAmountPayable to $verificationSum",
+        );
       }
 
       print("Submitting payment: ${jsonEncode(body)}");
-      print("Verification - totalAmount($calculatedTotalAmount) + taxAmount($calculatedTaxAmount) + deliveryCharge($calculatedDeliveryCharge) = amountPayable(${body["amountPayable"]})");
+      print(
+        "Verification - totalAmount($calculatedTotalAmount) + taxAmount($calculatedTaxAmount) + deliveryCharge($calculatedDeliveryCharge) = amountPayable(${body["amountPayable"]})",
+      );
 
       final response = await _submitCatalogPaymentAPI(body);
 
       if (response != null && response.status == true) {
         Get.back();
         Get.offAll(() => DashboardScreen());
-        Get.snackbar("Success", response.message ?? "Payment successful",
+        Get.snackbar(
+          "Success",
+          response.message ?? "Payment successful",
           backgroundColor: const Color(0xFF09243D),
-          colorText: Colors.white);
+          colorText: Colors.white,
+        );
         // Refresh investment amount after successful payment
         await fetchTotalInvestment();
       } else {
-        Get.snackbar("Error", response?.message ?? "Payment failed",
-           backgroundColor: const Color(0xFF09243D),
-          colorText: Colors.white);
+        Get.snackbar(
+          "Error",
+          response?.message ?? "Payment failed",
+          backgroundColor: const Color(0xFF09243D),
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
-      Get.snackbar("Error", "Please check your connection: $e",
-         backgroundColor: const Color(0xFF09243D),
-          colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        "Please check your connection: $e",
+        backgroundColor: const Color(0xFF09243D),
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
   }
 
-  Future<CatalogPaymentResponse?> _submitCatalogPaymentAPI(Map<String, dynamic> body) async {
+  Future<CatalogPaymentResponse?> _submitCatalogPaymentAPI(
+    Map<String, dynamic> body,
+  ) async {
     try {
       var headers = {'Content-Type': 'application/json'};
-      var request = http.Request('POST', Uri.parse('${BaseUrl.baseUrl}createCoinPayment1'));
+      var request = http.Request(
+        'POST',
+        Uri.parse('${BaseUrl.baseUrl}createCoinPayment1'),
+      );
       request.body = json.encode(body);
       request.headers.addAll(headers);
 
@@ -717,7 +1032,9 @@ class GoldCoinPaymentController extends GetxController {
         print("API Error: ${response.reasonPhrase}");
         return CatalogPaymentResponse(
           status: false,
-          message: response.reasonPhrase ?? "API call failed with status ${response.statusCode}",
+          message:
+              response.reasonPhrase ??
+              "API call failed with status ${response.statusCode}",
         );
       }
     } catch (e) {
